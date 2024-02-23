@@ -1,4 +1,4 @@
-from .user import User, UserCreate, UserDto, UserLogin, UserUpdate
+from .user import User, UserCreate, UserDto, UserLogin, UserUpdate, UserContactGroup
 from .query_filters import QueryFilters
 from .token import Token, TokenData
 from .blood_request import (
@@ -25,6 +25,7 @@ __all__ = [
     "UserDto",
     "UserLogin",
     "UserUpdate",
+    "UserContactGroup",
     "Token",
     "TokenData",
     "BloodRequestDto",

@@ -33,22 +33,39 @@ class UserCreate(BaseModel):
     # role: tp.Annotated[str, UserRoles] = Field("user", examples=["user", "admin"])
 
 
+class UserContactGroup(BaseModel):
+    hidden: bool = Field(False)
+    phone: tp.Optional[str] = Field(...)
+    email: tp.Optional[str] = Field(...)
+
+
 class UserUpdate(BaseModel):
     email: str = Field(...)
-    first_name: str = Field(...)
-    middle_name: str = Field(...)
-    last_name: str = Field(...)
-    city: str = Field(...)
+    contact_group: UserContactGroup = Field(...)
+    first_name: tp.Optional[str] = Field(...)
+    middle_name: tp.Optional[str] = Field(...)
+    last_name: tp.Optional[str] = Field(...)
+    city: tp.Optional[str] = Field(...)
+    wishes: tp.Optional[str] = Field(..., description="Предпочтения за донацию")
+    available_weekends_only: bool = Field(True)
+    avaliable_time: tp.List[tp.Tuple[str, str]] = Field(
+        ..., description="Время доступности", examples=[("10:00", "18:00")]
+    )
 
 
 class UserDto(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int = Field(..., examples=[1])
-    first_name: str = Field(..., examples=["Ivan"])
-    last_name: str = Field(..., examples=["Ivanov"])
-    email: str = Field(..., examples=["test@]test.com"])
-    avatar: tp.Optional[str] = Field(
-        ..., examples=["http://localhost:8000/static/avatars/1.png"]
+    email: str = Field(...)
+    contact_group: UserContactGroup = Field(...)
+    first_name: tp.Optional[str] = Field(None)
+    middle_name: tp.Optional[str] = Field(None)
+    last_name: tp.Optional[str] = Field(...)
+    city: tp.Optional[str] = Field(None)
+    vkid: tp.Optional[int] = Field(None)
+    wishes: tp.Optional[str] = Field(None, description="Предпочтения за донацию")
+    available_weekends_only: bool = Field(...)
+    avaliable_time: tp.List[tp.Tuple[str, str]] = Field(
+        ..., description="Время доступности", examples=[("10:00", "18:00")]
     )
-    role: tp.Annotated[str, UserRoles] = Field(..., examples=["user"])
