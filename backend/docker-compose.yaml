@@ -16,6 +16,8 @@ services:
       dockerfile: "Dockerfile"
     command: "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     restart: always
+    volumes:
+      - static-volume:/app/static
     env_file:
       - ".env"
     environment:
@@ -26,4 +28,4 @@ services:
 
 volumes:
   postgres-data:
-  minio_storage:
+  static-volume:
