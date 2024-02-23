@@ -1,9 +1,9 @@
 import datetime as dt
 import sqlalchemy as sa
+import typing as tp
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, TimestampMixin
-from .pet import Pet  # Import the Pet class from the same module or adjust the import path
 
 
 class BloodDonation(Base, TimestampMixin):
@@ -12,7 +12,7 @@ class BloodDonation(Base, TimestampMixin):
     amount: Mapped[int] = mapped_column(sa.Integer)
     date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
 
-    pet: Mapped[Pet] = relationship("Pet", back_populates="blood_donations")
+    pet = relationship("Pet", back_populates="blood_donations")
 
     def __repr__(self) -> str:
         return f"<BloodDonation {self.id} {self.amount} {self.date}>"

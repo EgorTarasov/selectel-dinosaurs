@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     postgres_user: str
     postgres_password: str
 
+    s3_access_key: str
+    s3_secret_key: str
+    s3_bucket: str
+    s3_host: str
+
     vk_client_id: str
     vk_secure_token: str
     vk_service_token: str

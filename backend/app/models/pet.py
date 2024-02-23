@@ -1,9 +1,9 @@
+import typing as tp
 import datetime as dt
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, TimestampMixin
-from .user import User  # Import the User class from the same module or adjust the import path
 
 
 class Pet(Base, TimestampMixin):
@@ -17,7 +17,12 @@ class Pet(Base, TimestampMixin):
     able_to_donate: Mapped[bool] = mapped_column(sa.Boolean)
     owner_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("users.id"))
 
-    owner: Mapped[User] = relationship("User", back_populates="pets")
+    owner = relationship("User", back_populates="pets")
+    vaccines = relationship("Vaccine", back_populates="pet")
+    blood_donations = relationship("BloodDonation", back_populates="pet")
+    blood_requests = relationship("BloodRequest", back_populates="pet")
 
     def __repr__(self) -> str:
-        return f"<Pet {self.id} {self.name} {self.type} {self.breed} {self.date_of_birth}>"
+        return (
+            f"<Pet {self.id} {self.name} {self.type} {self.breed} {self.date_of_birth}>"
+        )

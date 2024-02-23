@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, TimestampMixin
 
-# from .group import VkGroup
+from .pet import Pet
 
 
 class User(Base, TimestampMixin):
@@ -12,6 +12,7 @@ class User(Base, TimestampMixin):
 
     first_name: Mapped[str] = mapped_column(sa.Text)
     last_name: Mapped[str] = mapped_column(sa.Text)
+    middle_name: Mapped[str] = mapped_column(sa.Text, nullable=True)
     email: Mapped[str] = mapped_column(sa.Text, nullable=True, unique=True)
     password: Mapped[str] = mapped_column(sa.Text)
     role: Mapped[str] = mapped_column(sa.Text)  # user / moderator / admin
@@ -19,7 +20,7 @@ class User(Base, TimestampMixin):
     avatar: Mapped[str] = mapped_column(sa.Text, nullable=True)
     city: Mapped[str] = mapped_column(sa.Text, nullable=True)
 
-    pets: Mapped[list['Pet']] = relationship("Pet", back_populates="owner")
+    pets = relationship("Pet", back_populates="owner")
 
     def __repr__(self) -> str:
         return f"<User {self.id} {self.first_name} {self.last_name} {self.email}>"

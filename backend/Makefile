@@ -17,7 +17,7 @@ dev-down:
 migration:
 	alembic revision \
 	  --autogenerate \
-	  --rev-id $(shell python migrations/_get_next_revision_id.py) \
+	  --rev-id $(shell python3 migrations/_get_next_revision_id.py) \
 	  --message $(message)
 
 .PHONY: migrate

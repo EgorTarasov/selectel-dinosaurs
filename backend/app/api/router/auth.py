@@ -76,8 +76,9 @@ async def register(
         db_user = User(
             first_name=user.first_name,
             last_name=user.last_name,
+            middle_name=user.middle_name,
             email=user.email,
-            role=user.role,
+            role="user",
             password="",
         )
         db_user.password = password.PasswordManager.hash_password(user.password)

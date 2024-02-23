@@ -3,12 +3,21 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import (
+    APIRouter,
+    Depends,
+    UploadFile,
+    status,
+    HTTPException,
+    UploadFile,
+    File,
+)
 
 
-from ..middlewares import get_current_user, get_session
+from ...utils.s3 import upload_image, get_image_link, get_image_name
+from ..middlewares import get_current_user, get_session, UserTokenData
 from ...models import User
-from ..schemas import UserDto
+from ..schemas import UserDto, UserCreate, UserUpdate
 
 
 router: tp.Final[APIRouter] = APIRouter(prefix="/user")
@@ -16,9 +25,41 @@ router: tp.Final[APIRouter] = APIRouter(prefix="/user")
 # TODO: implement user routes /me /update
 
 
-@router.get("/me")
+@router.get("/me", response_model=UserDto)
 async def get_me(
     db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+    current_user: UserTokenData = Depends(get_current_user),
 ):
-    return current_user
+    stmt = sa.select(User).where(User.id == current_user.user_id)
+    db_user = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return UserDto.model_validate(db_user)
+
+
+@router.put("/profile", response_model=UserDto)
+async def update_profile(
+    user: UserUpdate = Depends(UserUpdate),
+    avatar_file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_session),
+    current_user: UserTokenData = Depends(get_current_user),
+):
+    stmt = sa.select(User).where(User.id == current_user.user_id)
+    db_user = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    db_user.first_name = user.first_name
+    db_user.last_name = user.last_name
+    db_user.email = user.email
+    db_user.city = user.city
+    name = get_image_name(current_user.user_id, "profile")
+    upload_image(avatar_file.file, name)
+    db_user.avatar = get_image_link(name)
+    await db.commit()
+    return UserDto.model_validate(db_user)

@@ -1,3 +1,4 @@
+from re import L
 import typing as tp
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -5,13 +6,13 @@ from pydantic import BaseModel, Field, ConfigDict
 UserRoles = tp.Literal["user", "admin"]
 
 
-class UserRole(BaseModel):
-    id: int = Field(..., alias="id")
-    name: str = Field()
+# class UserRole(BaseModel):
+#     id: int = Field(..., alias="id")
+#     name: str = Field()
 
-    model_config = ConfigDict(
-        from_attributes=True,
-    )
+#     model_config = ConfigDict(
+#         from_attributes=True,
+#     )
 
 
 class User(BaseModel):
@@ -26,9 +27,18 @@ class UserLogin(BaseModel):
 class UserCreate(BaseModel):
     first_name: str = Field(..., examples=["Ivan"])
     last_name: str = Field(..., examples=["Ivanov"])
+    middle_name: str = Field(..., examples=["Ivanovich"])
     email: str = Field(..., examples=["test@test.com"])
     password: str = Field(..., examples=["Test123456"])
-    role: UserRoles = Field("user", examples=["user", "admin"])
+    # role: tp.Annotated[str, UserRoles] = Field("user", examples=["user", "admin"])
+
+
+class UserUpdate(BaseModel):
+    email: str = Field(...)
+    first_name: str = Field(...)
+    middle_name: str = Field(...)
+    last_name: str = Field(...)
+    city: str = Field(...)
 
 
 class UserDto(BaseModel):
@@ -38,4 +48,7 @@ class UserDto(BaseModel):
     first_name: str = Field(..., examples=["Ivan"])
     last_name: str = Field(..., examples=["Ivanov"])
     email: str = Field(..., examples=["test@]test.com"])
-    role: UserRole = Field(..., examples=["user"])
+    avatar: tp.Optional[str] = Field(
+        ..., examples=["http://localhost:8000/static/avatars/1.png"]
+    )
+    role: tp.Annotated[str, UserRoles] = Field(..., examples=["user"])
