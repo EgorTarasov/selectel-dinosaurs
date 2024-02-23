@@ -25,9 +25,9 @@ class UserLogin(BaseModel):
 
 
 class UserCreate(BaseModel):
-    first_name: str = Field(..., examples=["Ivan"])
-    last_name: str = Field(..., examples=["Ivanov"])
-    middle_name: str = Field(..., examples=["Ivanovich"])
+    # first_name: str = Field(..., examples=["Ivan"])
+    # last_name: str = Field(..., examples=["Ivanov"])
+    # middle_name: str = Field(..., examples=["Ivanovich"])
     email: str = Field(..., examples=["test@test.com"])
     password: str = Field(..., examples=["Test123456"])
     # role: tp.Annotated[str, UserRoles] = Field("user", examples=["user", "admin"])

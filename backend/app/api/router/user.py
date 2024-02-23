@@ -42,8 +42,8 @@ async def get_me(
 
 @router.put("/profile", response_model=UserDto)
 async def update_profile(
+    avatar_file: UploadFile | None = File(None),
     user: UserUpdate = Depends(UserUpdate),
-    avatar_file: UploadFile = File(...),
     db: AsyncSession = Depends(get_session),
     current_user: UserTokenData = Depends(get_current_user),
 ):
@@ -58,7 +58,8 @@ async def update_profile(
     db_user.last_name = user.last_name
     db_user.email = user.email
     db_user.city = user.city
-    avatar = await save_image(avatar_file, db_user.id, "profile")
-    db_user.avatar = avatar
+    if avatar_file:
+        avatar = await save_image(avatar_file, db_user.id, "profile")
+        db_user.avatar = avatar
     await db.commit()
     return UserDto.model_validate(db_user)
