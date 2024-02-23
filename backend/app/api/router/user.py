@@ -11,6 +11,7 @@ from fastapi import (
     HTTPException,
     UploadFile,
     File,
+    Form,
 )
 
 
@@ -42,8 +43,11 @@ async def get_me(
 
 @router.put("/profile", response_model=UserDto)
 async def update_profile(
-    user: UserUpdate = Depends(UserUpdate),
-    avatar_file: UploadFile = File(...),
+    avatar: UploadFile | None = File(None),
+    first_name: str = Form(...),
+    last_name: str = Form(...),
+    email: str = Form(...),
+    city: str = Form(...),
     db: AsyncSession = Depends(get_session),
     current_user: UserTokenData = Depends(get_current_user),
 ):
@@ -54,11 +58,12 @@ async def update_profile(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
-    db_user.first_name = user.first_name
-    db_user.last_name = user.last_name
-    db_user.email = user.email
-    db_user.city = user.city
-    avatar = await save_image(avatar_file, db_user.id, "profile")
-    db_user.avatar = avatar
+    db_user.first_name = first_name
+    db_user.last_name = last_name
+    db_user.email = email
+    db_user.city = city
+    if avatar:
+        avatar_url = await save_image(avatar, db_user.id, "profile")
+        db_user.avatar = avatar_url
     await db.commit()
     return UserDto.model_validate(db_user)

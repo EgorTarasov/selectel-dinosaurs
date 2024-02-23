@@ -62,7 +62,7 @@ async def login(
 async def register(
     user: UserCreate,
     db: AsyncSession = Depends(get_session),
-):
+) -> Token:
     """Регистрация нового пользователя"""
 
     stmt = sa.select(User).where(User.email == user.email)
@@ -74,9 +74,9 @@ async def register(
         )
     else:
         db_user = User(
-            first_name=user.first_name,
-            last_name=user.last_name,
-            middle_name=user.middle_name,
+            first_name="",
+            last_name="",
+            middle_name="",
             email=user.email,
             role="user",
             password="",
