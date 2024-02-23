@@ -31,7 +31,6 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Token:
     """Вход по почте и паролю"""
-    print(form_data.username, form_data.password)
     try:
         # stmt = sa.select(User).where(User.email == form_data.username)
         # get User with role_data
@@ -52,7 +51,6 @@ async def login(
                 detail="Incorrect email or password",
             )
     except Exception as e:
-        print(e)
         logging.error(e)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

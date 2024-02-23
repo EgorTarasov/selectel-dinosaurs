@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         "https://oauth.vk.com/access_token?client_id={client_id}&client_secret={vk_secure_token}&redirect_uri={redirect_uri}&code={code}"
     )
     vk_base_url: str = "https://api.vk.ru/method"
-    model_config = SettingsConfigDict(env_file_encoding="utf-8", env_file=".env.example")
+    model_config = SettingsConfigDict(env_file_encoding="utf-8", env_file=".env")
 
     def build_postgres_dsn(self) -> str:
         return (

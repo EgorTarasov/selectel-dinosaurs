@@ -1,4 +1,5 @@
-from sqlalchemy.orm import selectinload
+import logging
+import sqlalchemy.orm as orm
 from sqlalchemy.ext.asyncio import AsyncSession
 import sqlalchemy as sa
 from ..models import Pet
@@ -53,21 +54,31 @@ async def update_pet(
 
 async def get_pet(pet_id: int, db: AsyncSession) -> Pet:
 
-    stmt = sa.select(Pet).filter(Pet.id == pet_id)
+    stmt = (
+        sa.select(Pet)
+        .options(
+            orm.selectinload(Pet.owner),
+            orm.selectinload(Pet.vaccines),
+            orm.selectinload(Pet.blood_donations),
+            orm.selectinload(Pet.blood_requests),
+        )
+        .where(Pet.id == pet_id)
+    )
+
     pet = (await db.execute(stmt)).scalar_one_or_none()
     if pet:
         return pet
-    raise ValueError(f"Pet with id {pet_id} not found")
+    else:
+        print("pet", pet)
+        raise ValueError(f"Pet with id {pet_id} not found")
 
 
 async def get_pets(db: AsyncSession) -> List[Pet]:
     stmt = sa.select(Pet).options(
-        sa.orm.selectinload(Pet.owner),
-        sa.orm.selectinload(Pet.vaccines),
-        sa.orm.selectinload(Pet.blood_donations),
-        sa.orm.selectinload(Pet.blood_requests),
-        sa.orm.selectinload(Pet.blood_donation_responses),
-        sa.orm.selectinload(Pet.blood_request_responses),
+        orm.selectinload(Pet.owner),
+        orm.selectinload(Pet.vaccines),
+        orm.selectinload(Pet.blood_donations),
+        orm.selectinload(Pet.blood_requests),
     )
     result = await db.execute(stmt)
     return list(result.scalars().all())

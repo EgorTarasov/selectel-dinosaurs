@@ -25,13 +25,7 @@ async def get_all_blood_donations(
     db: AsyncSession = Depends(get_session),
     current_user: UserTokenData = Depends(get_current_user),
 ):
-    print(
-        filters.city,
-        filters.amount,
-        filters.blood_type,
-        filters.due_date,
-        filters.pet_type,
-    )
+
     stmt = sa.select(Bank)
     if filters.city is not None:
 
@@ -71,7 +65,6 @@ async def create_bank(
 ):
     client = Client(settings.yandex_api_token)
     longitude, lattitude = client.coordinates(address)
-    print(longitude, lattitude)
     db_bank = Bank(
         name=name,
         address=address,
@@ -99,10 +92,5 @@ async def update_store_values(
         raise HTTPException(status_code=404, detail="Bank not found")
     bank.dog_storage = dog_storage
     bank.cat_storage = cat_storage
-    # save the changes
-    print(bank.dog_storage, bank.cat_storage)
-    # update the bank in the database
     await db.commit()
-    test_bank = await db.get(Bank, bank_id)
-
     return db_bank_to_bank_dto(bank)
