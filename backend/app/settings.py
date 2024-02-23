@@ -1,4 +1,5 @@
 import typing as tp
+from pydantic import EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,12 @@ class Settings(BaseSettings):
     postgres_port: int = 5432
     postgres_db: str
 
+    mail_user: EmailStr
+    mail_password: str
+    mail_host: str
+    mail_port: int
+
+    yandex_api_token: str
     postgres_user: str
     postgres_password: str
 

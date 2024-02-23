@@ -18,6 +18,8 @@ def db_user_to_user_dto(db_user: User) -> UserDto:
             "vk": db_user.vkid,
             "wishes": db_user.wishes,
             "available_weekends_only": db_user.available_weekends_only,
+
+            "avatar": db_user.avatar,
             "avaliable_time": db_user.avaliable_time if db_user.avaliable_time else [],
         }
     )

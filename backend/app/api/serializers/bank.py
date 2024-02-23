@@ -10,6 +10,8 @@ def db_bank_to_bank_response(bank: Bank, amount: int) -> BankResponse:
             "address": bank.address,
             "price": bank.price_per_mil * amount,
             "link": bank.link,
+            "dogStorage": bank.dog_storage,
+            "catStorage": bank.cat_storage,
         }
     )
 
@@ -20,10 +22,12 @@ def db_bank_to_bank_dto(bank: Bank) -> BankDto:
             "id": bank.id,
             "name": bank.name,
             "address": bank.address,
-            "city": bank.city,
+            "longitude": bank.longitude,
+            "latitude": bank.latitude,
             "pricePerMil": bank.price_per_mil,
-            "amountOfBlood": bank.amount,
             "phone": bank.phone,
             "link": bank.link,
+            "dogStorage": bank.dog_storage,
+            "catStorage": bank.cat_storage,
         }
     )
