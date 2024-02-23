@@ -1,5 +1,5 @@
 from pydantic import BaseModel, HttpUrl
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from datetime import datetime
 from enum import Enum
 
@@ -22,3 +22,18 @@ class PetDto(BaseModel):
     weight: float
     able_to_donate: bool
     owner: UserDto
+
+
+class PetCreate(BaseModel):
+    type: PetType
+    breed: str
+    avatar: Optional[HttpUrl] = "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
+    name: str
+    age: int
+    weight: float
+    able_to_donate: bool
+    owner: UserDto
+
+
+class PetDonateAble(BaseModel):
+    able_to_donate: bool
