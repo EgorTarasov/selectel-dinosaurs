@@ -1,4 +1,5 @@
 from .base import Base
+from .bank import Bank
 from .user import User
 from .pet import Pet
 from .vaccine import Vaccine
@@ -8,6 +9,7 @@ from .response import Response
 
 
 __all__ = [
+    "Bank",
     "User",
     "Base",
     "Pet",

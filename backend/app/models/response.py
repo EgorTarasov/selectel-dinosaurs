@@ -2,9 +2,6 @@ import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, TimestampMixin
-from .pet import (
-    Pet,
-)  # Import the Pet class from the same module or adjust the import path
 
 
 class Response(Base, TimestampMixin):
