@@ -21,6 +21,8 @@ class Pet(Base, TimestampMixin):
     vaccines = relationship("Vaccine", back_populates="pet")
     blood_donations = relationship("BloodDonation", back_populates="pet")
     blood_requests = relationship("BloodRequest", back_populates="pet")
+    blood_donation_responses = relationship("BloodDonationResponse", back_populates="pet")
+    blood_request_responses = relationship("BloodRequestResponse", back_populates="pet")
 
     def __repr__(self) -> str:
         return (

@@ -1,4 +1,5 @@
-from sqlalchemy import Session
+from sqlalchemy.orm import Session, selectinload
+import sqlalchemy as sa
 from ..models import Pet
 from typing import Optional, List
 
@@ -9,16 +10,17 @@ async def create_pet(owner_id: int, pet_create: PetCreate, db: Session) -> Pet:
     pet = Pet(
         type=pet_create.type,
         breed=pet_create.breed,
-        avatar=pet_create.avatar,
+        avatar=str(pet_create.avatar),
         name=pet_create.name,
         age=pet_create.age,
         weight=pet_create.weight,
-        able_to_donat=pet_create.able_to_donate,
+        able_to_donate=pet_create.able_to_donate,
         owner_id=owner_id
     )
     db.add(pet)
     await db.commit()
-    await db.refresh(pet)
+    await db.refresh(pet, ["id", "owner", "vaccines", "blood_donations", "blood_requests"])
+    print("pet", pet)
 
     return pet
 
@@ -46,4 +48,8 @@ async def get_pet(pet_id: int, db: Session) -> Pet:
 
 
 async def get_pets(db: Session) -> List[Pet]:
-    return db.query(Pet).all()
+    stmt = sa.select(Pet).options(sa.orm.selectinload(Pet.owner, Pet.vaccines, Pet.vaccines, Pet.blood_donations, Pet.blood_requests, Pet.blood_donation_responses, Pet.blood_request_responses))
+    result = await db.execute(stmt)
+    pets = result.scalars().all()
+    print(pets)
+    return pets

@@ -8,14 +8,16 @@ from .user import db_user_to_user_dto
 COOLDOWN_DAYS_AFTER_DONATION = 2 * 31
 
 
-async def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
+def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
+    print(db_pet)
+    print(db_pet.id)
     if is_full:
         from .blood_donation import db_blood_donations_to_blood_donation_dtos
         from .blood_request import db_blood_requests_to_blood_request_dtos
         from .vaccine import db_vaccines_to_vaccine_dtos
-        donations = await db_blood_donations_to_blood_donation_dtos(db_pet.blood_donations)
-        requests = await db_blood_requests_to_blood_request_dtos(db_pet.blood_requests)
-        vaccines = await db_vaccines_to_vaccine_dtos(db_pet.vaccines)
+        donations = db_blood_donations_to_blood_donation_dtos(db_pet.blood_donations)
+        requests = db_blood_requests_to_blood_request_dtos(db_pet.blood_requests)
+        vaccines = db_vaccines_to_vaccine_dtos(db_pet.vaccines)
         donations.sort(key=lambda x: x.date)
         requests.sort(key=lambda x: x.date)
         vaccines.sort(key=lambda x: x.date)
@@ -39,5 +41,5 @@ async def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
     )
 
 
-async def db_pets_to_pet_dtos(db_pets: List[Pet], is_full=False) -> List[PetDto]:
-    return [await db_pet_to_pet_dto(db_pet, is_full) for db_pet in db_pets]
+def db_pets_to_pet_dtos(db_pets: List[Pet], is_full=False) -> List[PetDto]:
+    return [db_pet_to_pet_dto(db_pet, is_full) for db_pet in db_pets]

@@ -34,18 +34,19 @@ async def create_pet(
         db_pet = await crud.create_pet(current_user.user_id, pet, db)
         return db_pet_to_pet_dto(db_pet)
     except Exception as e:
+        print(e)
         raise fastapi.HTTPException(status_code=400, detail=f"Pet create error: {str(e)}")
 
 
 # Endpoint to get all pet cards
 @router.get("/pets", response_model=tp.List[PetDto])
-def get_all_pets(db: Session = Depends(get_session)):
+async def get_all_pets(db: Session = Depends(get_session)):
     return db_pets_to_pet_dtos(await crud.get_pets(db))
 
 
 # Endpoint to update pet data
 @router.put("/pets/{pet_id}", response_model=PetDto)
-def update_pet(
+async def update_pet(
         pet_id: int,
         pet: PetUpdate,
         db: Session = Depends(get_session),
@@ -60,7 +61,7 @@ def update_pet(
 
 # Endpoint to update the 'able_to_donate' flag for a pet
 @router.put("/pets/{pet_id}/able-to-donate", response_model=PetDto)
-def update_pet_donation_flag(
+async def update_pet_donation_flag(
         pet_id: int,
         pet: PetDonateAble,
         db: Session = Depends(get_session),

@@ -12,6 +12,7 @@ class BloodDonation(Base, TimestampMixin):
     amount: Mapped[int] = mapped_column(sa.Integer)
     date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
 
+    blood_donation_response = relationship("BloodDonationResponse", back_populates="blood_donation")
     pet = relationship("Pet", back_populates="blood_donations")
 
     def __repr__(self) -> str:

@@ -12,6 +12,7 @@ class BloodRequest(Base, TimestampMixin):
     due_date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
 
     pet = relationship("Pet", back_populates="blood_requests")
+    blood_request_response = relationship("BloodRequestResponse", back_populates="blood_request")
 
     def __repr__(self) -> str:
         return f"<BloodRequest {self.id} {self.amount} {self.due_date}>"
