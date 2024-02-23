@@ -4,9 +4,7 @@ export enum DogBloodType {
   DEA_3 = "DEA 3",
   DEA_4 = "DEA 4",
   DEA_5 = "DEA 5",
-  DEA_6 = "DEA 6",
-  DEA_7 = "DEA 7",
-  DEA_8 = "DEA 8"
+  DEA_7 = "DEA 7"
 }
 
 export enum CatBloodType {

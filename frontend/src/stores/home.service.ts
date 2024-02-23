@@ -1,66 +1,20 @@
-import { Bank, Donation, SocialDonation } from "@/api/models";
+import { BanksEndpoint } from "@/api/endpoints/banks.endpoint";
+import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
+import { Bank, Donation, FetchBanksParams, SocialDonation } from "@/api/models";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
 
 export class HomeStore {
+  isLoading = false;
+
   animal: Animal | null = null;
   city: string | null = null;
   bloodType: DogBloodType | CatBloodType | null = null;
   bloodVolume: number | null = null;
   expirationDate: Date | undefined;
 
-  banks: Bank[] = [
-    {
-      id: 1,
-      name: "ШансБио",
-      address: "г. Москва, Электролитный проезд, дом 3 стр. 12",
-      city: "Электролитный проезд",
-      pricePerMil: 250,
-      amountOfBlood: 900,
-      phone: "+74952600260",
-      link: "https://vetlab.ru/"
-    },
-    {
-      id: 2,
-      name: "Vet Union",
-      address: "г. Москва, ул. Профсоюзная, д. 45",
-      city: "ул. Профсоюзная",
-      pricePerMil: 400,
-      amountOfBlood: 800,
-      phone: "+78002008565",
-      link: "https://vetunion.ru/lab/"
-    }
-  ];
-  donations: Donation[] = [
-    {
-      id: 1,
-      date: "2021-10-10",
-      amount: 500,
-      desctiption: "description",
-      pet: {
-        id: 1,
-        type: "dog",
-        breed: "labrador",
-        avatar:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Labrador_Retriever_%281210559%29.jpg/800px-Labrador_Retriever_%281210559%29.jpg",
-        name: "Барсик",
-        age: 5,
-        weight: 25,
-        able_to_donate: true,
-        owner: {
-          id: 1,
-          name: "Иванов Иван Иванович",
-          phone: "+79123456789",
-          email: "email",
-          city: "Москва"
-        },
-        donations: [],
-        requests: [],
-        vaccines: [],
-        cooldown_donation_days: 30
-      }
-    }
-  ];
+  banks: Bank[] = [];
+  donations: Donation[] = [];
   socialDonations: SocialDonation[] = [
     {
       id: 1,
@@ -97,6 +51,32 @@ export class HomeStore {
   setBloodVolume(bloodVolume: string) {
     if (typeof +bloodVolume === "number") {
       this.bloodVolume = +bloodVolume;
+    }
+  }
+
+  async applyFilters() {
+    this.isLoading = true;
+
+    const params: FetchBanksParams = {
+      blood_type: this.bloodType ?? undefined,
+      amount: this.bloodVolume ?? undefined,
+      city: this.city ?? undefined,
+      pet_type: this.animal === Animal.Dog ? "dog" : this.animal === Animal.Cat ? "cat" : undefined,
+      due_date: this.expirationDate ? this.expirationDate?.toISOString() : undefined
+    };
+
+    try {
+      const [banksResponse, donationsResponse] = await Promise.all([
+        BanksEndpoint.fetchBanks(params),
+        BloodDonationsEndpoint.fetchBloodDonations(params)
+      ]);
+
+      this.banks = banksResponse;
+      this.donations = donationsResponse;
+    } catch (error) {
+      console.error("Ошибка при получении данных:", error);
+    } finally {
+      this.isLoading = false;
     }
   }
 }

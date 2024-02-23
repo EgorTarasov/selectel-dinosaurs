@@ -8,3 +8,11 @@ export interface Bank {
   phone: string;
   link: string;
 }
+
+export interface FetchBanksParams {
+  blood_type?: string;
+  amount?: number;
+  city?: string;
+  pet_type?: "cat" | "dog";
+  due_date?: string;
+}

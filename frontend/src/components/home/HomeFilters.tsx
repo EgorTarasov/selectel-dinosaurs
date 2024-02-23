@@ -28,7 +28,7 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
       <div className="section">
         <div className="rounded-xl bg-white border border-gray-200 p-6 w-full">
           <div className="flex gap-5 flex-wrap w-full">
-            <div className="grid flex-auto items-center gap-1.5">
+            <div className="grid min-w-40 flex-auto items-center gap-1.5">
               <Label htmlFor="animal">Животное</Label>
 
               <Select onValueChange={(value: Animal) => vm.setAnimal(value)}>
@@ -57,7 +57,7 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
               />
             </div>
 
-            <div className="grid flex-auto items-center gap-1.5">
+            <div className="grid  min-w-40 flex-auto items-center gap-1.5">
               <Label htmlFor="bloodType">Группа крови</Label>
               <Select
                 value={vm.bloodType ?? ""}
@@ -79,7 +79,7 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
             </div>
 
             <div className="grid flex-auto items-center gap-1.5">
-              <Label htmlFor="bloodVolume">Количество крови</Label>
+              <Label htmlFor="bloodVolume">Количество крови, мл</Label>
               <Input
                 value={vm.bloodVolume?.toString() ?? ""}
                 onChange={(e) => vm.setBloodVolume(e.target.value.replace(/[^0-9]/g, ""))}
@@ -120,7 +120,33 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
             </div>
 
             <div className="grid flex-auto items-center gap-1.5 mt-5">
-              <Button>Найти</Button>
+              <Button
+                className={`relative min-w-40 ${vm.isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                onClick={() => vm.applyFilters()}>
+                {!vm.isLoading ? (
+                  "Найти"
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.001 8.001 0 0112 4.472v3.044a4 4 0 10-4 0v0zm2 0A8.001 8.001 0 0120.472 12h3.044a4 4 0 10-3.044-4v0zm0 2A8.001 8.001 0 0112 19.528v3.044a4 4 0 10-4 0v0zm0-2a8.001 8.001 0 01-8-8H0a4 4 0 104 4v0zm8 8a8.001 8.001 0 01-8 8v-3.044a4 4 0 003.044-4h4zm2-5.291v0zM20.472 12v0z"></path>
+                    </svg>
+                  </div>
+                )}
+              </Button>
             </div>
           </div>
         </div>

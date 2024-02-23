@@ -17,3 +17,11 @@ export interface SocialDonation {
   blood?: string;
   pet?: string;
 }
+
+export interface FetchDonationsParams {
+  blood_type?: string;
+  amount?: number;
+  city?: string;
+  pet_type?: "cat" | "dog";
+  due_date?: string;
+}
