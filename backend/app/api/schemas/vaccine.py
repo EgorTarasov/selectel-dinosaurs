@@ -11,3 +11,8 @@ class VaccineDto(BaseModel):
     date: datetime
     expire_date: datetime
     pet: PetDto
+
+
+class VaccineCreate(BaseModel):
+    name: str
+    date: datetime

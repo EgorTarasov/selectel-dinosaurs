@@ -20,8 +20,8 @@ router: tp.Final[APIRouter] = APIRouter(prefix="/pets")
 
 @router.get("/pets/my", response_model=tp.List[PetDto])
 async def get_my_pets(
-    current_user: UserTokenData = Depends(get_current_user),
-    db: AsyncSession = Depends(get_session),
+        current_user: UserTokenData = Depends(get_current_user),
+        db: AsyncSession = Depends(get_session),
 ):
     stmt = (
         sa.select(Pet)
@@ -40,9 +40,9 @@ async def get_my_pets(
 # Endpoint to get information about a specific pet including vaccinations, donations, and requests
 @router.get("/pets/{pet_id}", response_model=PetDto)
 async def get_pet_info(
-    pet_id: int,
-    current_user: UserTokenData = Depends(get_current_user),
-    db: AsyncSession = Depends(get_session),
+        pet_id: int,
+        current_user: UserTokenData = Depends(get_current_user),
+        db: AsyncSession = Depends(get_session),
 ):
     try:
         return db_pet_to_pet_dto(await crud.get_pet(pet_id, db))
@@ -56,9 +56,9 @@ async def get_pet_info(
 # Endpoint to create a new pet
 @router.post("/pets", response_model=PetDto)
 async def create_pet(
-    pet: PetCreate,
-    db: AsyncSession = Depends(get_session),
-    current_user=Depends(get_current_user),
+        pet: PetCreate,
+        db: AsyncSession = Depends(get_session),
+        current_user=Depends(get_current_user),
 ):
     try:
         db_pet = await crud.create_pet(current_user.user_id, pet, db)
@@ -79,10 +79,10 @@ async def get_all_pets(db: AsyncSession = Depends(get_session)):
 # Endpoint to update pet data
 @router.put("/pets/{pet_id}", response_model=PetDto)
 async def update_pet(
-    pet_id: int,
-    pet: PetUpdate,
-    db: AsyncSession = Depends(get_session),
-    current_user=Depends(get_current_user),
+        pet_id: int,
+        pet: PetUpdate,
+        db: AsyncSession = Depends(get_session),
+        current_user=Depends(get_current_user),
 ):
     try:
         db_pet = await crud.update_pet(current_user.user_id, pet_id, pet, db)
@@ -96,10 +96,10 @@ async def update_pet(
 # Endpoint to update the 'able_to_donate' flag for a pet
 @router.put("/pets/{pet_id}/able-to-donate", response_model=PetDto)
 async def update_pet_donation_flag(
-    pet_id: int,
-    pet: PetDonateAble,
-    db: AsyncSession = Depends(get_session),
-    current_user=Depends(get_current_user),
+        pet_id: int,
+        pet: PetDonateAble,
+        db: AsyncSession = Depends(get_session),
+        current_user=Depends(get_current_user),
 ):
     try:
         able_to_donate = pet.able_to_donate

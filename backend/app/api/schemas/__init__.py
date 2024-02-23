@@ -14,7 +14,7 @@ from .blood_donation import (
     BloodDonationResponseCreate,
     BloodDonationResponseDto,
 )
-from .vaccine import VaccineDto
+from .vaccine import VaccineDto, VaccineCreate
 from .bank import BankDto, BankResponse
 
 __all__ = [
@@ -43,4 +43,5 @@ __all__ = [
     "VaccineDto",
     "BankDto",
     "PetUpdate",
+    "VaccineCreate",
 ]

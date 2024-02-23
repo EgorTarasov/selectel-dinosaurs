@@ -19,7 +19,7 @@ class BloodDonationCreate(BaseModel):
 
 class BloodDonationResponseDto(BaseModel):
     id: int
-    blood_response: BloodDonationDto
+    blood_donation: BloodDonationDto
     msg: str
     amount: int
     pet: PetDto
