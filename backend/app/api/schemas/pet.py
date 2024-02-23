@@ -12,7 +12,7 @@ class PetType(str, Enum):
     dog = "dog"
 
 
-class Pet(BaseModel):
+class PetDto(BaseModel):
     id: int
     type: PetType
     breed: str
