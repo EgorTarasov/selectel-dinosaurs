@@ -8,7 +8,7 @@ from .user import db_user_to_user_dto
 COOLDOWN_DAYS_AFTER_DONATION = 2 * 31
 
 
-async def db_pet_to_pet_dto(db_pet: Pet, is_full=False):
+async def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
     if is_full:
         from .blood_donation import db_blood_donations_to_blood_donation_dtos
         from .blood_request import db_blood_requests_to_blood_request_dtos

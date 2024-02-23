@@ -9,7 +9,7 @@ async def db_blood_donation_to_blood_donation_dto(db_blood_donation: BloodDonati
         id=db_blood_donation.id,
         amount=db_blood_donation.amount,
         date=db_blood_donation.created_at,
-        pet=db_pet_to_pet_dto(db_blood_donation.pet, is_full=False),
+        pet=await db_pet_to_pet_dto(db_blood_donation.pet, is_full=False),
     )
 
 
