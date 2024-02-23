@@ -38,10 +38,14 @@ async def update_pet(
         if pet.owner_id != owner_id:
             raise ValueError("You are not owner of this pet")
         for key, value in pet_update.dict().items():
-            if value:
+            if value is not None:
+                if key == "avatar":
+                    value = str(value)
                 setattr(pet, key, value)
         await db.commit()
-        await db.refresh(pet)
+        await db.refresh(
+            pet, ["id", "owner", "vaccines", "blood_donations", "blood_requests"]
+        )
         return pet
     else:
         raise ValueError(f"Pet with id {pet_id} not found")

@@ -14,6 +14,7 @@ class BloodDonationDto(BaseModel):
 
 class BloodDonationCreate(BaseModel):
     amount: int
+    date: datetime
 
 
 class BloodDonationResponseDto(BaseModel):

@@ -39,12 +39,12 @@ class PetCreate(BaseModel):
 
 class PetUpdate(BaseModel):
     type: Optional[PetType] = None
-    breed: Optional[str]
+    breed: Optional[str] = None
     avatar: Optional[HttpUrl] = "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
-    name: Optional[str]
-    age: Optional[int]
-    weight: Optional[float]
-    able_to_donate: Optional[bool]
+    name: Optional[str] = None
+    age: Optional[int] = None
+    weight: Optional[float] = None
+    able_to_donate: Optional[bool] = None
 
 
 class PetDonateAble(BaseModel):
