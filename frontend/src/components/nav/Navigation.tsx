@@ -6,7 +6,7 @@ import Logo from "@/assets/logo.svg";
 export const Navigation = observer(() => {
   return (
     <>
-      <div className="flex-col sm:flex-row flex gap-2">
+      <div className="section items-center gap-2">
         <Logo />
         <Link to="/" className="[&.active]:font-bold">
           Home
