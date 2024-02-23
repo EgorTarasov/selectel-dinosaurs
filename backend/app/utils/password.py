@@ -1,4 +1,4 @@
-from passlib.context import CryptContext
+from passlib.context import CryptContext  # type: ignore
 
 
 class PasswordManager:
