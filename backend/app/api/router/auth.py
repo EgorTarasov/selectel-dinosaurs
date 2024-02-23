@@ -6,16 +6,18 @@ import httpx
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Query
+from fastapi.responses import Response
+
 from fastapi.security import OAuth2PasswordRequestForm
 
 
 from ..middlewares.db_session import get_session
 
 from ...settings import settings
-from ...utils import jwt, password
+from ...utils import jwt, password, EmailClient, EmailData
 
-from ...models import User
+from ...models import User, ResetCode
 
 from ..schemas import Token, UserCreate
 
@@ -90,7 +92,7 @@ async def register(
 
 
 @router.post("/login/vk")
-async def auth_vl(
+async def auth_vk(
     code: str = Query(..., description="Код авторизации"),
     db: AsyncSession = Depends(get_session),
 ) -> Token:
@@ -135,3 +137,64 @@ async def auth_vl(
     await db.refresh(db_user)
     token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
     return Token(access_token=token, token_type="Bearer")
+
+
+# def send_email(data: EmailData):
+
+
+@router.post("/password-code")
+async def reset_password(
+    background_tasks: BackgroundTasks,
+    email: str,
+    db: AsyncSession = Depends(get_session),
+):
+    stmt = sa.select(User).where(User.email == email)
+    db_user = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+    code = password.PasswordManager.get_reset_code(email)
+
+    # send email with token
+    email_client = EmailClient(settings.mail_user, settings.mail_password)
+    logging.debug("sending email about password recover")
+    subject = "Смена пароля"
+    template = "password_recover.jinja"
+    link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
+
+    data = {
+        "fullname": f"{db_user.first_name} {db_user.last_name}",
+        "link_on_password_recover": link_on_password_recover,
+    }
+    email_client.send_mailing(email, subject, template, data)
+
+    db_reset_code = ResetCode(user_id=db_user.id, code=code)
+    db.add(db_reset_code)
+    await db.commit()
+
+    return Response(status_code=status.HTTP_200_OK)
+
+
+@router.get("/password-reset")
+async def reset_password(
+    token: str,
+    newPassword: str = Query(..., description="Новый пароль"),
+    db: AsyncSession = Depends(get_session),
+):
+    stmt = (
+        sa.select(ResetCode)
+        .options(orm.selectinload(ResetCode.user))
+        .where(ResetCode.code == token)
+    )
+    db_reset_code = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_reset_code:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Code not found"
+        )
+
+    db_user = db_reset_code.user
+    db_user.password = password.PasswordManager.hash_password(newPassword)
+    db.add(db_user)
+    await db.commit()
+    return Response(status_code=status.HTTP_200_OK)

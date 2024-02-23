@@ -65,6 +65,7 @@ class UserDto(BaseModel):
     city: tp.Optional[str] = Field(None)
     vkid: tp.Optional[int] = Field(None)
     wishes: tp.Optional[str] = Field(None, description="Предпочтения за донацию")
+    avatar: tp.Optional[str] = Field(None)
     available_weekends_only: bool = Field(...)
     avaliable_time: tp.List[tp.Tuple[str, str]] = Field(
         ..., description="Время доступности", examples=[("10:00", "18:00")]

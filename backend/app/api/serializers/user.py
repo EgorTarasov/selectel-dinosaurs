@@ -19,5 +19,6 @@ def db_user_to_user_dto(db_user: User) -> UserDto:
             "wishes": db_user.wishes,
             "available_weekends_only": db_user.available_weekends_only,
             "avaliable_time": db_user.avaliable_time,
+            "avatar": db_user.avatar,
         }
     )

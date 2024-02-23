@@ -6,9 +6,11 @@ from .vaccine import Vaccine
 from .blood_donation import BloodDonation
 from .blood_request import BloodRequest
 from .response import Response
+from .resetcode import ResetCode
 
 
 __all__ = [
+    "ResetCode",
     "Bank",
     "User",
     "Base",

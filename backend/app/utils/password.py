@@ -1,4 +1,5 @@
 from passlib.context import CryptContext  # type: ignore
+import hashlib
 
 
 class PasswordManager:
@@ -11,3 +12,9 @@ class PasswordManager:
     @classmethod
     def hash_password(cls, password: str) -> str:
         return cls.pwd_context.hash(password)
+
+    @classmethod
+    def get_reset_code(cls, email: str) -> str:
+        # create url safe reset code
+
+        return hashlib.sha256((email + "reset").encode()).hexdigest()
