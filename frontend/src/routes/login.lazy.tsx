@@ -1,36 +1,89 @@
-import { AuthService } from "@/stores/auth.service";
+import { Text } from "@/components/typography/Text";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { LoginStore } from "@/stores/login.store";
 import { createFileRoute } from "@tanstack/react-router";
-import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
-class LoginStore {
-  username = "";
-  password = "";
-  constructor() {
-    makeAutoObservable(this);
-  }
-}
-
 const Login = observer(() => {
   const { redirect } = Route.useSearch();
-  const [vm] = useState(() => new LoginStore());
-
-  const handleAuth = async () => {
-    const success = await AuthService.login(vm.username, vm.password);
-
-    if (success) {
-      window.location.href = redirect ?? "/";
-    }
-  };
+  const [vm] = useState(() => new LoginStore(redirect));
 
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
-      <input type="text" value={vm.username} onChange={(e) => (vm.username = e.target.value)} />
-      <input type="password" value={vm.password} onChange={(e) => (vm.password = e.target.value)} />
-
-      <button onClick={handleAuth}>Login</button>
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="flex flex-col rounded-lg bg-white w-96 p-6">
+        <ul className="flex">
+          <li className="flex-1">
+            <button
+              onClick={() => (vm.tab = "login")}
+              className={cn(
+                "w-full items-center border-b py-3",
+                vm.tab === "login"
+                  ? "text-foreground border-b border-b-primary"
+                  : "text-slate-400 border-b-slate-200"
+              )}>
+              <Text.H4>Вход</Text.H4>
+            </button>
+          </li>
+          <li className="flex-1">
+            <button
+              onClick={() => (vm.tab = "register")}
+              className={cn(
+                "w-full items-center border-b py-3",
+                vm.tab === "register"
+                  ? "text-foreground border-b-primary"
+                  : "text-slate-400 border-b-slate-200"
+              )}>
+              <Text.H4>Регистрация</Text.H4>
+            </button>
+          </li>
+        </ul>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            vm.onSubmit();
+          }}
+          className="flex flex-col py-5">
+          <fieldset className="flex flex-col gap-1.5">
+            <Label className={cn(vm.isErrored && "text-destructive")}>Почта</Label>
+            <Input
+              disabled={vm.isLoading}
+              type="email"
+              placeholder="test@test.com"
+              value={vm.email}
+              onChange={(e) => (vm.email = e.target.value)}
+            />
+          </fieldset>
+          <fieldset className="gap-1.5 flex flex-col mt-3 relative">
+            <Label className={cn(vm.isErrored && "text-destructive")}>Пароль</Label>
+            <Input
+              disabled={vm.isLoading}
+              type="password"
+              placeholder="Test123456"
+              value={vm.password}
+              onChange={(e) => (vm.password = e.target.value)}
+            />
+            <button
+              type="button"
+              className="absolute right-2 bottom-1.5 text-slate-600 hover:underline">
+              Забыли?
+            </button>
+          </fieldset>
+          {vm.isErrored && (
+            <Text.UiMedium className="text-destructive mt-2 text-center">
+              {vm.tab === "login"
+                ? "Неверный логин или пароль"
+                : "Пользователь с таким email уже зарегистрирован"}
+            </Text.UiMedium>
+          )}
+          <Button type="submit" className="mt-5" disabled={vm.isLoading}>
+            {vm.isLoading ? "Загрузка..." : vm.tab === "login" ? "Войти" : "Зарегистрироваться"}
+          </Button>
+        </form>
+      </div>
     </div>
   );
 });

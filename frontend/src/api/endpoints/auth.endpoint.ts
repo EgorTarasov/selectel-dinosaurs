@@ -20,6 +20,24 @@ export namespace AuthEndpoint {
     return parseJwt<AuthDto.Item>(result.access_token);
   };
 
+  export const register = async (email: string, password: string) => {
+    const result = await api.post<AuthDto.Result>(
+      "/api/auth/register",
+      {
+        email,
+        password
+      },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    setStoredAuthToken(result.access_token);
+    return parseJwt<AuthDto.Item>(result.access_token);
+  };
+
   export const loginWithTelegram = async (user: TUser) => {
     const result = await api.post<string>("/api/auth/add/telegram", { ...user });
 

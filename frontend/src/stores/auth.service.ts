@@ -40,6 +40,16 @@ class AuthServiceViewModel {
     }
   };
 
+  register = async (username: string, password: string): Promise<boolean> => {
+    try {
+      const user = await AuthEndpoint.register(username, password);
+      this.auth = { state: "authenticated", user };
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   logout() {
     this.auth = { state: "anonymous" };
     removeStoredAuthToken();
