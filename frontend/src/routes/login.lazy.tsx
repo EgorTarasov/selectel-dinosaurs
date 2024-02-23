@@ -12,8 +12,7 @@ const Login = observer(() => {
     const success = await AuthService.login(username, password);
 
     if (success) {
-      // redirect to the previous page
-      window.location.href = redirect; // TODO: use the redirect search param
+      window.location.href = redirect ?? "/";
     }
   };
 

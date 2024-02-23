@@ -1,11 +1,13 @@
 import { AuthService } from "@/stores/auth.service";
 import { Link } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
+import Logo from "@/assets/logo.svg";
 
 export const Navigation = observer(() => {
   return (
     <>
       <div className="p-2 flex gap-2">
+        <Logo />
         <Link to="/" className="[&.active]:font-bold">
           Home
         </Link>
