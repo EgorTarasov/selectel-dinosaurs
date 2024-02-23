@@ -7,7 +7,7 @@ from .blood_request import (
     BloodRequestResponseDto,
     BloodRequestResponseCreate,
 )
-from .pet import PetDto, PetCreate, PetDonateAble
+from .pet import PetDto, PetCreate, PetDonateAble, PetUpdate
 from .blood_donation import (
     BloodDonationDto,
     BloodDonationCreate,
@@ -42,4 +42,5 @@ __all__ = [
     "BloodDonationResponseDto",
     "VaccineDto",
     "BankDto",
+    "PetUpdate",
 ]
