@@ -38,6 +38,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-telegram-auth:
+    specifier: ^1.0.4
+    version: 1.0.4
   tailwind-merge:
     specifier: ^2.2.1
     version: 2.2.1
@@ -2487,6 +2490,12 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.6.2
+    dev: false
+
+  /react-telegram-auth@1.0.4:
+    resolution: {integrity: sha512-S/yddONhaCW0LoaMIr9gaeaKrXZz4bPMFEHVmlTPJneVlA57qi1yomr6Q41mKhUCfwO3p0GWYgBN62J0A2IKYQ==}
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react@18.2.0:

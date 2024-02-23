@@ -1,36 +1,21 @@
-import { AuthEndpoint } from "@/api/endpoints/auth.endpoint";
-import { UserEndpoint } from "@/api/endpoints/user.endpoint";
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { PrivateRoute } from "@/components/hoc/PrivateRoute";
+import { AuthService } from "@/stores/auth.service";
+import { createFileRoute } from "@tanstack/react-router";
+import { observer } from "mobx-react-lite";
 
-export const Route = createLazyFileRoute("/")({
-  component: Index
-});
-
-function Index() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleAuth = async () => {
-    const res = await AuthEndpoint.login(username, password);
-    console.log(res);
-  };
-
-  useEffect(() => {
-    const checkUser = async () => {
-      console.log(await UserEndpoint.current());
-    };
-
-    checkUser();
-  }, []);
-
+const Index = observer(() => {
   return (
     <div className="p-2">
-      <h3>Welcome Home!</h3>
-      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-      <button onClick={handleAuth}>Login</button>
+      {AuthService.auth.state}
+      <h1>all good</h1>
     </div>
   );
-}
+});
+
+export const Route = createFileRoute("/")({
+  component: () => (
+    <PrivateRoute>
+      <Index />
+    </PrivateRoute>
+  )
+});
