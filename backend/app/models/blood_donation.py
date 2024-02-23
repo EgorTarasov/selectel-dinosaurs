@@ -16,3 +16,17 @@ class BloodDonation(Base, TimestampMixin):
 
     def __repr__(self) -> str:
         return f"<BloodDonation {self.id} {self.amount} {self.date}>"
+
+
+class BloodDonationResponse(Base, TimestampMixin):
+    id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
+    blood_donation_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey('blood_donations.id', ondelete='CASCADE'), index=True)
+    msg: Mapped[str] = mapped_column(sa.String, nullable=False)
+    amount: Mapped[int] = mapped_column(sa.Integer, nullable=False)
+    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey('pets.id', ondelete='CASCADE'), index=True)
+
+    blood_donation: Mapped[BloodDonation] = relationship("BloodDonation", back_populates="blood_donation_response")
+    pet: Mapped['Pet'] = relationship("Pet", back_populates="blood_donation_responses")
+
+    def __repr__(self) -> str:
+        return f"<BloodDonationResponse {self.id} {self.amount} {self.created_at}>"

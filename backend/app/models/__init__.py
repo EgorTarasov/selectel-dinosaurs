@@ -3,10 +3,9 @@ from .bank import Bank
 from .user import User
 from .pet import Pet
 from .vaccine import Vaccine
-from .blood_donation import BloodDonation
-from .blood_request import BloodRequest
+from .blood_donation import BloodDonation, BloodDonationResponse
+from .blood_request import BloodRequest, BloodRequestResponse
 from .response import Response
-
 
 __all__ = [
     "Bank",
@@ -17,4 +16,6 @@ __all__ = [
     "BloodDonation",
     "BloodRequest",
     "Response",
+    "BloodDonationResponse",
+    "BloodRequestResponse",
 ]
