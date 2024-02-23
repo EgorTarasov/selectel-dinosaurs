@@ -7,3 +7,13 @@ export interface Donation {
   date: string;
   pet: Pet;
 }
+
+export interface SocialDonation {
+  id: number;
+  city: string;
+  name: string;
+  link: string;
+  phone?: string;
+  blood?: string;
+  pet?: string;
+}

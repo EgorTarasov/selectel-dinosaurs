@@ -28,38 +28,38 @@ const DonationCard = ({
               <path
                 d="M4.49999 6H3.49999C3.05797 6 2.63404 5.82441 2.32148 5.51185C2.00892 5.19929 1.83333 4.77536 1.83333 4.33333C1.83333 3.89131 2.00892 3.46738 2.32148 3.15482C2.63404 2.84226 3.05797 2.66667 3.49999 2.66667H4.49999"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12.5 6H13.5C13.942 6 14.366 5.82441 14.6785 5.51185C14.9911 5.19929 15.1667 4.77536 15.1667 4.33333C15.1667 3.89131 14.9911 3.46738 14.6785 3.15482C14.366 2.84226 13.942 2.66667 13.5 2.66667H12.5"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M3.16667 14.6667H13.8333"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M7.16667 9.77333V11.3333C7.16667 11.7 6.85334 11.9867 6.52 12.14C5.73334 12.5 5.16667 13.4933 5.16667 14.6667"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M9.83333 9.77333V11.3333C9.83333 11.7 10.1467 11.9867 10.48 12.14C11.2667 12.5 11.8333 13.4933 11.8333 14.6667"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12.5 1.33333H4.5V6C4.5 7.06086 4.92143 8.07828 5.67157 8.82843C6.42172 9.57857 7.43913 10 8.5 10C9.56087 10 10.5783 9.57857 11.3284 8.82843C12.0786 8.07828 12.5 7.06086 12.5 6V1.33333Z"
                 stroke="#F73232"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
             {donations.length} {getDonationDeclension(donations.length)}
@@ -105,7 +105,7 @@ const DonationCard = ({
       </div>
 
       {/* TODO: заменит type на тип крови */}
-      <div className="absolute p-3 top-0 right-0 bg-red-500 rounded-tr-md text-white font-semibold">
+      <div className="absolute p-3 top-0 right-0 bg-red-500 rounded-tr-md rounded-bl-md text-white font-semibold">
         {type}
       </div>
     </div>
