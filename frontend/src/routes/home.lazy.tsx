@@ -16,6 +16,14 @@ const Index: FCVM<HomeStore> = observer(() => {
       <div className="section mt-8 mb-7">
         <h3 className="font-semibold text-2xl">Подходящие банки крови</h3>
       </div>
+
+      <div className="section">
+        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {vm.banks.map((bank) => (
+            <BankCard key={bank.id} {...bank} />
+          ))}
+        </div>
+      </div>
     </>
   );
 });
