@@ -8,5 +8,6 @@ from .user import db_user_to_user_dto
 from .vaccine import db_vaccines_to_vaccine_dtos, db_vaccine_to_vaccine_dto
 
 from .bank import db_bank_to_bank_dto
+from .user import db_user_to_user_dto
 
-__all__ = ["db_bank_to_bank_dto"]
+__all__ = ["db_bank_to_bank_dto", "db_user_to_user_dto"]
