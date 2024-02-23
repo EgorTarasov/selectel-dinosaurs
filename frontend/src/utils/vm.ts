@@ -1,3 +1,3 @@
 import { FC } from "react";
 
-export type FCVM<T extends object> = FC<{ vm: T }>;
+export type FCVM<T> = FC<{ vm: T }>;

@@ -27,7 +27,7 @@ export const Navigation = observer(() => {
           <Logo />
         </Link>
         <NavLink to="/">Поиск донора для питомца </NavLink>
-        <NavLink to="/playground">Где питомцу сдать кровь?</NavLink>
+        <NavLink to="/map">Где питомцу сдать кровь?</NavLink>
         <div className="ml-auto">
           {AuthService.auth.state !== "loading" && (
             <Link

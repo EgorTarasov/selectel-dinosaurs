@@ -1,12 +1,17 @@
+import { CatBloodType, DogBloodType } from "@/constants";
+
 export interface Bank {
   id: number;
   name: string;
   address: string;
-  city: string;
+  longitude: number;
+  latitude: number;
   pricePerMil: number;
   amountOfBlood: number;
   phone: string;
   link: string;
+  dogStorage: Record<keyof typeof DogBloodType, number>;
+  catStorage: Record<keyof typeof CatBloodType, number>;
 }
 
 export interface FetchBanksParams {
