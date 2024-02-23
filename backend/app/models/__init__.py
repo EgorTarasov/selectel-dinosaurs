@@ -1,5 +1,5 @@
 from .base import Base
-from .bank import Bank
+from .bank import Bank, CatBloodStorage, DogBloodStorage
 from .user import User
 from .pet import Pet
 from .vaccine import Vaccine
@@ -12,6 +12,8 @@ from .resetcode import ResetCode
 __all__ = [
     "ResetCode",
     "Bank",
+    "DogBloodStorage",
+    "CatBloodStorage",
     "User",
     "Base",
     "Pet",

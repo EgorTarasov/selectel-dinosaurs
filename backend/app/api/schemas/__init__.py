@@ -1,5 +1,5 @@
 from .user import User, UserCreate, UserDto, UserLogin, UserUpdate, UserContactGroup
-from .query_filters import QueryFilters
+from .query_filters import QueryFilters, map_blood_type
 from .token import Token, TokenData
 from .blood_request import (
     BloodRequestDto,
@@ -19,6 +19,7 @@ from .bank import BankDto, BankResponse
 
 __all__ = [
     "BankResponse",
+    "map_blood_type",
     "QueryFilters",
     "User",
     "UserCreate",

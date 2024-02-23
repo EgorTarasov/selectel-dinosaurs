@@ -6,11 +6,13 @@ import datetime as dt
 from typing import List
 
 from random import randint
+
+
 from ..serializers.bank import db_bank_to_bank_dto
 from ..middlewares.db_session import get_session
 from ..middlewares.current_user import get_current_user, UserTokenData
-from ..schemas import BankDto, QueryFilters
-from ...models import Bank
+from ..schemas import BankDto, QueryFilters, map_blood_type
+from ...models import Bank, CatBloodStorage, DogBloodStorage
 
 router = APIRouter(prefix="/banks")
 
@@ -28,23 +30,27 @@ async def get_all_blood_donations(
         filters.due_date,
         filters.pet_type,
     )
-    if filters.city is None:
-        stmt = (
-            sa.select(Bank)
-            .where(Bank.amount >= filters.amount)
-            .order_by(Bank.price_per_mil)
-        )
-    else:
-        stmt = (
-            sa.select(Bank)
-            .where(
-                sa.and_(
-                    Bank.address.ilike(f"%{filters.city}%"),
-                    (Bank.amount >= filters.amount),
-                )
+    stmt = sa.select(Bank)
+    if filters.city is not None:
+
+        stmt.where(Bank.address.ilike(f"%{filters.city}%"))
+    if (
+        filters.blood_type is not None
+        and filters.pet_type is not None
+        and filters.amount is not None
+        and filters.amount > 0
+    ):
+        blood_type = map_blood_type(filters.blood_type, filters.pet_type)
+        if filters.pet_type == "dog":
+            stmt = stmt.where(
+                sa.cast(Bank.dog_storage[blood_type].astext, sa.Integer)
+                >= filters.amount
             )
-            .order_by(Bank.price_per_mil)
-        )
+        elif filters.pet_type == "cat":
+            stmt = stmt.where(
+                sa.cast(Bank.cat_storage[blood_type].astext, sa.Integer)
+                >= filters.amount
+            )
 
     banks = (await db.execute(stmt)).all()
 
@@ -67,20 +73,31 @@ async def create_bank(
         city=address.split(",")[-2].strip(),
         address=address,
         price_per_mil=price_per_mil,
-        amount=randint(5, 20) * 100,
         phone=phone,
         link=link,
     )
     db.add(db_bank)
     await db.commit()
     return db_bank_to_bank_dto(db_bank)
-    # return BankDto.model_validate(
-    #     {
-    #         "id": db_bank.id,
-    #         "name": db_bank.name,
-    #         "city": db_bank.city,
-    #         "address": db_bank.address,
-    #         "pricePerMil": db_bank.price_per_mil,
-    #         "amountOfBlood": db_bank.amount,
-    #     }
-    # )
+
+
+@router.put("/{bank_id}", response_model=BankDto)
+async def update_store_values(
+    bank_id: int,
+    dog_storage: DogBloodStorage,
+    cat_storage: CatBloodStorage,
+    db: AsyncSession = Depends(get_session),
+    current_user: UserTokenData = Depends(get_current_user),
+):
+    bank = await db.get(Bank, bank_id)
+    if bank is None:
+        raise HTTPException(status_code=404, detail="Bank not found")
+    bank.dog_storage = dog_storage
+    bank.cat_storage = cat_storage
+    # save the changes
+    print(bank.dog_storage, bank.cat_storage)
+    # update the bank in the database
+    await db.commit()
+    test_bank = await db.get(Bank, bank_id)
+
+    return db_bank_to_bank_dto(bank)

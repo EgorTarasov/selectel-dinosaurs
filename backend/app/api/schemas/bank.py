@@ -16,7 +16,23 @@ class BankDto(BaseModel):
     amount: int = Field(0, alias="amountOfBlood")
     phone: tp.Optional[str] = Field(None)
     link: tp.Optional[str] = Field(None)
-    # donations: List[BloodDonationDto]
+    dogStorage: tp.Dict[str, int] = Field(
+        {
+            "DEA_1_1": 0,
+            "DEA_1_2": 0,
+            "DEA_3": 0,
+            "DEA_4": 0,
+            "DEA_5": 0,
+            "DEA_7": 0,
+        }
+    )
+    catStorage: tp.Dict[str, int] = Field(
+        {
+            "A": 0,
+            "B": 0,
+            "AB": 0,
+        }
+    )
 
 
 class BankResponse(BaseModel):
@@ -25,6 +41,23 @@ class BankResponse(BaseModel):
     address: str
     price: int
     link: str
+    dogStorage: tp.Dict[str, int] = Field(
+        {
+            "DEA_1_1": 0,
+            "DEA_1_2": 0,
+            "DEA_3": 0,
+            "DEA_4": 0,
+            "DEA_5": 0,
+            "DEA_7": 0,
+        }
+    )
+    catStorage: tp.Dict[str, int] = Field(
+        {
+            "A": 0,
+            "B": 0,
+            "AB": 0,
+        }
+    )
 
 
 class BankCreate(BaseModel):
