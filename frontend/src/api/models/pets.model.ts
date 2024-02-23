@@ -1,4 +1,5 @@
 import { Donation } from "./donation.model";
+import { UserDto } from "./user.model";
 
 export interface Pet {
   id: number;
@@ -9,7 +10,7 @@ export interface Pet {
   age: number;
   weight: number;
   able_to_donate: boolean;
-  owner: unknown; // TODO: Добавить ДТО юзера
+  owner: UserDto.Item;
   donations: Donation[];
   requests: unknown;
   vaccines: unknown;
