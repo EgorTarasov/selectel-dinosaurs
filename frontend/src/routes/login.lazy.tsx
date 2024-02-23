@@ -1,15 +1,23 @@
 import { AuthService } from "@/stores/auth.service";
 import { createFileRoute } from "@tanstack/react-router";
+import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
+class LoginStore {
+  username = "";
+  password = "";
+  constructor() {
+    makeAutoObservable(this);
+  }
+}
+
 const Login = observer(() => {
   const { redirect } = Route.useSearch();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [vm] = useState(() => new LoginStore());
 
   const handleAuth = async () => {
-    const success = await AuthService.login(username, password);
+    const success = await AuthService.login(vm.username, vm.password);
 
     if (success) {
       window.location.href = redirect ?? "/";
@@ -19,8 +27,8 @@ const Login = observer(() => {
   return (
     <div className="p-2">
       <h3>Welcome Home!</h3>
-      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <input type="text" value={vm.username} onChange={(e) => (vm.username = e.target.value)} />
+      <input type="password" value={vm.password} onChange={(e) => (vm.password = e.target.value)} />
 
       <button onClick={handleAuth}>Login</button>
     </div>
