@@ -17,12 +17,13 @@ class PetDto(BaseModel):
     breed: str
     avatar: HttpUrl
     name: str
-    date_of_birth: datetime
+    age: int
     weight: float
     able_to_donate: bool
     owner: UserDto
     donations: List
     requests: List
+    vaccines: List
     cooldown_donation_days: int
 
 

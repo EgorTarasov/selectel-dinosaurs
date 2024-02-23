@@ -12,7 +12,7 @@ class Pet(Base, TimestampMixin):
     breed: Mapped[str] = mapped_column(sa.Text)
     avatar: Mapped[str] = mapped_column(sa.Text)
     name: Mapped[str] = mapped_column(sa.Text)
-    date_of_birth: Mapped[dt.datetime] = mapped_column(sa.DateTime)
+    age: Mapped[int] = mapped_column(sa.Integer)
     weight: Mapped[float] = mapped_column(sa.Float)
     able_to_donate: Mapped[bool] = mapped_column(sa.Boolean)
     owner_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("users.id"))
@@ -24,5 +24,5 @@ class Pet(Base, TimestampMixin):
 
     def __repr__(self) -> str:
         return (
-            f"<Pet {self.id} {self.name} {self.type} {self.breed} {self.date_of_birth}>"
+            f"<Pet {self.id} {self.name} {self.type} {self.breed} {self.age}>"
         )
