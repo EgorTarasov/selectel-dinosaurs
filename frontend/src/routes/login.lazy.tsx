@@ -2,6 +2,7 @@ import { Text } from "@/components/typography/Text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs } from "@/components/ui/tabs/Tabs";
 import { cn } from "@/lib/utils";
 import { LoginStore } from "@/stores/login.store";
 import { createFileRoute } from "@tanstack/react-router";
@@ -15,32 +16,12 @@ const Login = observer(() => {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="flex flex-col rounded-lg bg-white w-96 p-6">
-        <ul className="flex">
-          <li className="flex-1">
-            <button
-              onClick={() => (vm.tab = "login")}
-              className={cn(
-                "w-full items-center border-b py-3",
-                vm.tab === "login"
-                  ? "text-foreground border-b border-b-primary"
-                  : "text-slate-400 border-b-slate-200"
-              )}>
-              <Text.H4>Вход</Text.H4>
-            </button>
-          </li>
-          <li className="flex-1">
-            <button
-              onClick={() => (vm.tab = "register")}
-              className={cn(
-                "w-full items-center border-b py-3",
-                vm.tab === "register"
-                  ? "text-foreground border-b-primary"
-                  : "text-slate-400 border-b-slate-200"
-              )}>
-              <Text.H4>Регистрация</Text.H4>
-            </button>
-          </li>
-        </ul>
+        <Tabs
+          tabs={["login", "register"]}
+          activeTab={vm.tab}
+          renderTab={(tab) => (tab === "login" ? "Вход" : "Регистрация")}
+          onTabChange={(tab) => (vm.tab = tab)}
+        />
         <form
           onSubmit={(e) => {
             e.preventDefault();
