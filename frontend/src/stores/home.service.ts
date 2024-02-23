@@ -1,4 +1,4 @@
-import { Bank } from "@/api/models";
+import { Bank, Donation } from "@/api/models";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { log } from "console";
 import { makeAutoObservable } from "mobx";
@@ -30,6 +30,36 @@ export class HomeStore {
       amountOfBlood: 800,
       phone: "+78002008565",
       link: "https://vetunion.ru/lab/"
+    }
+  ];
+  donations: Donation[] = [
+    {
+      id: 1,
+      date: "2021-10-10",
+      amount: 500,
+      desctiption: "description",
+      pet: {
+        id: 1,
+        type: "dog",
+        breed: "labrador",
+        avatar:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Labrador_Retriever_%281210559%29.jpg/800px-Labrador_Retriever_%281210559%29.jpg",
+        name: "Барсик",
+        age: 5,
+        weight: 25,
+        able_to_donate: true,
+        owner: {
+          id: 1,
+          name: "Иванов Иван Иванович",
+          phone: "+79123456789",
+          email: "email",
+          city: "Москва"
+        },
+        donations: [],
+        requests: [],
+        vaccines: [],
+        cooldown_donation_days: 30
+      }
     }
   ];
 
