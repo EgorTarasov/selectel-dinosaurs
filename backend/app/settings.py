@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     mail_host: str
     mail_port: int
 
+    yandex_api_token: str
     postgres_user: str
     postgres_password: str
 

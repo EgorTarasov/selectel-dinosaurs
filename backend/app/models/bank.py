@@ -23,11 +23,12 @@ class CatBloodStorage(TypedDict):
 class Bank(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
     name: Mapped[str] = mapped_column(sa.String(50), nullable=False)
-    city: Mapped[str] = mapped_column(sa.String(50), nullable=False)
     address: Mapped[str] = mapped_column(sa.String(100), nullable=False)
     price_per_mil: Mapped[int] = mapped_column(sa.Integer, nullable=False)
     link: Mapped[str] = mapped_column(sa.String(100), nullable=True)
     phone: Mapped[str] = mapped_column(sa.String(20), nullable=True)
+    longitude: Mapped[float] = mapped_column(sa.Float, nullable=True)
+    latitude: Mapped[float] = mapped_column(sa.Float, nullable=True)
     dog_storage: Mapped[DogBloodStorage] = mapped_column(
         JSON,
         nullable=False,

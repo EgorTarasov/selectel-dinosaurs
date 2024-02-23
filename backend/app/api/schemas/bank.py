@@ -11,7 +11,8 @@ class BankDto(BaseModel):
     id: int
     name: str
     address: str
-    city: str
+    longitude: tp.Optional[float] = Field(None)
+    latitude: tp.Optional[float] = Field(None)
     price: int = Field(..., alias="pricePerMil")
     amount: int = Field(0, alias="amountOfBlood")
     phone: tp.Optional[str] = Field(None)

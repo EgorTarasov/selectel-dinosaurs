@@ -6,6 +6,7 @@ import datetime as dt
 from typing import List
 
 from random import randint
+from yandex_geocoder import Client
 
 
 from ..serializers.bank import db_bank_to_bank_dto
@@ -13,6 +14,7 @@ from ..middlewares.db_session import get_session
 from ..middlewares.current_user import get_current_user, UserTokenData
 from ..schemas import BankDto, QueryFilters, map_blood_type
 from ...models import Bank, CatBloodStorage, DogBloodStorage
+from ...settings import settings
 
 router = APIRouter(prefix="/banks")
 
@@ -67,14 +69,17 @@ async def create_bank(
     db: AsyncSession = Depends(get_session),
     current_user: UserTokenData = Depends(get_current_user),
 ):
-
+    client = Client(settings.yandex_api_token)
+    longitude, lattitude = client.coordinates(address)
+    print(longitude, lattitude)
     db_bank = Bank(
         name=name,
-        city=address.split(",")[-2].strip(),
         address=address,
         price_per_mil=price_per_mil,
         phone=phone,
         link=link,
+        longitude=longitude,
+        latitude=lattitude,
     )
     db.add(db_bank)
     await db.commit()
