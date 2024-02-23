@@ -33,11 +33,9 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
 
               <Select onValueChange={(value: Animal) => vm.setAnimal(value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder={"Не выбрано"} />
+                  <SelectValue defaultValue={Animal.Dog} placeholder={Animal.Dog} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={"Не выбрано"}>Не выбрано</SelectItem>
-
                   {Object.values(Animal).map((animal) => (
                     <SelectItem key={animal} value={animal}>
                       {animal}

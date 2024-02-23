@@ -7,7 +7,7 @@ import { makeAutoObservable } from "mobx";
 export class HomeStore {
   isLoading = false;
 
-  animal: Animal | null = null;
+  animal: Animal | null = Animal.Dog;
   city: string | null = null;
   bloodType: DogBloodType | CatBloodType | null = null;
   bloodVolume: number | null = null;
