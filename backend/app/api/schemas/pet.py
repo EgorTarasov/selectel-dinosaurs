@@ -1,10 +1,9 @@
 from pydantic import BaseModel, HttpUrl
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime
 from enum import Enum
 
-if TYPE_CHECKING:
-    from .user import UserDto
+from .user import UserDto
 
 
 class PetType(str, Enum):
@@ -22,6 +21,9 @@ class PetDto(BaseModel):
     weight: float
     able_to_donate: bool
     owner: UserDto
+    donations: List
+    requests: List
+    cooldown_donation_days: int
 
 
 class PetCreate(BaseModel):

@@ -2,8 +2,7 @@ from pydantic import BaseModel
 from typing import TYPE_CHECKING
 from datetime import datetime
 
-if TYPE_CHECKING:
-    from .pet import PetDto
+from .pet import PetDto
 
 
 class BloodDonationDto(BaseModel):
@@ -11,3 +10,20 @@ class BloodDonationDto(BaseModel):
     amount: int
     date: datetime
     pet: PetDto
+
+
+class BloodDonationCreate(BaseModel):
+    amount: int
+
+
+class BloodDonationResponseDto(BaseModel):
+    id: int
+    blood_response: BloodDonationDto
+    msg: str
+    amount: int
+    pet: PetDto
+
+
+class BloodDonationResponseCreate(BaseModel):
+    msg: str
+    amount: int

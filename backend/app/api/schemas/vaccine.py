@@ -2,8 +2,7 @@ from pydantic import BaseModel, HttpUrl
 from typing import TYPE_CHECKING
 from datetime import datetime
 
-if TYPE_CHECKING:
-    from .pet import PetDto
+from .pet import PetDto
 
 
 class VaccineDto(BaseModel):
