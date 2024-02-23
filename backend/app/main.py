@@ -44,7 +44,8 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_headers=["*"],
     )
-    # router = APIRouter(dependencies=[Depends(get_user_by_token)])
+    # add static dir
+    app.mount("/static", StaticFiles(directory=settings.static_dir), name="static")
     api_router = create_api_router(db, prefix=settings.api_prefix)
 
     app.include_router(api_router)

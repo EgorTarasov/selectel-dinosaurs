@@ -14,7 +14,7 @@ from fastapi import (
 )
 
 
-from ...utils.s3 import upload_image, get_image_link, get_image_name
+from ...utils.files import save_image
 from ..middlewares import get_current_user, get_session, UserTokenData
 from ...models import User
 from ..schemas import UserDto, UserCreate, UserUpdate
@@ -58,8 +58,7 @@ async def update_profile(
     db_user.last_name = user.last_name
     db_user.email = user.email
     db_user.city = user.city
-    name = get_image_name(current_user.user_id, "profile")
-    upload_image(avatar_file.file, name)
-    db_user.avatar = get_image_link(name)
+    avatar = await save_image(avatar_file, db_user.id, "profile")
+    db_user.avatar = avatar
     await db.commit()
     return UserDto.model_validate(db_user)
