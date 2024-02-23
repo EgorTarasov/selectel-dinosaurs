@@ -1,6 +1,5 @@
-import { Bank, Donation } from "@/api/models";
+import { Bank, Donation, SocialDonation } from "@/api/models";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
-import { log } from "console";
 import { makeAutoObservable } from "mobx";
 
 export class HomeStore {
@@ -60,6 +59,17 @@ export class HomeStore {
         vaccines: [],
         cooldown_donation_days: 30
       }
+    }
+  ];
+  socialDonations: SocialDonation[] = [
+    {
+      id: 1,
+      city: "Москва",
+      name: "Ветлаб",
+      link: "https://vetlab.ru/",
+      phone: "+74952600260",
+      blood: "O+",
+      pet: "Кот"
     }
   ];
 
