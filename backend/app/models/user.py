@@ -16,6 +16,8 @@ class User(Base, TimestampMixin):
     password: Mapped[str] = mapped_column(sa.Text)
     role: Mapped[str] = mapped_column(sa.Text)  # user / moderator / admin
 
+    pets: Mapped[list['Pet']] = relationship("Pet", back_populates="owner")
+
     def __repr__(self) -> str:
         return f"<User {self.id} {self.first_name} {self.last_name} {self.email}>"
 
