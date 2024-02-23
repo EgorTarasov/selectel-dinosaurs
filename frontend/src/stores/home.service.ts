@@ -10,6 +10,29 @@ export class HomeStore {
   bloodVolume: number | null = null;
   expirationDate: Date | undefined;
 
+  banks: Bank[] = [
+    {
+      id: 1,
+      name: "ШансБио",
+      address: "г. Москва, Электролитный проезд, дом 3 стр. 12",
+      city: "Электролитный проезд",
+      pricePerMil: 250,
+      amountOfBlood: 900,
+      phone: "+74952600260",
+      link: "https://vetlab.ru/"
+    },
+    {
+      id: 2,
+      name: "Vet Union",
+      address: "г. Москва, ул. Профсоюзная, д. 45",
+      city: "ул. Профсоюзная",
+      pricePerMil: 400,
+      amountOfBlood: 800,
+      phone: "+78002008565",
+      link: "https://vetunion.ru/lab/"
+    }
+  ];
+
   constructor() {
     makeAutoObservable(this);
   }
