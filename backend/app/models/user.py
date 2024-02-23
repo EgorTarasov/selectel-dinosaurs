@@ -12,9 +12,12 @@ class User(Base, TimestampMixin):
 
     first_name: Mapped[str] = mapped_column(sa.Text)
     last_name: Mapped[str] = mapped_column(sa.Text)
-    email: Mapped[str] = mapped_column(sa.Text)
+    email: Mapped[str] = mapped_column(sa.Text, nullable=True, unique=True)
     password: Mapped[str] = mapped_column(sa.Text)
     role: Mapped[str] = mapped_column(sa.Text)  # user / moderator / admin
+    vkid: Mapped[int] = mapped_column(sa.Integer, nullable=True, unique=True)
+    avatar: Mapped[str] = mapped_column(sa.Text, nullable=True)
+    city: Mapped[str] = mapped_column(sa.Text, nullable=True)
 
     def __repr__(self) -> str:
         return f"<User {self.id} {self.first_name} {self.last_name} {self.email}>"
