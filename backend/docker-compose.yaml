@@ -22,7 +22,17 @@ services:
       - POSTGRES_HOST=postgres
     ports:
       - "8000:8000"
-
+  minio:
+    image: minio/minio
+    ports:
+      - "10000:9000"
+      - "10001:9001"
+    volumes:
+      - minio_storage:/data
+    env_file:
+      - ".env"
+    command: server --console-address ":9001" /data
 
 volumes:
   postgres-data:
+  minio_storage:
