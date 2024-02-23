@@ -1,67 +1,20 @@
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import BankCard from "@/components/cards/BankCard";
+import { HomeFilters } from "@/components/home/HomeFilters";
+import { HomeStore } from "@/stores/home.service";
+import { FCVM } from "@/utils/vm";
 import { createFileRoute } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
 import { observer } from "mobx-react-lite";
+import { useState } from "react";
 
-interface FormSchema {
-  username: string;
-}
-
-const Index = observer(() => {
-  const form = useForm<FormSchema>({
-    defaultValues: {
-      username: ""
-    }
-  });
-
-  function onSubmit(data: FormSchema) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      )
-    });
-  }
+const Index: FCVM<HomeStore> = observer(() => {
+  const [vm] = useState(() => new HomeStore());
 
   return (
     <>
-      <div className="section">
-        <h1 className="">Данные для поиска</h1>
-      </div>
+      <HomeFilters vm={vm} />
 
-      <div className="section rounded-xl bg-white border border-gray-200 p-4">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>This is your public display name.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
+      <div className="section mt-8 mb-7">
+        <h3 className="font-semibold text-2xl">Подходящие банки крови</h3>
       </div>
     </>
   );
