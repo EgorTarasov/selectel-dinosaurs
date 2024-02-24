@@ -37,7 +37,7 @@ async def get_my_pets(
         .where(Pet.owner_id == current_user.user_id)
     )
     db_pets = list((await db.execute(stmt)).scalars().all())
-    return db_pets_to_pet_dtos(db_pets)
+    return db_pets_to_pet_dtos(db_pets, is_full=True)
 
 
 # Endpoint to get information about a specific pet including vaccinations, donations, and requests
@@ -48,7 +48,7 @@ async def get_pet_info(
     db: AsyncSession = Depends(get_session),
 ):
     try:
-        return db_pet_to_pet_dto(await crud.get_pet(pet_id, db))
+        return db_pet_to_pet_dto(await crud.get_pet(pet_id, db), is_full=True)
     except Exception as e:
         print(e)
         raise fastapi.HTTPException(
