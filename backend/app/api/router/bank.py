@@ -31,8 +31,9 @@ async def get_all_blood_donations(
 
         stmt.where(Bank.address.ilike(f"%{filters.city}%"))
     if (
-        filters.blood_type is not None
-        and filters.pet_type is not None
+        filters.pet_type is not None
+        and filters.pet_type != "any"
+        and filters.blood_type is not None
         and filters.amount is not None
         and filters.amount > 0
     ):
