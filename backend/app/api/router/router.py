@@ -8,6 +8,8 @@ from .blood_donation import router as blood_donation_router
 from .blood_request import router as blood_request_router
 from .vaccine import router as vaccine_router
 from .social import router as social_router
+from .bank_request import router as bank_request_router
+from .bank_donation import router as bank_donation_router
 
 from .pet import router as pet_router
 
@@ -34,4 +36,7 @@ def create_api_router(db: Database, prefix: str = "/api") -> APIRouter:
 
     router.include_router(vaccine_router, tags=["vaccine"])
     router.include_router(social_router, tags=["social"])
+
+    router.include_router(bank_request_router, tags=["bank_request"])
+    router.include_router(bank_donation_router, tags=["bank_donation"])
     return router

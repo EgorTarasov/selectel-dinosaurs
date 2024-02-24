@@ -28,8 +28,14 @@ from .blood_donation import (
 from .vaccine import VaccineDto, VaccineCreate
 from .bank import BankDto, BankResponse
 from .social import SocialMediaPostCreate, SocialMediaPostDto
+from .bank_request import BankRequest, BankRequestResponse
+from .bank_donation import BankDonation, BankDonationResponse
 
 __all__ = [
+    "BankDonation",
+    "BankDonationResponse",
+    "BankRequest",
+    "BankRequestResponse",
     "VkPayload",
     "VkUser",
     "SocialMediaPostCreate",

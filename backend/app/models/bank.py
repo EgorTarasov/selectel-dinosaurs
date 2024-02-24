@@ -1,7 +1,9 @@
 from typing_extensions import TypedDict
+
+from httpx import request
 from .base import Base, TimestampMixin
 from sqlalchemy.dialects.postgresql import JSON, ARRAY
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 import sqlalchemy as sa
 
 
@@ -46,5 +48,8 @@ class Bank(Base, TimestampMixin):
         JSON, nullable=False, default={"A": 0, "B": 0, "AB": 0}
     )
 
+    requests = relationship("BankRequest", back_populates="bank")
+    donations = relationship("BankDonation", back_populates="bank")
+
     def __repr__(self) -> str:
-        return f"<Bank {self.id} {self.name} {self.address}>"
+        return f"<Bank {self.id} {self.name} {self.address} {self.price_per_mil} {self.phone} {self.link} {self.longitude} {self.latitude} {self.advantages} {self.dog_storage} {self.cat_storage}>"
