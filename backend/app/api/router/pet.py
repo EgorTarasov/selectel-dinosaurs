@@ -1,5 +1,5 @@
 import fastapi
-from fastapi import FastAPI, HTTPException, Depends, Form, APIRouter
+from fastapi import Depends, APIRouter, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
@@ -7,6 +7,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 import typing as tp
 import datetime as dt
+
+from ...utils.files import save_image
 
 from ..middlewares.db_session import get_session
 from ..middlewares.current_user import get_current_user, UserTokenData
@@ -76,6 +78,36 @@ async def create_pet(
 async def get_all_pets(db: AsyncSession = Depends(get_session)):
     db_pets = await crud.get_pets(db)
     return db_pets_to_pet_dtos(db_pets)
+
+
+@router.put(
+    "/pets/{pet_id}/photo",
+)
+async def update_photo(
+    pet_id: int,
+    photo: UploadFile = File(...),
+    current_user: UserTokenData = Depends(get_current_user),
+    db: AsyncSession = Depends(get_session),
+):
+    stmt = sa.select(Pet).where(
+        sa.and_(Pet.id == pet_id, Pet.owner_id == current_user.user_id)
+    )
+    db_pet = (await db.execute(stmt)).scalar()
+    if not db_pet:
+        raise fastapi.HTTPException(
+            status_code=404, detail=f"Pet with id {pet_id} not found"
+        )
+    try:
+        photo_url = await save_image(photo, current_user.user_id, "pet")
+        db_pet.avatar = photo_url
+        db.add(db_pet)
+        await db.commit()
+        return photo_url
+    except Exception as e:
+        print(e)
+        raise fastapi.HTTPException(
+            status_code=400, detail=f"Pet photo update error: {str(e)}"
+        )
 
 
 # Endpoint to update pet data
