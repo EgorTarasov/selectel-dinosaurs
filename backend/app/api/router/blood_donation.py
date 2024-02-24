@@ -4,8 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import orm
 import sqlalchemy as sa
 from typing import List, Optional
+
+
 from ..middlewares.db_session import get_session
-from ..middlewares.current_user import get_current_user
+from ..middlewares.current_user import get_current_user, UserTokenData
 from ..schemas import (
     BloodDonationCreate,
     BloodDonationDto,
@@ -30,8 +32,8 @@ router = APIRouter(prefix="/blood-donations")
 #
 @router.get("/", response_model=List[BloodDonationSearchResult])
 async def get_all_blood_donations(
-        filters: QueryFilters = Depends(),
-        db: AsyncSession = Depends(get_session),
+    filters: QueryFilters = Depends(),
+    db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
     # contanct group, vkid
     stmt = (
@@ -63,11 +65,11 @@ async def get_all_blood_donations(
         # search where BloodDonation.pet.owner.city ilike filters.city
         stmt = stmt.where(User.city.ilike(f"%{filters.city}%"))
     if (
-            filters.blood_type is not None
-            and filters.amount is not None
-            and filters.amount > 0
+        filters.blood_type is not None
+        and filters.amount is not None
+        and filters.amount > 0
+        and filters.pet_type is not None
     ):
-        print("filtering by blood type and pet type")
         blood_type = map_blood_type(filters.blood_type, filters.pet_type)
         stmt = stmt.where(
             Pet.blood_type == filters.pet_type,
@@ -107,21 +109,17 @@ async def get_all_blood_donations(
 
 @router.post("/pet/{pet_id}", response_model=BloodDonationDto)
 async def create_blood_donation_request(
-        pet_id: int,
-        payload: BloodDonationCreate,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    pet_id: int,
+    payload: BloodDonationCreate,
+    db: AsyncSession = Depends(get_session),
+    current_user: UserTokenData = Depends(get_current_user),
 ):
     stmt = sa.select(Pet).where(Pet.id == pet_id)
     db_pet = (await db.execute(stmt)).scalar_one_or_none()
     if not db_pet:
-        raise HTTPException(
-            404, detail="Pet not found"
-        )
+        raise HTTPException(404, detail="Pet not found")
     if db_pet.owner_id != current_user.user_id:
-        raise HTTPException(
-            400, detail="You are not owner of this pet!"
-        )
+        raise HTTPException(400, detail="You are not owner of this pet!")
 
     blood_donation = BloodDonation(
         pet_id=pet_id,
@@ -146,22 +144,18 @@ async def create_blood_donation_request(
     "/{blood_donation_id}/pet/{pet_id}", response_model=BloodDonationResponseDto
 )
 async def create_response_to_blood_donation(
-        blood_donation_id: int,
-        pet_id: int,
-        blood_response: BloodDonationResponseCreate,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    blood_donation_id: int,
+    pet_id: int,
+    blood_response: BloodDonationResponseCreate,
+    db: AsyncSession = Depends(get_session),
+    current_user: UserTokenData = Depends(get_current_user),
 ):
     stmt = sa.select(Pet).where(Pet.id == pet_id)
     db_pet = (await db.execute(stmt)).scalar_one_or_none()
     if not db_pet:
-        raise HTTPException(
-            404, detail="Pet not found"
-        )
+        raise HTTPException(404, detail="Pet not found")
     if db_pet.owner_id != current_user.user_id:
-        raise HTTPException(
-            400, detail="You are not owner of this pet!"
-        )
+        raise HTTPException(400, detail="You are not owner of this pet!")
     db_blood_response = BloodDonationResponse(
         blood_donation_id=blood_donation_id,
         msg=blood_response.msg,
@@ -187,9 +181,9 @@ async def create_response_to_blood_donation(
     "/response/{blood_donation_id}", response_model=List[BloodDonationResponseDto]
 )
 async def get_responses_for_blood_donation_request(
-        blood_donation_id: int,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    blood_donation_id: int,
+    db: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
     stmt = (
         sa.select(BloodDonationResponse)
@@ -217,21 +211,20 @@ async def get_responses_for_blood_donation_request(
 
 @router.delete("/{blood_donation_id}")
 async def delete_blood_donation(
-        blood_donation_id: int,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    blood_donation_id: int,
+    db: AsyncSession = Depends(get_session),
+    current_user: UserTokenData = Depends(get_current_user),
 ):
-    stmt = sa.select(BloodDonation).options(orm.selectinload(BloodDonation.pet)).where(
-        BloodDonation.id == blood_donation_id)
+    stmt = (
+        sa.select(BloodDonation)
+        .options(orm.selectinload(BloodDonation.pet))
+        .where(BloodDonation.id == blood_donation_id)
+    )
     db_blood_donation = (await db.execute(stmt)).scalar_one_or_none()
     if not db_blood_donation:
-        raise HTTPException(
-            404, detail="Blood donation not found"
-        )
+        raise HTTPException(404, detail="Blood donation not found")
     if db_blood_donation.pet.owner_id != current_user.user_id:
-        raise HTTPException(
-            400, detail="You are not owner of this blood donation!"
-        )
+        raise HTTPException(400, detail="You are not owner of this blood donation!")
     row = await db.execute(
         sa.select(BloodDonation)
         .options(orm.selectinload(BloodDonation.blood_donation_response))

@@ -1,7 +1,7 @@
 project_dit = .
 .PHONY: dev
 dev:
-	docker compose up postgres -d --remove-orphans
+	docker compose up postgres rabbitmq -d --build --remove-orphans
 
 .PHONY: run-dev
 run-dev: dev

@@ -10,6 +10,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, 
 from fastapi.responses import Response
 
 from fastapi.security import OAuth2PasswordRequestForm
+from app.worker import send_recovery_code
 
 
 from ..middlewares.db_session import get_session
@@ -19,7 +20,7 @@ from ...utils import jwt, password, EmailClient, EmailData
 
 from ...models import User, ResetCode
 
-from ..schemas import Token, UserCreate
+from ..schemas import Token, UserCreate, VkPayload
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -91,49 +92,33 @@ async def register(
 
 @router.post("/login/vk")
 async def auth_vk(
-    code: str = Query(..., description="Код авторизации"),
+    payload: VkPayload,
     db: AsyncSession = Depends(get_session),
 ) -> Token:
-    url = settings.vk_token_url.format(
-        client_id=settings.vk_client_id,
-        vk_secure_token=settings.vk_secure_token,
-        redirect_uri=settings.vk_redirect_uri,
-        code=code,
-    )
-    client = httpx.AsyncClient()
-    response = await client.get(url)
-    if response.status_code != 200:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail=response.json()
-        )
-    access_token = response.json()["access_token"]
-    user_id = response.json()["user_id"]
-    response = await client.get(
-        settings.vk_base_url + "/users.get",
-        headers={"Authorization": f"Bearer {access_token}"},
-        params={"fields": "photo_200, city", "v": "5.199"},
-    )
-
-    user_info: dict[str, tp.Any] = response.json()["response"][0]
-
-    if "city" in user_info.keys():
-        city = user_info["city"]["title"]
+    """Вход через ВКонтакте"""
+    stmt = sa.select(User).where(User.email == payload.user.email)
+    db_user: User | None = (await db.execute(stmt)).unique().scalar_one_or_none()
+    if db_user:
+        token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
+        return Token(access_token=token, token_type="Bearer")
     else:
-        city = "Не указан"
-
-    db_user = User(
-        vkid=user_info["id"],
-        first_name=user_info["first_name"],
-        last_name=user_info["last_name"],
-        avatar=user_info["photo_200"],
-        city=city,
-        password="",
-        role="user",
-    )
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
-    token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
+        db_user = User(
+            first_name=payload.user.first_name,
+            last_name=payload.user.last_name,
+            vkid=payload.user.id,
+            middle_name="",
+            email=(
+                payload.user.email
+                if payload.user.email
+                else f"{payload.user.id}@larek.tech"
+            ),
+            role="user",
+            password="",
+        )
+        db.add(db_user)
+        await db.commit()
+        await db.refresh(db_user)
+        token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
     return Token(access_token=token, token_type="Bearer")
 
 
@@ -141,7 +126,7 @@ async def auth_vk(
 
 
 @router.post("/password-code")
-async def reset_password(
+async def password_code(
     background_tasks: BackgroundTasks,
     email: str,
     db: AsyncSession = Depends(get_session),
@@ -155,17 +140,18 @@ async def reset_password(
     code = password.PasswordManager.get_reset_code(email)
 
     # send email with token
-    email_client = EmailClient(settings.mail_user, settings.mail_password)
-    logging.debug("sending email about password recover")
-    subject = "Смена пароля"
-    template = "password_recover.jinja"
-    link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
+    # email_client = EmailClient(settings.mail_user, settings.mail_password)
+    # logging.debug("sending email about password recover")
+    # subject = "Смена пароля"
+    # template = "password_recover.jinja"
+    # link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
 
-    data = {
-        "fullname": f"{db_user.first_name} {db_user.last_name}",
-        "link_on_password_recover": link_on_password_recover,
-    }
-    email_client.send_mailing(email, subject, template, data)
+    # data = {
+    #     "fullname": f"{db_user.first_name} {db_user.last_name}",
+    #     "link_on_password_recover": link_on_password_recover,
+    # }
+    # email_client.send_mailing(email, subject, template, data)
+    send_recovery_code.delay(email, db_user.first_name, db_user.last_name, code)
 
     db_reset_code = ResetCode(user_id=db_user.id, code=code)
     db.add(db_reset_code)
