@@ -2,6 +2,7 @@ from re import L
 import typing as tp
 from pydantic import BaseModel, Field, ConfigDict
 
+
 UserRoles = tp.Literal["user", "admin"]
 
 
@@ -12,6 +13,50 @@ UserRoles = tp.Literal["user", "admin"]
 #     model_config = ConfigDict(
 #         from_attributes=True,
 #     )
+
+
+class VkUser(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    avatar: str
+    avatar_base: tp.Optional[str]
+    phone: str
+    email: str
+
+
+class VkPayload(BaseModel):
+    """
+
+
+        payload: {
+        type ":"
+        silent_token ",
+        "auth": 1,
+        "user": {
+            "id": 0000000,
+            "first_name": "Elvira",
+            "last_name": "D.",
+            "avatar": "https:\/\/sun9-57.vkuserphoto.ru\/s\/v1\/ig2\/9tzaf1Ny5r4wDJPTiZxRt...",
+            "avatar_base": null,
+            "phone": "+7 *** *** ** 73",
+            "email": "el***@mail.ru"
+        },
+        "token": "pB59JLSks...",
+        "ttl": 600,
+        "uuid": "someuuid",
+        "hash": "W7gOEykRK..."
+    }
+
+
+    """
+
+    auth: int
+    user: VkUser
+    token: str
+    ttl: int
+    uuid: str
+    hash: str
 
 
 class User(BaseModel):
