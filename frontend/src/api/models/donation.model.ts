@@ -46,3 +46,46 @@ export interface CreateDonationParams {
   amount: number;
   petId: number;
 }
+
+export interface BloodRequest {
+  id: number;
+  amount: number;
+  due_date: string;
+  date: string;
+  pet: {
+    id: number;
+    type: string;
+    breed: string;
+    avatar: string;
+    name: string;
+    age: number;
+    weight: number;
+    able_to_donate: boolean;
+    donations: unknown[];
+    requests: unknown[];
+    vaccines: unknown[];
+    cooldown_donation_days: number;
+    bloodType: string;
+  };
+}
+
+export interface DonationRequest {
+  id: number;
+  amount: number;
+  date: string;
+  pet: {
+    id: number;
+    type: string;
+    breed: string;
+    avatar: string;
+    name: string;
+    age: number;
+    weight: number;
+    able_to_donate: boolean;
+    donations: unknown[];
+    requests: unknown[];
+    vaccines: unknown[];
+    cooldown_donation_days: number;
+    bloodType: string;
+  };
+}

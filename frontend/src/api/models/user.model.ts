@@ -1,3 +1,5 @@
+import { BloodRequest, DonationRequest } from ".";
+
 export namespace UserDto {
   export interface Item {
     id: number;
@@ -16,6 +18,8 @@ export namespace UserDto {
     available_weekends_only: boolean;
     avaliable_time: [string, string][];
     avatar?: string;
+    requests: BloodRequest[];
+    donations: DonationRequest[];
   }
 
   export interface Update {
