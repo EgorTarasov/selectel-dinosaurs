@@ -3,6 +3,7 @@ import DonationCard from "@/components/cards/DonationCard";
 import SocialDonationCard from "@/components/cards/SocialDonationCard";
 import { HomeFilters } from "@/components/home/HomeFilters";
 import HomeSceleton from "@/components/home/HomeSceleton";
+import { Toaster } from "@/components/ui/toaster";
 import { HomeStore } from "@/stores/home.service";
 import { createFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
@@ -62,6 +63,8 @@ const Index = observer(() => {
           ))}
         </div>
       </div>
+
+      <Toaster />
     </div>
   );
 });
