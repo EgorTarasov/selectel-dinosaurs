@@ -35,6 +35,7 @@ async def get_my_pets(
             orm.selectinload(Pet.blood_requests),
         )
         .where(Pet.owner_id == current_user.user_id)
+        .order_by(Pet.id)
     )
     db_pets = list((await db.execute(stmt)).scalars().all())
     return db_pets_to_pet_dtos(db_pets, is_full=True)

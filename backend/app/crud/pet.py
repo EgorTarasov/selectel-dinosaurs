@@ -46,7 +46,7 @@ async def create_pet(owner_id: int, pet_create: PetCreate, db: AsyncSession) -> 
 
 
 async def update_pet(
-    owner_id: int, pet_id: int, pet_update: PetUpdate, db: AsyncSession
+        owner_id: int, pet_id: int, pet_update: PetUpdate, db: AsyncSession
 ) -> Pet:
     stmt = (
         sa.select(Pet)
@@ -107,7 +107,6 @@ async def update_pet(
 
 
 async def get_pet(pet_id: int, db: AsyncSession) -> Pet:
-
     stmt = (
         sa.select(Pet)
         .options(
@@ -133,6 +132,6 @@ async def get_pets(db: AsyncSession) -> List[Pet]:
         orm.selectinload(Pet.vaccines),
         orm.selectinload(Pet.blood_donations),
         orm.selectinload(Pet.blood_requests),
-    )
+    ).order_by(Pet.id)
     result = await db.execute(stmt)
     return list(result.scalars().all())

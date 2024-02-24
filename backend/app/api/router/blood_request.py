@@ -11,6 +11,7 @@ from ..schemas import (
     BloodRequestDto,
     BloodRequestResponseCreate,
     BloodRequestResponseDto,
+    BloodRequestUpdate,
 )
 from ...models import User, BloodRequest, BloodRequestResponse
 from ..serializers import (
@@ -25,11 +26,11 @@ router = APIRouter(prefix="/blood-requests")
 
 @router.get("/", response_model=List[BloodRequestDto])
 async def get_all_blood_requests(
-    type: Optional[str] = None,
-    breed: Optional[str] = None,
-    weight: Optional[float] = None,
-    amount: Optional[int] = None,
-    db: AsyncSession = Depends(get_session),
+        type: Optional[str] = None,
+        breed: Optional[str] = None,
+        weight: Optional[float] = None,
+        amount: Optional[int] = None,
+        db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
     stmt = sa.select(BloodRequest).options(orm.selectinload(BloodRequest.pet))
 
@@ -53,10 +54,10 @@ async def get_all_blood_requests(
 
 @router.post("/pet/{pet_id}", response_model=BloodRequestDto)
 async def create_blood_request_request(
-    pet_id: int,
-    payload: BloodRequestCreate,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        pet_id: int,
+        payload: BloodRequestCreate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     blood_request = BloodRequest(
         pet_id=pet_id,
@@ -79,11 +80,11 @@ async def create_blood_request_request(
 
 @router.post("/{blood_request_id}/pet/{pet_id}", response_model=BloodRequestResponseDto)
 async def create_response_to_blood_request(
-    blood_request_id: int,
-    pet_id: int,
-    blood_response: BloodRequestResponseCreate,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_request_id: int,
+        pet_id: int,
+        blood_response: BloodRequestResponseCreate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     db_blood_response = BloodRequestResponse(
         blood_request_id=blood_request_id,
@@ -110,9 +111,9 @@ async def create_response_to_blood_request(
     "/response/{blood_request_id}", response_model=List[BloodRequestResponseDto]
 )
 async def get_responses_for_blood_request_request(
-    blood_request_id: int,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_request_id: int,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     stmt = (
         sa.select(BloodRequestResponse)
@@ -140,9 +141,9 @@ async def get_responses_for_blood_request_request(
 
 @router.delete("/{blood_request_id}")
 async def delete_blood_request(
-    blood_request_id: int,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_request_id: int,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     row = await db.execute(
         sa.select(BloodRequest)
@@ -158,3 +159,28 @@ async def delete_blood_request(
         return fastapi.Response(status_code=204)
     else:
         return fastapi.Response(status_code=400)
+
+
+@router.put("/{blood_request_id}", response_model=BloodRequestDto)
+async def update_blood_request(
+        blood_request_id: int,
+        payload: BloodRequestUpdate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user)
+):
+    stmt = sa.select(BloodRequest).where(BloodRequest.id == blood_request_id)
+    db_blood_request = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_blood_request:
+        raise HTTPException(404, detail="Blood Donation not found")
+
+    if payload.amount is not None:
+        db_blood_request.amount = payload.amount
+    if payload.due_date is not None:
+        db_blood_request.due_date = payload.due_date
+
+    # Сохраняем изменения и обновляем объект с БД
+    await db.commit()
+    await db.refresh(db_blood_request, ["pet"])
+    await db.refresh(db_blood_request.pet, ["id", "owner"])
+
+    return db_blood_request_to_blood_request_dto(db_blood_request)

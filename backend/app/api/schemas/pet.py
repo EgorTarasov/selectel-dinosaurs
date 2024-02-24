@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime
 from enum import Enum
 
-from .blood_request import BloodRequestDto
 from .vaccine import VaccineDto
+
 
 # from .vaccine import VaccineDto, VaccineCreate
 
@@ -29,7 +29,7 @@ class PetDto(BaseModel):
     weight: float
     able_to_donate: bool
     donations: list
-    requests: list[BloodRequestDto]
+    requests: list
     vaccines: list[VaccineDto]
     cooldown_donation_days: int
     blood_type: str = Field(..., alias="bloodType")
