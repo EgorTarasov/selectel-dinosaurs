@@ -42,6 +42,18 @@ class AuthServiceViewModel {
     }
   };
 
+  loginViaVk = async (code: unknown): Promise<boolean> => {
+    try {
+      await AuthEndpoint.loginViaVk(code);
+
+      const user = await UserEndpoint.current();
+      this.auth = { state: "authenticated", user };
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   register = async (username: string, password: string): Promise<boolean> => {
     try {
       await AuthEndpoint.register(username, password);

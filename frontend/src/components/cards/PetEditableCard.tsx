@@ -24,6 +24,16 @@ type PetAvatarProps = {
   index: number;
 };
 
+function pluralizeDaysRussian(count: number) {
+  if (count % 10 === 1 && count % 100 !== 11) {
+    return `${count} день`;
+  } else if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) {
+    return `${count} дня`;
+  } else {
+    return `${count} дней`;
+  }
+}
+
 const PetAvatar: FC<PetAvatarProps> = observer(({ vm, index }) => {
   const [dragOverImage, setDragOverImage] = useState(false);
 
@@ -292,7 +302,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                 <Label htmlFor="readyToDonate">Готов к донортсву</Label>
               </>
             ) : (
-              `До следующей донации должно пройти ещё ${pet.cooldown_donation_days} дней`
+              `До следующей донации должно пройти ещё ${pluralizeDaysRussian(pet.cooldown_donation_days)}`
             )}
           </div>
         </div>

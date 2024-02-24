@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { ELEVATION } from "./Map";
 import { ru } from "date-fns/locale";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const TimePill = (x: { className: string; children: ReactNode }) => {
   return (
@@ -38,6 +39,7 @@ const AVAILABLE_TIME = [
 ];
 
 export const DonorTab: FCVM<MapSidebar> = observer(({ vm }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   if (!vm || !vm.item?.data) return null;
 
   return (
@@ -122,7 +124,7 @@ export const DonorTab: FCVM<MapSidebar> = observer(({ vm }) => {
             <li key={time} className="flex items-center gap-2">
               <Button
                 variant="outline"
-                size="sm"
+                size={isDesktop ? "lg" : "default"}
                 disabled={vm.loading}
                 onClick={() => (vm.time === time ? (vm.time = null) : (vm.time = time))}
                 className={cn(

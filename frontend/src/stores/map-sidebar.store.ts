@@ -107,7 +107,6 @@ export class MapSidebar {
     );
   }
   async submit() {
-    this.loading = true;
     this.errorText = null;
 
     if (this.tab === "donor") {
@@ -131,8 +130,6 @@ export class MapSidebar {
         return;
       }
     }
-
-    this.loading = false;
   }
 
   constructor() {
