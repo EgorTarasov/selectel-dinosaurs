@@ -77,7 +77,7 @@ async def create_pet(
 @router.get("/pets", response_model=tp.List[PetDto])
 async def get_all_pets(db: AsyncSession = Depends(get_session)):
     db_pets = await crud.get_pets(db)
-    return db_pets_to_pet_dtos(db_pets)
+    return db_pets_to_pet_dtos(db_pets, is_full=True)
 
 
 @router.put(
