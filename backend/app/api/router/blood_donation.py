@@ -1,3 +1,4 @@
+import fastapi
 from fastapi import APIRouter, Depends, HTTPException, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import orm
@@ -14,7 +15,7 @@ from ..schemas import (
 from ...models import User, BloodDonation, BloodDonationResponse
 from ..serializers import db_blood_donation_to_blood_donation_dto, \
     db_blood_donation_response_to_blood_donation_response_dto, \
-    db_blood_donation_responses_to_blood_donation_response_dtos
+    db_blood_donation_responses_to_blood_donation_response_dtos, db_blood_donations_to_blood_donation_dtos
 
 router = APIRouter(prefix="/blood-donations")
 
@@ -27,15 +28,26 @@ async def get_all_blood_donations(
         amount: Optional[int] = None,
         db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
-    stmt = sa.select(BloodDonation)
-    if breed:
-        stmt.where(BloodDonation.pet.breed == breed)
-    if weight:
-        stmt.where(BloodDonation.pet.weight >= weight)
-    if amount:
-        stmt.where(BloodDonation.amount >= amount)
+    stmt = sa.select(BloodDonation).options(
+        orm.selectinload(BloodDonation.pet)
+    )
 
-    return []
+    res = []
+    for t in (await db.execute(stmt)).all():
+        db_blood_donation = t[0]
+        if breed and db_blood_donation.pet.breed != breed:
+            continue
+        if weight and db_blood_donation.pet.weight < weight:
+            continue
+        if amount and db_blood_donation.amount < amount:
+            continue
+        await db.refresh(
+            db_blood_donation.pet,
+            ["id", "owner"],
+        )
+        res.append(db_blood_donation)
+
+    return db_blood_donations_to_blood_donation_dtos(res)
 
 
 @router.post("/pet/{pet_id}", response_model=BloodDonationDto)
@@ -123,3 +135,20 @@ async def get_responses_for_blood_donation_request(
         res.append(db_blood_response)
 
     return db_blood_donation_responses_to_blood_donation_response_dtos(res)
+
+
+@router.delete("/{blood_donation_id}")
+async def delete_blood_donation(blood_donation_id: int, db: AsyncSession = Depends(get_session),
+                                current_user: User = Depends(get_current_user)):
+    row = await db.execute(
+        sa.select(BloodDonation).options(orm.selectinload(BloodDonation.blood_donation_response)).where(
+            BloodDonation.id == blood_donation_id))
+    row = row.scalar_one_or_none()
+    if row:
+        for t in row.blood_donation_response:
+            await db.delete(t)
+        await db.delete(row)
+        await db.commit()
+        return fastapi.Response(status_code=204)
+    else:
+        return fastapi.Response(status_code=400)
