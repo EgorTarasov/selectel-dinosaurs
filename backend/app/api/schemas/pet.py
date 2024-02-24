@@ -23,7 +23,7 @@ class PetDto(BaseModel):
     id: int
     type: PetType
     breed: str
-    avatar: HttpUrl
+    avatar: str
     name: str
     age: int
     weight: float
@@ -38,7 +38,7 @@ class PetDto(BaseModel):
 class PetCreate(BaseModel):
     type: PetType
     breed: str
-    avatar: Optional[HttpUrl] = (
+    avatar: Optional[str] = (
         "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
     )
     name: str
@@ -53,7 +53,7 @@ class PetCreate(BaseModel):
 class PetUpdate(BaseModel):
     type: Optional[PetType] = None
     breed: Optional[str] = None
-    avatar: Optional[HttpUrl] = (
+    avatar: Optional[str] = (
         "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
     )
     name: Optional[str] = None
