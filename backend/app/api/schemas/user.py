@@ -2,7 +2,6 @@ from re import L
 import typing as tp
 from pydantic import BaseModel, Field, ConfigDict
 
-
 UserRoles = tp.Literal["user", "admin"]
 
 
@@ -70,3 +69,6 @@ class UserDto(BaseModel):
     avaliable_time: tp.List[tp.Tuple[str, str]] = Field(
         ..., description="Время доступности", examples=[("10:00", "18:00")]
     )
+
+    requests: tp.Optional[list] = []
+    donations: tp.Optional[list] = []

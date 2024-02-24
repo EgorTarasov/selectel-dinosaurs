@@ -2,7 +2,7 @@ from ...models import User
 from ..schemas import UserDto
 
 
-def db_user_to_user_dto(db_user: User) -> UserDto:
+def db_user_to_user_dto(db_user: User, requests=[], donations=[]) -> UserDto:
     return UserDto.model_validate(
         {
             "id": db_user.id,
@@ -21,5 +21,7 @@ def db_user_to_user_dto(db_user: User) -> UserDto:
 
             "avatar": db_user.avatar,
             "avaliable_time": db_user.avaliable_time if db_user.avaliable_time else [],
+            "requests": requests,
+            "donations": donations,
         }
     )
