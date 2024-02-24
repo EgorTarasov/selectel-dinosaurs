@@ -18,6 +18,9 @@ import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
 import { useToast } from "../ui/use-toast";
 import { homeStore } from "@/stores/home.service";
 import { Link } from "@tanstack/react-router";
+import { Dialog, DialogTrigger } from "../ui/dialog";
+import DonationDialog from "../dialogs/DonationDialog";
+import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
 
 type PetAvatarProps = {
   vm: ProfileStore;
@@ -356,6 +359,58 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
             </div>
           </div>
         )}
+
+        <div className="flex justify-start w-full mt-10">
+          {pet.able_to_donate && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">Добавить заявку на донорство</Button>
+              </DialogTrigger>
+              <DonationDialog
+                confirmLabel="Добавить"
+                description="Чтобы ее могли видеть другие пользователи"
+                title="Добавить заявку на донорство"
+                initialValue={0}
+                callback={(value) => {
+                  BloodDonationsEndpoint.postDonation({
+                    amount: value,
+                    petId: pet.id
+                  }).then(() => {
+                    toast({
+                      title: "Заявка добавлена",
+                      description: "Заявка на донорство добавлена"
+                    });
+                  });
+                }}
+              />
+            </Dialog>
+          )}
+
+          {isNeedDonation && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">Добавить заявку на переливание</Button>
+              </DialogTrigger>
+              <DonationDialog
+                confirmLabel="Добавить"
+                description="Чтобы ее могли видеть другие пользователи"
+                title="Добавить заявку на переливание"
+                initialValue={0}
+                callback={(value) => {
+                  BloodDonationsEndpoint.postRequest({
+                    amount: value,
+                    petId: pet.id
+                  }).then(() => {
+                    toast({
+                      title: "Заявка добавлена",
+                      description: "Заявка на переливание добавлена"
+                    });
+                  });
+                }}
+              />
+            </Dialog>
+          )}
+        </div>
       </div>
     </>
   );
