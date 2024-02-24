@@ -14,6 +14,7 @@ from ..schemas import (
     QueryFilters,
     BloodDonationSearchResult,
     map_blood_type,
+    BloodDonationUpdate,
 )
 from ...models import User, BloodDonation, BloodDonationResponse, Pet
 from ..serializers import (
@@ -245,3 +246,26 @@ async def delete_blood_donation(
         return fastapi.Response(status_code=204)
     else:
         return fastapi.Response(status_code=400)
+
+
+@router.put("/{blood_donation_id}", response_model=BloodDonationDto)
+async def update_blood_donation_request(
+        blood_donation_id: int,
+        payload: BloodDonationUpdate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user)
+):
+    stmt = sa.select(BloodDonation).where(BloodDonation.id == blood_donation_id)
+    db_blood_donation = (await db.execute(stmt)).scalar_one_or_none()
+    if not db_blood_donation:
+        raise HTTPException(404, detail="Blood Donation not found")
+
+    db_blood_donation.amount = payload.amount
+    db_blood_donation.date = payload.date
+
+    # Сохраняем изменения и обновляем объект с БД
+    await db.commit()
+    await db.refresh(db_blood_donation, ["pet"])
+    await db.refresh(db_blood_donation.pet, ["id", "owner"])
+
+    return db_blood_donation_to_blood_donation_dto(db_blood_donation)

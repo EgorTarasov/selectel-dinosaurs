@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 from typing import TYPE_CHECKING, Optional
 from datetime import datetime
 
-
 from .pet import PetDto
 
 
@@ -60,3 +59,8 @@ class BloodDonationResponseDto(BaseModel):
 class BloodDonationResponseCreate(BaseModel):
     msg: str
     amount: int
+
+
+class BloodDonationUpdate(BaseModel):
+    msg: Optional[str] = None
+    amount: Optional[int] = None
