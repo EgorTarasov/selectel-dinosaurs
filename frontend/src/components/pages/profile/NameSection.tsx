@@ -15,9 +15,9 @@ export const NameSection: FCVM<ProfileStore> = observer(({ vm }) => {
   return (
     <div className="flex items-center gap-9 flex-col md:flex-row mt-6 md:mt-0">
       <Avatar vm={vm} />
-      <div className="flex flex-col justify-between h-full">
+      <div className="flex flex-col justify-between h-full w-full">
         <Text.H4>Основное</Text.H4>
-        <div className="flex gap-5 flex-wrap">
+        <div className="w-full grid sm:grid-cols-2 md:grid-cols-3 gap-5 flex-wrap mt-3">
           <fieldset className="gap-2 flex flex-col">
             <Label htmlFor="first_name">Имя</Label>
             <Input

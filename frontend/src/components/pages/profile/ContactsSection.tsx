@@ -19,9 +19,8 @@ export const ContactsSection: FCVM<ProfileStore> = observer(({ vm }) => {
   return (
     <div className="flex flex-col gap-5 w-full items-start">
       <Text.H4>Контакты</Text.H4>
-      <div className="flex gap-7 flex-wrap">
+      <div className="gap-7 grid sm:grid-cols-2 md:grid-cols-4 w-full">
         <IconInput
-          className="w-[252px]"
           placeholder="Телефон"
           type="tel"
           leftIcon={<PhoneIcon />}
@@ -29,7 +28,6 @@ export const ContactsSection: FCVM<ProfileStore> = observer(({ vm }) => {
           onChange={(v) => (vm.item.data!.contact_group.phone = v.target.value)}
         />
         <IconInput
-          className="w-[252px]"
           placeholder="Почта"
           type="email"
           leftIcon={<EmailIcon />}
@@ -37,14 +35,12 @@ export const ContactsSection: FCVM<ProfileStore> = observer(({ vm }) => {
           onChange={(v) => (vm.item.data!.contact_group.email = v.target.value)}
         />
         <IconInput
-          className="w-[252px]"
           placeholder="Ссылка на VK"
           leftIcon={<VkIcon />}
           disabled
           value={vm.item.data.vkid ? `https://vk.com/id${vm.item.data.vkid}` : "Отсутствует"}
         />
         <IconInput
-          className="w-[252px]"
           placeholder="Ник в Telegram"
           leftIcon={<TelegramIcon />}
           disabled

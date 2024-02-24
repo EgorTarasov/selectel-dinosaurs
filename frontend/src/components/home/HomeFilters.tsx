@@ -30,10 +30,12 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
           <div className="flex gap-5 flex-wrap w-full">
             <div className="grid min-w-40 flex-auto items-center gap-1.5">
               <Label htmlFor="animal">Животное</Label>
-
               <Select onValueChange={(value: Animal) => vm.setAnimal(value)}>
                 <SelectTrigger>
-                  <SelectValue defaultValue={Animal.Dog} placeholder={Animal.Dog} />
+                  <SelectValue
+                    defaultValue={vm.animal || Animal.Dog}
+                    placeholder={vm.animal || Animal.Dog}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(Animal).map((animal) => (
@@ -102,7 +104,7 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
                     {vm.expirationDate ? (
                       format(vm.expirationDate, "PPP")
                     ) : (
-                      <span>Выбирте дату</span>
+                      <span>Выберете дату</span>
                     )}
                   </Button>
                 </PopoverTrigger>

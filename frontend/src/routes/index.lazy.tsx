@@ -3,13 +3,13 @@ import DonationCard from "@/components/cards/DonationCard";
 import SocialDonationCard from "@/components/cards/SocialDonationCard";
 import { HomeFilters } from "@/components/home/HomeFilters";
 import HomeSceleton from "@/components/home/HomeSceleton";
-import { HomeStore } from "@/stores/home.service";
+import { homeStore } from "@/stores/home.service";
 import { createFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 const Index = observer(() => {
-  const [vm] = useState(() => new HomeStore());
+  const [vm] = useState(() => homeStore);
 
   useEffect(() => {
     vm.applyFilters();

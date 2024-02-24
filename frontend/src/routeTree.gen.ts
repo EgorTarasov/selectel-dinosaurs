@@ -19,6 +19,7 @@ import { Route as rootRoute } from './routes/__root'
 const ProfileLazyImport = createFileRoute('/profile')()
 const MapLazyImport = createFileRoute('/map')()
 const LoginLazyImport = createFileRoute('/login')()
+const LeaderboardLazyImport = createFileRoute('/leaderboard')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -38,6 +39,11 @@ const LoginLazyRoute = LoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
+const LeaderboardLazyRoute = LeaderboardLazyImport.update({
+  path: '/leaderboard',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/leaderboard.lazy').then((d) => d.Route))
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -49,6 +55,10 @@ declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/leaderboard': {
+      preLoaderRoute: typeof LeaderboardLazyImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -70,6 +80,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
+  LeaderboardLazyRoute,
   LoginLazyRoute,
   MapLazyRoute,
   ProfileLazyRoute,

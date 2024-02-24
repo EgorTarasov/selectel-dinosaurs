@@ -18,6 +18,9 @@ export default defineConfig({
     }),
     basicSsl()
   ],
+  build: {
+    target: "esnext"
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

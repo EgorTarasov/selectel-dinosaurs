@@ -1,4 +1,13 @@
-from .user import User, UserCreate, UserDto, UserLogin, UserUpdate, UserContactGroup
+from .user import (
+    User,
+    UserCreate,
+    UserDto,
+    UserLogin,
+    UserUpdate,
+    UserContactGroup,
+    VkPayload,
+    VkUser,
+)
 from .query_filters import QueryFilters, map_blood_type
 from .token import Token, TokenData
 from .blood_request import (
@@ -21,6 +30,8 @@ from .bank import BankDto, BankResponse
 from .social import SocialMediaPostCreate, SocialMediaPostDto
 
 __all__ = [
+    "VkPayload",
+    "VkUser",
     "SocialMediaPostCreate",
     "SocialMediaPostDto",
     "BloodDonationSearchResult",
