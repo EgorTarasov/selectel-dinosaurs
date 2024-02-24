@@ -17,6 +17,7 @@ class PetSearchResult(BaseModel):
     id: int
     name: str
     weight: int
+    age: int
     type: str
     avatar: str
     blood_type: str = Field(..., alias="bloodType")

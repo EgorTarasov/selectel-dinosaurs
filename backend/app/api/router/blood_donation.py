@@ -20,7 +20,6 @@ from ..serializers import (
     db_blood_donation_to_blood_donation_dto,
     db_blood_donation_response_to_blood_donation_response_dto,
     db_blood_donation_responses_to_blood_donation_response_dtos,
-    db_blood_donations_to_blood_donation_dtos,
 )
 
 router = APIRouter(prefix="/blood-donations")
@@ -31,7 +30,7 @@ router = APIRouter(prefix="/blood-donations")
 async def get_all_blood_donations(
     filters: QueryFilters = Depends(),
     db: AsyncSession = Depends(get_session),
-):  # -> list[Any]:
+):
     # contanct group, vkid
     stmt = (
         sa.select(
@@ -50,6 +49,7 @@ async def get_all_blood_donations(
             User.phone,
             User.contact_email,
             User.wishes,
+            Pet.age,
         )
         .select_from(BloodDonation)
         .join(Pet, BloodDonation.pet_id == Pet.id)
@@ -85,6 +85,7 @@ async def get_all_blood_donations(
                     "type": obj[6],
                     "avatar": obj[7],
                     "bloodType": obj[8],
+                    "age": obj[15],
                 },
                 "city": obj[9],
                 "owner": {
