@@ -3,7 +3,6 @@ import { getDonationDeclension, getYearDeclension } from "@/api/utils/declesions
 import { Button } from "../ui/button";
 import VkIcon from "@/assets/vk.svg";
 import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
-import { ToastAction } from "../ui/toast";
 import { useToast } from "../ui/use-toast";
 
 const DonationCard = ({ id, pet: { avatar, name, age, weight, bloodType }, owner }: Donation) => {

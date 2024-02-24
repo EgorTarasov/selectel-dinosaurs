@@ -1,10 +1,10 @@
 import { MapSidebar } from "@/stores/map-sidebar.store";
-import { FCVM } from "@/utils/vm";
 import { observer } from "mobx-react-lite";
 import PhoneIcon from "@/assets/phone.svg";
 import { Text } from "@/components/typography/Text";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FCVM } from "@/utils/vm";
 
 export const SeekTab: FCVM<MapSidebar> = observer(({ vm }) => {
   if (!vm || !vm.item?.data) return null;
@@ -35,7 +35,7 @@ export const SeekTab: FCVM<MapSidebar> = observer(({ vm }) => {
             placeholder="0"
             className="w-48"
             type="number"
-            onChange={(e) => (vm.bloodRequiredCount = e.target.value)}
+            onChange={(e) => (vm.bloodRequiredCount = e.target.value.replace("-", ""))}
           />
           <Text.Subtle className="text-slate-400">мл</Text.Subtle>
         </div>

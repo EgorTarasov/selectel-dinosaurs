@@ -13,9 +13,11 @@ import { NavLink } from "./Navigation";
 import { useState } from "react";
 import { AuthService } from "@/stores/auth.service";
 import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 
 export const HamburgerMenu = observer(() => {
   const [open, setOpen] = useState(false);
+
   return (
     <Drawer shouldScaleBackground open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild className="flex md:hidden ml-auto">
@@ -46,7 +48,7 @@ export const HamburgerMenu = observer(() => {
           {AuthService.auth.state !== "loading" && (
             <Link
               to="/login"
-              className={buttonVariants()}
+              className={cn(buttonVariants({ size: "lg" }), "mt-auto mb-6")}
               onClick={() => {
                 if (AuthService.auth.state === "authenticated") {
                   AuthService.logout();

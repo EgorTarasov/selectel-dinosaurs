@@ -17,8 +17,9 @@ class _MapStore {
   async init(map: ElementRef<typeof Common.YMap>) {
     this.Map = map;
 
-    const res = await BanksEndpoint.fetchBanks({});
-    const data: PointFeature[] = res.map((bank) => ({
+    const [banks] = await Promise.all([BanksEndpoint.fetchBanks({})]);
+
+    const data: PointFeature[] = banks.map((bank) => ({
       id: bank.id.toString(),
       type: "Feature",
       geometry: {
