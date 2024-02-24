@@ -66,7 +66,6 @@ async def get_all_blood_donations(
         )
 
     res = (await db.execute(stmt)).all()
-    print(res)
     return [
         BloodDonationSearchResult.model_validate(
             {

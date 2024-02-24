@@ -13,6 +13,7 @@ class BankDto(BaseModel):
     address: str
     longitude: tp.Optional[float] = Field(None)
     latitude: tp.Optional[float] = Field(None)
+    advantages: tp.Optional[List[str]] = Field([])
     price: int = Field(..., alias="pricePerMil")
     amount: int = Field(0, alias="amountOfBlood")
     phone: tp.Optional[str] = Field(None)
@@ -63,3 +64,4 @@ class BankResponse(BaseModel):
 
 class BankCreate(BaseModel):
     name: str = Field(..., min_length=3, max_length=50)
+    advantages: tp.Optional[List[str]] = Field([])

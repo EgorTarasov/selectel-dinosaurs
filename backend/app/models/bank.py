@@ -1,6 +1,6 @@
 from typing_extensions import TypedDict
 from .base import Base, TimestampMixin
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import JSON, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 import sqlalchemy as sa
 
@@ -29,6 +29,7 @@ class Bank(Base, TimestampMixin):
     phone: Mapped[str] = mapped_column(sa.String(20), nullable=True)
     longitude: Mapped[float] = mapped_column(sa.Float, nullable=True)
     latitude: Mapped[float] = mapped_column(sa.Float, nullable=True)
+    advantages: Mapped[list[str]] = mapped_column(ARRAY(sa.Text), nullable=True)
     dog_storage: Mapped[DogBloodStorage] = mapped_column(
         JSON,
         nullable=False,

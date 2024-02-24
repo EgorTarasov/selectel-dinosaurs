@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Form, Query
+from fastapi import APIRouter, Depends, HTTPException, Form, Query, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 import typing as tp
 import sqlalchemy as sa
@@ -55,11 +55,12 @@ async def get_all_blood_donations(
 
 @router.post("/", response_model=BankDto)
 async def create_bank(
-    name: str = Form(...),
-    address: str = Form(...),
-    price_per_mil: int = Form(...),
-    phone: tp.Optional[str] = Form(None),
-    link: tp.Optional[str] = Form(None),
+    name: str = Body(...),
+    address: str = Body(...),
+    price_per_mil: int = Body(...),
+    phone: tp.Optional[str] = Body(None),
+    link: tp.Optional[str] = Body(None),
+    advantages: tp.Optional[List[str]] = Body(None),
     db: AsyncSession = Depends(get_session),
     current_user: UserTokenData = Depends(get_current_user),
 ):
@@ -73,9 +74,11 @@ async def create_bank(
         link=link,
         longitude=longitude,
         latitude=lattitude,
+        advantages=advantages,
     )
     db.add(db_bank)
     await db.commit()
+    await db.refresh(db_bank, ["advantages"])
     return db_bank_to_bank_dto(db_bank)
 
 
