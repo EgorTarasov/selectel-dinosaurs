@@ -48,6 +48,7 @@ async def get_all_blood_donations(
         .select_from(BloodDonation)
         .join(Pet, BloodDonation.pet_id == Pet.id)
         .join(User, Pet.owner_id == User.id)
+        .where(Pet.type == filters.pet_type)
     )
 
     if filters.city is not None:
@@ -55,18 +56,13 @@ async def get_all_blood_donations(
         stmt = stmt.where(User.city.ilike(f"%{filters.city}%"))
     if (
         filters.blood_type is not None
-        and filters.pet_type is not None
         and filters.amount is not None
         and filters.amount > 0
     ):
-        # search where BloodDonation.pet.blood_type == filters.blood_type
-        # and BloodDonation.pet.type == filters.pet_type
+        print("filtering by blood type and pet type")
         blood_type = map_blood_type(filters.blood_type, filters.pet_type)
         stmt = stmt.where(
-            sa.and_(
-                Pet.blood_type == blood_type,
-                Pet.type == filters.pet_type,
-            )
+            Pet.blood_type == filters.pet_type,
         )
 
     res = (await db.execute(stmt)).all()
