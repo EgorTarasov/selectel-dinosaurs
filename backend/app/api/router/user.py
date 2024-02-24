@@ -14,39 +14,58 @@ from fastapi import (
     Form,
 )
 
-
-from ..serializers import db_user_to_user_dto
+from ..serializers import db_user_to_user_dto, db_blood_requests_to_blood_request_dtos, \
+    db_blood_donations_to_blood_donation_dtos
 from ...utils.files import save_image
 from ..middlewares import get_current_user, get_session, UserTokenData
 from ...models import User
 from ..schemas import UserDto, UserCreate, UserUpdate
 
-
 router: tp.Final[APIRouter] = APIRouter(prefix="/user")
+
 
 # TODO: implement user routes /me /update
 
 
 @router.get("/me", response_model=UserDto)
 async def get_me(
-    db: AsyncSession = Depends(get_session),
-    current_user: UserTokenData = Depends(get_current_user),
+        db: AsyncSession = Depends(get_session),
+        current_user: UserTokenData = Depends(get_current_user),
 ):
-    stmt = sa.select(User).where(User.id == current_user.user_id)
+    requests = []
+    donations = []
+
+    stmt = sa.select(User) \
+        .options(orm.selectinload(User.pets)) \
+        .where(User.id == current_user.user_id)
     db_user = (await db.execute(stmt)).scalar_one_or_none()
+
+    for db_pet in db_user.pets:
+        await db.refresh(db_pet, ["blood_donations"])
+        for db_blood_donation in db_pet.blood_donations:
+            db_blood_donation.pet = db_pet
+            donations.append(db_blood_donation)
+        await db.refresh(db_pet, ["blood_requests"])
+        for db_blood_request in db_pet.blood_requests:
+            db_blood_request.pet = db_pet
+            requests.append(db_blood_request)
+
     if not db_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
-    return db_user_to_user_dto(db_user)
+    return db_user_to_user_dto(db_user,
+                               requests=db_blood_requests_to_blood_request_dtos(requests),
+                               donations=db_blood_donations_to_blood_donation_dtos(donations),
+                               )
 
 
 @router.put("/profile/picture", response_model=UserDto)
 async def update_profile_picture(
-    avatar: UploadFile = File(...),
-    db: AsyncSession = Depends(get_session),
-    current_user: UserTokenData = Depends(get_current_user),
+        avatar: UploadFile = File(...),
+        db: AsyncSession = Depends(get_session),
+        current_user: UserTokenData = Depends(get_current_user),
 ):
     stmt = sa.select(User).where(User.id == current_user.user_id)
     db_user = (await db.execute(stmt)).scalar_one_or_none()
@@ -62,9 +81,9 @@ async def update_profile_picture(
 
 @router.put("/profile", response_model=UserDto)
 async def update_profile(
-    user_data: UserUpdate,
-    db: AsyncSession = Depends(get_session),
-    current_user: UserTokenData = Depends(get_current_user),
+        user_data: UserUpdate,
+        db: AsyncSession = Depends(get_session),
+        current_user: UserTokenData = Depends(get_current_user),
 ):
     stmt = sa.select(User).where(User.id == current_user.user_id)
     db_user = (await db.execute(stmt)).scalar_one_or_none()
