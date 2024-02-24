@@ -90,7 +90,7 @@ async def update_pet(
             pet.age = pet_update.age
         if pet_update.weight:
             pet.weight = pet_update.weight
-        if pet_update.able_to_donate:
+        if pet_update.able_to_donate is not None:
             pet.able_to_donate = pet_update.able_to_donate
 
         if pet_update.blood_type:
