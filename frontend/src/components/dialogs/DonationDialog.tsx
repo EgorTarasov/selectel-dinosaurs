@@ -29,7 +29,7 @@ type Props = {
   initialValue?: number;
 };
 
-const DonationDialog = ({ callback, title, description, confirmLabel, initialValue }: Props) => {
+const DonationDialog = ({ callback, title, description, confirmLabel }: Props) => {
   const [amount, setAmount] = useState(0);
   const [expirationDate, setExpirationDate] = useState<Date | undefined>(undefined);
   const [address, setAddress] = useState("");

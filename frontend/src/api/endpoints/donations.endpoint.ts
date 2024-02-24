@@ -1,5 +1,6 @@
 import api from "api/utils/api";
 import {
+  BloodRequest,
   CreateDonationParams,
   CreateRequestParams,
   Donation,
@@ -36,7 +37,7 @@ export namespace BloodDonationsEndpoint {
   };
 
   export const fetchRequests = async (params: FetchDonationsParams) => {
-    return api.get<{}>("/api/blood-requests/", { params });
+    return api.get<BloodRequest[]>("/api/blood-requests/", { params });
   };
 
   export const deleteBloodDonation = async (id: number) => {
