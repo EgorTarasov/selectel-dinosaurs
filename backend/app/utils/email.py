@@ -14,6 +14,9 @@ class EmailData(tp.TypedDict):
     data: dict[str, tp.Any]
 
 
+# TODO: define finite amount of email templates
+
+
 class EmailClient:
     def __init__(
         self,
@@ -36,7 +39,7 @@ class EmailClient:
             server_port (int, optional): _description_. По умолчанию 587.
             templates_path (pathlib.Path | str, optional): путь до папки с шаблонами писем. По умолчанию pathlib.Path("./templates").
         """
-        print(os.listdir())
+
         self._host = host
         self._port = port
         self.__user = mail_user
