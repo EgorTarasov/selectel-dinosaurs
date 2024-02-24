@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import TYPE_CHECKING, Optional
 from datetime import datetime
+from .pet import PetDto
 
 
 class BloodRequestDto(BaseModel):
@@ -8,6 +9,7 @@ class BloodRequestDto(BaseModel):
     amount: int
     due_date: datetime
     date: datetime
+    pet: PetDto
 
 
 class BloodRequestCreate(BaseModel):
