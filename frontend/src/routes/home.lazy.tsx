@@ -3,6 +3,7 @@ import DonationCard from "@/components/cards/DonationCard";
 import SocialDonationCard from "@/components/cards/SocialDonationCard";
 import { HomeFilters } from "@/components/home/HomeFilters";
 import HomeSceleton from "@/components/home/HomeSceleton";
+import { Toaster } from "@/components/ui/toaster";
 import { HomeStore } from "@/stores/home.service";
 import { createFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
@@ -57,11 +58,19 @@ const Index = observer(() => {
 
       <div className="section">
         <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {vm.socialDonations.map((socialDonation) => (
-            <SocialDonationCard key={socialDonation.id} {...socialDonation} />
-          ))}
+          {vm.isLoading
+            ? Array.from({ length: 3 }).map((_, i) => <HomeSceleton key={i} />)
+            : vm.socialDonations.map((socialDonation) => (
+                <SocialDonationCard key={socialDonation.id} {...socialDonation} />
+              ))}
+
+          {vm.socialDonations.length === 0 && !vm.isLoading && (
+            <div className="w-full text-slate-500">Нет похожих запросов</div>
+          )}
         </div>
       </div>
+
+      <Toaster />
     </div>
   );
 });
