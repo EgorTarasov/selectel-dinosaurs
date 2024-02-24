@@ -1,3 +1,5 @@
+import { UserEndpoint } from "@/api/endpoints/user.endpoint";
+import { UserDto } from "@/api/models/user.model";
 import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
 import { UserEndpoint } from "@/api/endpoints/user.endpoint";
 import { Pet } from "@/api/models";
@@ -191,6 +193,4 @@ export class ProfileStore {
         });
     }
   }
-
-  async save() {}
 }

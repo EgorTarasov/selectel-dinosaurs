@@ -32,8 +32,9 @@ class AuthServiceViewModel {
 
   login = async (username: string, password: string): Promise<boolean> => {
     try {
-      const user = await AuthEndpoint.login(username, password);
-      // @ts-expect-error desc
+      await AuthEndpoint.login(username, password);
+
+      const user = await UserEndpoint.current();
       this.auth = { state: "authenticated", user };
       return true;
     } catch {
@@ -43,8 +44,9 @@ class AuthServiceViewModel {
 
   register = async (username: string, password: string): Promise<boolean> => {
     try {
-      const user = await AuthEndpoint.register(username, password);
-      // @ts-expect-error desc
+      await AuthEndpoint.register(username, password);
+
+      const user = await UserEndpoint.current();
       this.auth = { state: "authenticated", user };
       return true;
     } catch {

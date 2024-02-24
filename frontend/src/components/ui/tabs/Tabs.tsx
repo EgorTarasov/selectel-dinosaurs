@@ -9,6 +9,7 @@ interface TabsProps<T extends string> {
   activeTab: NoInfer<T>;
   onTabChange: (tab: T) => void;
   variant?: "default" | "secondary";
+  disabled?: boolean;
 }
 
 export const Tabs = observer(<T extends string>(x: TabsProps<T>) => {
@@ -18,12 +19,14 @@ export const Tabs = observer(<T extends string>(x: TabsProps<T>) => {
       {x.tabs.map((tab) => (
         <li key={tab} className="flex-1 h-fit">
           <button
+            disabled={x.disabled}
             onClick={() => x.onTabChange(tab)}
             className={cn(
               "w-full items-center border-b border-b-transparent py-3",
               x.activeTab === tab
                 ? "text-foreground border-b border-b-primary"
-                : `text-slate-400 ${variant === "default" && "border-b-slate-200"}`
+                : `text-slate-400 ${variant === "default" && "border-b-slate-200"}`,
+              x.disabled && "cursor-not-allowed"
             )}>
             {variant === "default" ? (
               <Text.H4 className="whitespace-nowrap px-2">{x.renderTab(tab)}</Text.H4>
