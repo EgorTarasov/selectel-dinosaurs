@@ -24,29 +24,9 @@ const Profile = observer(() => {
           renderTab={(tab) => (tab === "settings" ? "Мой профиль" : "Мои питомцы")}
         />
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          vm.save();
-        }}
-        className="flex flex-col"></form>
-      <div className="flex justify-end">
-        <Button variant="secondary">Обновить данные</Button>
-      </div>
-      <NameSection vm={vm} />
-      <span className="h-16" />
-      <ContactsSection vm={vm} />
-      <span className="h-16" />
-      <CommunicationSection vm={vm} />
 
       {vm.tab === "settings" && (
         <>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              vm.save();
-            }}
-            className="flex flex-col"></form>
           <div className="flex justify-end">
             <Button variant="secondary">Обновить данные</Button>
           </div>

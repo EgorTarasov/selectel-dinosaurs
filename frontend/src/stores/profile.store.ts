@@ -1,9 +1,7 @@
 import { UserEndpoint } from "@/api/endpoints/user.endpoint";
 import { UserDto } from "@/api/models/user.model";
 import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
-import { UserEndpoint } from "@/api/endpoints/user.endpoint";
 import { Pet } from "@/api/models";
-import { UserDto } from "@/api/models/user.model";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
 
