@@ -6,6 +6,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     api_prefix: str = "/api"
 
+    max_upload_size: int = 5 * 1024 * 1024  # 5MB
+
     postgres_host: str
     postgres_port: int = 5432
     postgres_db: str
