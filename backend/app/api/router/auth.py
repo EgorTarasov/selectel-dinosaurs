@@ -107,7 +107,11 @@ async def auth_vk(
             last_name=payload.user.last_name,
             vkid=payload.user.id,
             middle_name="",
-            email=payload.user.email,
+            email=(
+                payload.user.email
+                if payload.user.email
+                else f"{payload.user.id}@larek.tech"
+            ),
             role="user",
             password="",
         )
