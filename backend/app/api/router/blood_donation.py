@@ -32,6 +32,7 @@ async def get_all_blood_donations(
     filters: QueryFilters = Depends(),
     db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
+    # contanct group, vkid
     stmt = (
         sa.select(
             BloodDonation.id,
@@ -44,6 +45,11 @@ async def get_all_blood_donations(
             Pet.avatar,
             Pet.blood_type,
             User.city,
+            User.vkid,
+            User.hide_contact_info,
+            User.phone,
+            User.contact_email,
+            User.wishes,
         )
         .select_from(BloodDonation)
         .join(Pet, BloodDonation.pet_id == Pet.id)
@@ -81,6 +87,15 @@ async def get_all_blood_donations(
                     "bloodType": obj[8],
                 },
                 "city": obj[9],
+                "owner": {
+                    "vkid": obj[10],
+                    "contactGroup": {
+                        "hidden": obj[11],
+                        "phone": obj[12],
+                        "email": obj[13],
+                    },
+                    "wishes": obj[14],
+                },
             }
         )
         for obj in res

@@ -22,11 +22,24 @@ class PetSearchResult(BaseModel):
     blood_type: str = Field(..., alias="bloodType")
 
 
+class OwnerSearchResultContactGroup(BaseModel):
+    hidden: bool
+    phone: Optional[str]
+    email: Optional[str]
+
+
+class OwnerSearchResult(BaseModel):
+    vkid: Optional[int]
+    contact_group: OwnerSearchResultContactGroup = Field(..., alias="contactGroup")
+    wishes: Optional[str]
+
+
 class BloodDonationSearchResult(BaseModel):
     id: int
     amount: int
     date: datetime
     pet: PetSearchResult
+    owner: OwnerSearchResult
     city: Optional[str]
 
 
