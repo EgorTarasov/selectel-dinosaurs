@@ -20,7 +20,7 @@ const DEFAULT_LOCATION = {
 export const Map = observer(() => {
   const vm = MapStore;
   const ref = useRef(null);
-  const gridSizedMethod = Clusters.clusterByGrid({ gridSize: 64 });
+  const gridSizedMethod = Clusters.clusterByGrid({ gridSize: 128 });
 
   useEffect(() => {
     vm.init(ref.current!);
@@ -38,6 +38,7 @@ export const Map = observer(() => {
       {/* @ts-expect-error deprecated */}
       <Clusters.YMapClusterer
         marker={Marker}
+        key={MapStore.selectedLocation.item?.id ?? "default"}
         cluster={Cluster}
         method={gridSizedMethod}
         features={vm.locations}

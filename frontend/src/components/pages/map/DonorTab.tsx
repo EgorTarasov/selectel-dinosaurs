@@ -57,14 +57,18 @@ export const DonorTab: FCVM<MapSidebar> = observer(({ vm }) => {
           </a>
         </div>
       </div>
-      <Text.UiMedium>Преимущества</Text.UiMedium>
-      <ul className="space-y-2">
-        {vm.item.data.advantages.map((advantage, index) => (
-          <li key={index} className="flex rounded-2xl bg-green-50 py-2 px-3">
-            <Text.Subtle>{advantage}</Text.Subtle>
-          </li>
-        ))}
-      </ul>
+      {vm.item.data.advantages && (
+        <>
+          <Text.UiMedium>Преимущества</Text.UiMedium>
+          <ul className="space-y-2">
+            {vm.item.data.advantages.map((advantage, index) => (
+              <li key={index} className="flex rounded-2xl bg-green-50 py-2 px-3">
+                <Text.Subtle>{advantage}</Text.Subtle>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       <div className="flex flex-col gap-3">
         <Text.H4>Количество кровепродуктов</Text.H4>
         <ul className="flex flex-wrap gap-3">

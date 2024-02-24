@@ -2,7 +2,6 @@ from re import L
 import typing as tp
 from pydantic import BaseModel, Field, ConfigDict
 
-
 UserRoles = tp.Literal["user", "admin"]
 
 

@@ -1,35 +1,29 @@
 import { cn } from "@/lib/utils";
 import { HTMLProps } from "react";
 
-export const Text = {
-  H4: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <h4 className={cn("text-xl font-semibold", className)} {...props}></h4>
-  ),
-  H3: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <h3 className={cn("text-2xl", className)} {...props}></h3>
-  ),
-  Large: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <h2 className={cn("text-lg", className)} {...props}></h2>
-  ),
-  UiMedium: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-base font-medium", className)} {...props}></p>
-  ),
-  SubleSemi: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-sm font-semibold", className)} {...props}></p>
-  ),
-  Subtle: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-sm", className)} {...props}></p>
-  ),
-  Small: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-sm leading-4 font-medium", className)} {...props}></p>
-  ),
-  UI: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-base", className)} {...props}></p>
-  ),
-  Detail: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-xs leading-5 font-medium", className)} {...props}></p>
-  ),
-  Error: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
-    <p className={cn("text-sm text-red-500 text-center", className)} {...props}></p>
-  )
+type keys =
+  | "H4"
+  | "H3"
+  | "H2"
+  | "Large"
+  | "UiMedium"
+  | "SubleSemi"
+  | "Subtle"
+  | "Small"
+  | "UI"
+  | "Detail"
+  | "Error";
+
+export const Text: Record<keys, (p: HTMLProps<HTMLHeadingElement>) => JSX.Element> = {
+  H4: (p) => <h4 {...p} className={cn("text-xl font-semibold", p.className)}></h4>,
+  H3: (p) => <h3 {...p} className={cn("text-2xl font-semibold", p.className)}></h3>,
+  H2: (p) => <h2 {...p} className={cn("text-3xl font-semibold", p.className)}></h2>,
+  Large: (p) => <h2 {...p} className={cn("text-lg", p.className)}></h2>,
+  UiMedium: (p) => <p {...p} className={cn("text-base font-medium", p.className)}></p>,
+  SubleSemi: (p) => <p {...p} className={cn("text-sm font-semibold", p.className)}></p>,
+  Subtle: (p) => <p {...p} className={cn("text-sm", p.className)}></p>,
+  Small: (p) => <p {...p} className={cn("text-sm leading-4 font-medium", p.className)}></p>,
+  UI: (p) => <p {...p} className={cn("text-base", p.className)}></p>,
+  Detail: (p) => <p {...p} className={cn("text-xs leading-5 font-medium", p.className)}></p>,
+  Error: (p) => <p {...p} className={cn("text-sm text-red-500 text-center", p.className)}></p>
 };
