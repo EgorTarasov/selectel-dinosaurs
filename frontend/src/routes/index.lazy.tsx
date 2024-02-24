@@ -52,6 +52,22 @@ const Index = observer(() => {
       </div>
 
       <div className="section mt-8 mb-7">
+        <h3 className="font-semibold text-2xl">Подходящие реципиенты</h3>
+      </div>
+
+      <div className="section">
+        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {vm.isLoading
+            ? Array.from({ length: 3 }).map((_, i) => <HomeSceleton key={i} />)
+            : vm.donations.map((donation) => <DonationCard key={donation.id} {...donation} />)}
+
+          {vm.donations.length === 0 && !vm.isLoading && (
+            <div className="w-full text-slate-500">Нет подходящих доноров</div>
+          )}
+        </div>
+      </div>
+
+      <div className="section mt-8 mb-7">
         <h3 className="font-semibold text-2xl">Похожие запросы в соц. сетях</h3>
       </div>
 

@@ -35,6 +35,10 @@ export namespace BloodDonationsEndpoint {
     });
   };
 
+  export const fetchRequests = async (params: FetchDonationsParams) => {
+    return api.get<{}>("/api/blood-requests/", { params });
+  };
+
   export const deleteBloodDonation = async (id: number) => {
     return api.delete<{}>(`/api/blood-donations/${id}`);
   };
