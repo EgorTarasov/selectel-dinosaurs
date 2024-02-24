@@ -117,12 +117,11 @@ const DonationCard = ({ id, pet: { avatar, name, age, weight, bloodType }, owner
       <div className="flex justify-end w-full flex-col h-full mt-3">
         <Button
           onClick={() => {
-            BloodDonationsEndpoint.postBloodDonation(id, 1)
+            BloodDonationsEndpoint.postBloodDonationResponse(id, 2)
               .then(() => {
                 toast({
                   title: "Запрос отправлен",
-                  description: "Донор свяжется с вами, если сможет помочь.",
-                  action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+                  description: "Донор свяжется с вами, если сможет помочь."
                 });
               })
               .catch(() => {

@@ -41,3 +41,8 @@ export interface FetchDonationsParams {
   pet_type?: "cat" | "dog";
   due_date?: string;
 }
+
+export interface CreateDonationParams {
+  amount: number;
+  petId: number;
+}
