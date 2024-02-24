@@ -1,3 +1,4 @@
+import { VkLoginButton } from "@/components/buttons/VkLoginButton";
 import { Text } from "@/components/typography/Text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,11 +48,13 @@ const Login = observer(() => {
               value={vm.password}
               onChange={(e) => (vm.password = e.target.value)}
             />
-            <button
-              type="button"
-              className="absolute right-2 bottom-1.5 text-slate-600 hover:underline">
-              Забыли?
-            </button>
+            {vm.tab === "login" && (
+              <button
+                type="button"
+                className="absolute right-2 bottom-1.5 text-slate-600 hover:underline">
+                Забыли?
+              </button>
+            )}
           </fieldset>
           {vm.isErrored && (
             <Text.UiMedium className="text-destructive mt-2 text-center">
@@ -60,9 +63,10 @@ const Login = observer(() => {
                 : "Пользователь с таким email уже зарегистрирован"}
             </Text.UiMedium>
           )}
-          <Button type="submit" className="mt-5" disabled={vm.isLoading}>
+          <Button type="submit" className="mt-5 mb-3" disabled={vm.isLoading}>
             {vm.isLoading ? "Загрузка..." : vm.tab === "login" ? "Войти" : "Зарегистрироваться"}
           </Button>
+          <VkLoginButton />
         </form>
       </div>
     </div>

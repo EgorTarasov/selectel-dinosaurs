@@ -25,11 +25,6 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const onCloseClick = () => {
-    if (vm) {
-      vm.item = null;
-    }
-  };
 
   useEffect(() => {
     setDrawerOpen(vm.item !== null);
@@ -56,7 +51,7 @@ export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
           "transition-all duration-300"
         )}>
         <DrawerHeader className="flex justify-between">
-          <DrawerTitle>Банки</DrawerTitle>
+          <DrawerTitle>Банки крови</DrawerTitle>
           <DrawerClose onClick={() => (vm.item = null)}>
             <Cross1Icon className="size-6" />
           </DrawerClose>
@@ -72,14 +67,6 @@ export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
                 tabs={["donor", "seek"]}
                 disabled={vm.loading}
               />
-              {vm.item && (
-                <button
-                  disabled={vm.loading}
-                  className="rounded-full w-10 h-10 flex items-center justify-center border border-slate-200"
-                  onClick={onCloseClick}>
-                  <Cross1Icon />
-                </button>
-              )}
             </div>
             <BloodFilter vm={vm} />
             {!vm.item && (

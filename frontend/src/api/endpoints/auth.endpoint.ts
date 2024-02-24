@@ -20,6 +20,14 @@ export namespace AuthEndpoint {
     return parseJwt<AuthDto.Item>(result.access_token);
   };
 
+  export const loginViaVk = async (code: unknown) => {
+    // @ts-expect-error no spread but i know what im doing shut up
+    const result = await api.post<AuthDto.Result>("/api/auth/login/vk", { ...code });
+
+    setStoredAuthToken(result.access_token);
+    return parseJwt<AuthDto.Item>(result.access_token);
+  };
+
   export const register = async (email: string, password: string) => {
     const result = await api.post<AuthDto.Result>(
       "/api/auth/register",

@@ -28,7 +28,7 @@ export const ContactsSection: FCVM<ProfileStore> = observer(({ vm }) => {
           onChange={(v) => (vm.item.data!.contact_group.phone = v.target.value)}
         />
         <IconInput
-          placeholder="Почта"
+          placeholder="Контактная почта"
           type="email"
           leftIcon={<EmailIcon />}
           value={vm.item.data.contact_group?.email}

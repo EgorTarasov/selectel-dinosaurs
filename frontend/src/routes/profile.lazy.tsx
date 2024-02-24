@@ -4,6 +4,7 @@ import { ContactsSection } from "@/components/pages/profile/ContactsSection";
 import { NameSection } from "@/components/pages/profile/NameSection";
 import { PetsSection } from "@/components/pages/profile/PetsSection";
 import { Button } from "@/components/ui/button";
+import { LoadingWrapper } from "@/components/ui/loaders/LoadingWrapper";
 import { Tabs } from "@/components/ui/tabs/Tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileStore } from "@/stores/profile.store";
@@ -27,36 +28,39 @@ const Profile = observer(() => {
         />
       </div>
 
-      {vm.tab === "settings" && (
-        <>
-          <div className="flex justify-end">
-            <Button
-              variant="secondary"
-              onClick={() =>
-                vm
-                  .updateUser()
-                  .then(() => {
-                    toast({ variant: "default", description: "Профиль успешно обновлён" });
-                  })
-                  .catch(() =>
-                    toast({
-                      variant: "destructive",
-                      title: "Ошибка",
-                      description: "Не удалось обновить профиль"
+      {vm.tab === "settings" &&
+        (vm.item.loading ? (
+          <LoadingWrapper />
+        ) : (
+          <>
+            <div className="flex justify-end">
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  vm
+                    .updateUser()
+                    .then(() => {
+                      toast({ variant: "default", description: "Профиль успешно обновлён" });
                     })
-                  )
-              }
-              disabled={vm.item.loading || vm.isProfileSubmitDisabled}>
-              Обновить данные
-            </Button>
-          </div>
-          <NameSection vm={vm} />
-          <span className="h-16" />
-          <ContactsSection vm={vm} />
-          <span className="h-16" />
-          <CommunicationSection vm={vm} />
-        </>
-      )}
+                    .catch(() =>
+                      toast({
+                        variant: "destructive",
+                        title: "Ошибка",
+                        description: "Не удалось обновить профиль"
+                      })
+                    )
+                }
+                disabled={vm.item.loading || vm.isProfileSubmitDisabled}>
+                Обновить данные
+              </Button>
+            </div>
+            <NameSection vm={vm} />
+            <span className="h-16" />
+            <ContactsSection vm={vm} />
+            <span className="h-16" />
+            <CommunicationSection vm={vm} />
+          </>
+        ))}
 
       {vm.tab === "pets" && (
         <>

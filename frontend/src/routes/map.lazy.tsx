@@ -1,3 +1,4 @@
+import { PrivateRoute } from "@/components/hoc/PrivateRoute";
 import { Map } from "@/components/pages/map/Map";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
@@ -11,5 +12,9 @@ const MapPage = observer(() => {
 });
 
 export const Route = createLazyFileRoute("/map")({
-  component: MapPage
+  component: () => (
+    <PrivateRoute>
+      <MapPage />
+    </PrivateRoute>
+  )
 });

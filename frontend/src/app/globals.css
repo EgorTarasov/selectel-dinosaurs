@@ -56,7 +56,8 @@
   * {
     @apply border-border;
   }
-  body {
+  body,
+  #app {
     @apply bg-background text-foreground;
   }
 }

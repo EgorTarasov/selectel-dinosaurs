@@ -8,7 +8,7 @@ const SocialDonationCard = ({ link, summary }: SocialDonation) => {
 
         <div className="mt-2">
           <span className="text-sm font-semibold">Краткое сообщение:</span>
-          <span className="text-sm"> {summary}</span>
+          <span className="text-sm break-words"> {summary}</span>
         </div>
 
         <div className="mt-2">

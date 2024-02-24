@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const ProfileLazyImport = createFileRoute('/profile')()
 const MapLazyImport = createFileRoute('/map')()
+const LoginVkLazyImport = createFileRoute('/login-vk')()
 const LoginLazyImport = createFileRoute('/login')()
 const LeaderboardLazyImport = createFileRoute('/leaderboard')()
 const IndexLazyImport = createFileRoute('/')()
@@ -33,6 +34,11 @@ const MapLazyRoute = MapLazyImport.update({
   path: '/map',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/map.lazy').then((d) => d.Route))
+
+const LoginVkLazyRoute = LoginVkLazyImport.update({
+  path: '/login-vk',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login-vk.lazy').then((d) => d.Route))
 
 const LoginLazyRoute = LoginLazyImport.update({
   path: '/login',
@@ -65,6 +71,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLazyImport
       parentRoute: typeof rootRoute
     }
+    '/login-vk': {
+      preLoaderRoute: typeof LoginVkLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/map': {
       preLoaderRoute: typeof MapLazyImport
       parentRoute: typeof rootRoute
@@ -82,6 +92,7 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   LeaderboardLazyRoute,
   LoginLazyRoute,
+  LoginVkLazyRoute,
   MapLazyRoute,
   ProfileLazyRoute,
 ])

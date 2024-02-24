@@ -38,6 +38,9 @@ dependencies:
   '@tanstack/react-router':
     specifier: ^1.16.5
     version: 1.16.5(react-dom@18.2.0)(react@18.2.0)
+  '@vkid/sdk':
+    specifier: ^1.1.0
+    version: 1.1.0
   axios:
     specifier: ^1.6.7
     version: 1.6.7
@@ -2003,6 +2006,12 @@ packages:
       - '@swc/helpers'
     dev: true
 
+  /@vkid/sdk@1.1.0:
+    resolution: {integrity: sha512-D8rDQL2EznT1VZE54+q8bxhbuktxoLsNI5UUpO4U9wOQnXNXaNu/fyr0zK3Ip6oZIyRbob+NXntV1rCp90m8mg==}
+    dependencies:
+      crypto-js: 4.2.0
+    dev: false
+
   /@yandex/ymaps3-types@0.0.21(@types/react-dom@18.2.19)(@types/react@18.2.56):
     resolution: {integrity: sha512-mMKDhzHdV+4ZkzrN2oKzRXEHfCtS3/PLjzWUG2Tp5qsBWszViruk4gng+c/ORthztooYRgqB2+U5syNHDPc0Kw==}
     peerDependencies:
@@ -2290,6 +2299,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    dev: false
 
   /cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}

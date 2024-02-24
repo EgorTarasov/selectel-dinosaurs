@@ -6,8 +6,8 @@ import PhoneIcon from "@/assets/phone.svg";
 
 export const BankCard: FC<{ item: Bank; onClick: () => void }> = observer(({ item, onClick }) => {
   return (
-    <div
-      className="flex flex-col gap-4 hover:bg-gray-100 p-4 rounded-lg cursor-pointer transition-all duration-300"
+    <button
+      className="flex flex-col gap-4 hover:bg-gray-100 p-4 rounded-lg cursor-pointer transition-all duration-300 text-left"
       onClick={onClick}>
       <Text.H4>{item.name}</Text.H4>
       <div className="flex flex-col gap-3">
@@ -24,6 +24,6 @@ export const BankCard: FC<{ item: Bank; onClick: () => void }> = observer(({ ite
           </a>
         </div>
       </div>
-    </div>
+    </button>
   );
 });
