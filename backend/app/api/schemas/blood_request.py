@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from datetime import datetime
 
 
@@ -25,3 +25,8 @@ class BloodRequestResponseDto(BaseModel):
 class BloodRequestResponseCreate(BaseModel):
     msg: str
     amount: int
+
+
+class BloodRequestUpdate(BaseModel):
+    amount: Optional[int] = None
+    due_date: Optional[datetime] = None

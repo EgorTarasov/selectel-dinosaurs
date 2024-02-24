@@ -62,5 +62,4 @@ class BloodDonationResponseCreate(BaseModel):
 
 
 class BloodDonationUpdate(BaseModel):
-    msg: Optional[str] = None
     amount: Optional[int] = None
