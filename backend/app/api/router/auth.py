@@ -105,6 +105,7 @@ async def auth_vk(
         db_user = User(
             first_name=payload.user.first_name,
             last_name=payload.user.last_name,
+            vkid=payload.user.id,
             middle_name="",
             email=payload.user.email,
             role="user",
