@@ -1,5 +1,4 @@
 import { MapSidebar } from "@/stores/map-sidebar.store";
-import { FCVM } from "@/utils/vm";
 import { observer } from "mobx-react-lite";
 import { Text } from "@/components/typography/Text";
 import PhoneIcon from "@/assets/phone.svg";
@@ -13,6 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { ELEVATION } from "./Map";
 import { ru } from "date-fns/locale";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { FCVM } from "@/utils/vm";
 
 const TimePill = (x: { className: string; children: ReactNode }) => {
   return (
@@ -64,7 +64,7 @@ export const DonorTab: FCVM<MapSidebar> = observer(({ vm }) => {
           <Text.UiMedium>Преимущества</Text.UiMedium>
           <ul className="space-y-2">
             {vm.item.data.advantages.map((advantage, index) => (
-              <li key={index} className="flex rounded-2xl bg-green-50 py-2 px-3">
+              <li key={index} className="flex rounded-2xl bg-green-50 border py-2 px-3">
                 <Text.Subtle>{advantage}</Text.Subtle>
               </li>
             ))}

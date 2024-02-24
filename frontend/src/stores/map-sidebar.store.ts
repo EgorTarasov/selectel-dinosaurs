@@ -2,6 +2,10 @@ import { PointFeature } from "@/components/pages/map/map.types";
 import { CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
 import { MapStore } from "./map.store";
+import { BankRequestEndpoint } from "@/api/endpoints/bank-request.endpoint";
+import { toast } from "@/components/ui/use-toast";
+import { BankDonationEndpoint } from "@/api/endpoints/bank-donation.endpoint";
+import { BankDonationDto } from "@/api/models/bank-donation.model";
 
 const BLOOD_PRICE_RUB = 350;
 const DEFICIT_COEF = {
@@ -51,7 +55,6 @@ export class MapSidebar {
     );
 
     return items;
-    // return [...items, ...items, ...items, ...items];
   }
 
   get bloodCount(): Array<{ type: string; level: "low" | "medium" | "high" }> {
@@ -93,7 +96,11 @@ export class MapSidebar {
         ? this.item.data.dogStorage[this.selectedBloodType as keyof typeof DogBloodType]
         : this.item.data.catStorage[this.selectedBloodType as keyof typeof CatBloodType];
 
-    if (Number(this.bloodRequiredCount) > maxAmount) {
+    if (Number(this.bloodRequiredCount) < 0) {
+      return "Введите корректное количество крови";
+    }
+
+    if (maxAmount === 0 || Number(this.bloodRequiredCount) > maxAmount) {
       return "В банке недостаточно крови";
     }
 
@@ -106,6 +113,7 @@ export class MapSidebar {
       ).toFixed(2) + " руб"
     );
   }
+
   async submit() {
     this.errorText = null;
 
@@ -119,16 +127,61 @@ export class MapSidebar {
         this.errorText = "Выберите время";
         return;
       }
+
+      const template = {
+        date: this.date,
+        time: this.time,
+        animal_type: this.animalType,
+        blood_type: this.selectedBloodType,
+        count: Number(this.bloodRequiredCount),
+        bank: this.item!.data!.id
+      };
+
+      await BankRequestEndpoint.create(template);
+      toast({
+        title: "Успешно",
+        description: "Заявка успешно отправлена"
+      });
+      this.item = null;
     } else {
       if (this.selectedBloodType === "ALL") {
         this.errorText = "Выберите группу крови";
         return;
       }
 
+      if (this.item?.data) {
+        const maxAmount =
+          this.animalType === "dog"
+            ? this.item.data.dogStorage[this.selectedBloodType as keyof typeof DogBloodType]
+            : this.item.data.catStorage[this.selectedBloodType as keyof typeof CatBloodType];
+
+        if (maxAmount === 0) {
+          this.errorText = "В банке недостаточно крови";
+          return;
+        }
+      }
+
       if (Number(this.bloodRequiredCount) === 0) {
         this.errorText = "Введите количество крови";
         return;
       }
+
+      const template: BankDonationDto.Template = {
+        animal_type: this.animalType,
+        blood_type: this.selectedBloodType,
+        count: Number(this.bloodRequiredCount),
+        bank: this.item!.data!.id,
+        date: new Date(),
+        time: new Date().toLocaleTimeString()
+      };
+
+      await BankDonationEndpoint.create(template);
+      toast({
+        title: "Успешно",
+        description: "Заявка успешно отправлена"
+      });
+
+      this.item = null;
     }
   }
 
