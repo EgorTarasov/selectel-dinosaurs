@@ -102,7 +102,7 @@ const DonationCard = ({ id, pet: { avatar, name, age, weight, bloodType }, owner
       {!owner.contactGroup.hidden && owner.vkid && (
         <div className="mt-2">
           <a href={`vk.com/${owner.vkid}`} target="_blank" rel="noreferrer">
-            <Button className="w-full" variant="outline">
+            <Button className="w-13 h-13" variant="outline">
               <VkIcon />
             </Button>
           </a>

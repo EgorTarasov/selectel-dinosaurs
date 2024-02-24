@@ -23,13 +23,15 @@ export interface Donation {
 }
 
 export interface SocialDonation {
-  id: number;
-  city: string;
-  name: string;
+  vkid: number;
   link: string;
-  phone?: string;
-  blood?: string;
-  pet?: string;
+  text: string;
+  summary: string;
+  images: string[];
+  date: string;
+  id: number;
+  uploaded_by: number;
+  uploaded_at: string;
 }
 
 export interface FetchDonationsParams {

@@ -1,5 +1,5 @@
 import api from "api/utils/api";
-import { Donation, FetchDonationsParams } from "../models";
+import { Donation, FetchDonationsParams, SocialDonation } from "../models";
 
 export namespace BloodDonationsEndpoint {
   export const fetchBloodDonations = async (params: FetchDonationsParams) => {
@@ -11,5 +11,9 @@ export namespace BloodDonationsEndpoint {
       msg: "string",
       amount: 0
     });
+  };
+
+  export const fetchSocialDonations = async (params: FetchDonationsParams) => {
+    return api.get<SocialDonation[]>("/api/social/social", { params });
   };
 }
