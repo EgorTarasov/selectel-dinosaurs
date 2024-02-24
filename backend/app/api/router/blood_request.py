@@ -12,6 +12,7 @@ from ..schemas import (
     BloodRequestResponseCreate,
     BloodRequestResponseDto,
     BloodRequestUpdate,
+    QueryFilters,
 )
 from ...models import User, BloodRequest, BloodRequestResponse
 from ..serializers import (
@@ -26,10 +27,7 @@ router = APIRouter(prefix="/blood-requests")
 
 @router.get("/", response_model=List[BloodRequestDto])
 async def get_all_blood_requests(
-        type: Optional[str] = None,
-        breed: Optional[str] = None,
-        weight: Optional[float] = None,
-        amount: Optional[int] = None,
+        filters: QueryFilters = Depends(),
         db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
     stmt = sa.select(BloodRequest).options(orm.selectinload(BloodRequest.pet))
@@ -37,16 +35,19 @@ async def get_all_blood_requests(
     res = []
     for t in (await db.execute(stmt)).all():
         db_blood_request = t[0]
-        if breed and db_blood_request.pet.breed != breed:
+
+        await db.refresh(db_blood_request, ["pet"])
+        await db.refresh(db_blood_request.pet, ["owner"])
+
+        if filters.city and not (filters.city.lower() in db_blood_request.pet.owner.city.lower()):
             continue
-        if weight and db_blood_request.pet.weight < weight:
+
+        if filters.pet_type and filters.pet_type != "any" and filters.pet_type != db_blood_request.pet.type:
             continue
-        if amount and db_blood_request.amount < amount:
+
+        if filters.amount and filters.amount < db_blood_request.amount:
             continue
-        await db.refresh(
-            db_blood_request.pet,
-            ["id", "owner"],
-        )
+
         res.append(db_blood_request)
 
     return db_blood_requests_to_blood_request_dtos(res)
@@ -63,6 +64,8 @@ async def create_blood_request_request(
         pet_id=pet_id,
         amount=payload.amount,
         due_date=payload.due_date,
+        msg=payload.msg,
+        address=payload.address,
     )
     db.add(blood_request)
     await db.commit()
@@ -177,6 +180,12 @@ async def update_blood_request(
         db_blood_request.amount = payload.amount
     if payload.due_date is not None:
         db_blood_request.due_date = payload.due_date
+
+    if payload.msg is not None:
+        db_blood_request.msg = payload.msg
+
+    if payload.address is not None:
+        db_blood_request.address = payload.address
 
     # Сохраняем изменения и обновляем объект с БД
     await db.commit()

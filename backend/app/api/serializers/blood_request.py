@@ -11,6 +11,8 @@ def db_blood_request_to_blood_request_dto(db_blood_request: BloodRequest) -> Blo
         date=db_blood_request.created_at,
         due_date=db_blood_request.due_date,
         pet=db_pet_to_pet_dto(db_blood_request.pet, is_full=False),
+        msg=db_blood_request.msg,
+        address=db_blood_request.address,
     )
 
 

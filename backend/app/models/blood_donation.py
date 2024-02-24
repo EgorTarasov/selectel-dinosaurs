@@ -12,6 +12,8 @@ class BloodDonation(Base, TimestampMixin):
     amount: Mapped[int] = mapped_column(sa.Integer)
     date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
     selected_blood_donation_response_id: Mapped[sa.Integer] = mapped_column(sa.Integer, nullable=True)
+    msg: Mapped[sa.String] = mapped_column(sa.String, nullable=True)
+    address: Mapped[sa.String] = mapped_column(sa.String, nullable=True)
 
     blood_donation_response = relationship("BloodDonationResponse", back_populates="blood_donation")
     pet = relationship("Pet", back_populates="blood_donations")

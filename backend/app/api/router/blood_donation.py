@@ -53,6 +53,8 @@ async def get_all_blood_donations(
             User.contact_email,
             User.wishes,
             Pet.age,
+            BloodDonation.msg,
+            BloodDonation.address,
         )
         .select_from(BloodDonation)
         .join(Pet, BloodDonation.pet_id == Pet.id)
@@ -100,6 +102,8 @@ async def get_all_blood_donations(
                     },
                     "wishes": obj[14],
                 },
+                "msg": "Болезнь",
+                "address": "Москва",
             }
         )
         for obj in res
@@ -124,6 +128,8 @@ async def create_blood_donation_request(
         pet_id=pet_id,
         amount=payload.amount,
         date=payload.date,
+        msg=payload.msg,
+        address=payload.address,
     )
     db.add(blood_donation)
     await db.commit()
@@ -254,6 +260,12 @@ async def update_blood_donation_request(
 
     if payload.amount is not None:
         db_blood_donation.amount = payload.amount
+
+    if payload.msg is not None:
+        db_blood_donation.msg = payload.msg
+
+    if payload.address is not None:
+        db_blood_donation.address = payload.address
 
     # Сохраняем изменения и обновляем объект с БД
     await db.commit()

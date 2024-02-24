@@ -10,6 +10,8 @@ class BloodDonationDto(BaseModel):
     amount: int
     date: datetime
     pet: PetDto
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"
 
 
 class PetSearchResult(BaseModel):
@@ -41,11 +43,15 @@ class BloodDonationSearchResult(BaseModel):
     pet: PetSearchResult
     owner: OwnerSearchResult
     city: Optional[str]
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"
 
 
 class BloodDonationCreate(BaseModel):
     amount: int
     date: datetime
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"
 
 
 class BloodDonationResponseDto(BaseModel):
@@ -63,3 +69,5 @@ class BloodDonationResponseCreate(BaseModel):
 
 class BloodDonationUpdate(BaseModel):
     amount: Optional[int] = None
+    msg: Optional[str] = None
+    address: Optional[str] = None
