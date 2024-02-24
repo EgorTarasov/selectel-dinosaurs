@@ -29,8 +29,8 @@ router = APIRouter(prefix="/blood-donations")
 #
 @router.get("/", response_model=List[BloodDonationSearchResult])
 async def get_all_blood_donations(
-    filters: QueryFilters = Depends(),
-    db: AsyncSession = Depends(get_session),
+        filters: QueryFilters = Depends(),
+        db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
     # contanct group, vkid
     stmt = (
@@ -61,9 +61,9 @@ async def get_all_blood_donations(
         # search where BloodDonation.pet.owner.city ilike filters.city
         stmt = stmt.where(User.city.ilike(f"%{filters.city}%"))
     if (
-        filters.blood_type is not None
-        and filters.amount is not None
-        and filters.amount > 0
+            filters.blood_type is not None
+            and filters.amount is not None
+            and filters.amount > 0
     ):
         print("filtering by blood type and pet type")
         blood_type = map_blood_type(filters.blood_type, filters.pet_type)
@@ -104,10 +104,10 @@ async def get_all_blood_donations(
 
 @router.post("/pet/{pet_id}", response_model=BloodDonationDto)
 async def create_blood_donation_request(
-    pet_id: int,
-    payload: BloodDonationCreate,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        pet_id: int,
+        payload: BloodDonationCreate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     blood_donation = BloodDonation(
         pet_id=pet_id,
@@ -132,11 +132,11 @@ async def create_blood_donation_request(
     "/{blood_donation_id}/pet/{pet_id}", response_model=BloodDonationResponseDto
 )
 async def create_response_to_blood_request(
-    blood_donation_id: int,
-    pet_id: int,
-    blood_response: BloodDonationResponseCreate,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_donation_id: int,
+        pet_id: int,
+        blood_response: BloodDonationResponseCreate,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     db_blood_response = BloodDonationResponse(
         blood_donation_id=blood_donation_id,
@@ -163,9 +163,9 @@ async def create_response_to_blood_request(
     "/response/{blood_donation_id}", response_model=List[BloodDonationResponseDto]
 )
 async def get_responses_for_blood_donation_request(
-    blood_donation_id: int,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_donation_id: int,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     stmt = (
         sa.select(BloodDonationResponse)
@@ -193,9 +193,9 @@ async def get_responses_for_blood_donation_request(
 
 @router.delete("/{blood_donation_id}")
 async def delete_blood_donation(
-    blood_donation_id: int,
-    db: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
+        blood_donation_id: int,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
 ):
     row = await db.execute(
         sa.select(BloodDonation)
@@ -211,3 +211,21 @@ async def delete_blood_donation(
         return fastapi.Response(status_code=204)
     else:
         return fastapi.Response(status_code=400)
+
+
+@router.post("{blood_donation_id}/response/{blood_donation_response_id}/accept")
+async def accept_blood_donation_response(
+        blood_donation_id: int,
+        blood_donation_response_id: int,
+        db: AsyncSession = Depends(get_session),
+        current_user: User = Depends(get_current_user),
+):
+    # TODO: checks (is user owner, is donation_response valid)
+    stmt = sa.update(BloodDonation) \
+        .where(BloodDonation.id == blood_donation_id) \
+        .values(selected_blood_donation_response_id=blood_donation_response_id)
+
+    await db.execute(stmt)
+    await db.commit()
+
+    return fastapi.Response(status_code=201)
