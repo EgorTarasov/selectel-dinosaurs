@@ -1,5 +1,6 @@
 import BankCard from "@/components/cards/BankCard";
 import DonationCard from "@/components/cards/DonationCard";
+import HomeRequestCard from "@/components/cards/HomeRequestCard";
 import SocialDonationCard from "@/components/cards/SocialDonationCard";
 import { HomeFilters } from "@/components/home/HomeFilters";
 import HomeSceleton from "@/components/home/HomeSceleton";
@@ -47,6 +48,22 @@ const Index = observer(() => {
 
           {vm.donations.length === 0 && !vm.isLoading && (
             <div className="w-full text-slate-500">Нет подходящих доноров</div>
+          )}
+        </div>
+      </div>
+
+      <div className="section mt-8 mb-7">
+        <h3 className="font-semibold text-2xl">Подходящие реципиенты</h3>
+      </div>
+
+      <div className="section">
+        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {vm.isLoading
+            ? Array.from({ length: 3 }).map((_, i) => <HomeSceleton key={i} />)
+            : vm.requests.map((request) => <HomeRequestCard key={request.id} {...request} />)}
+
+          {vm.donations.length === 0 && !vm.isLoading && (
+            <div className="w-full text-slate-500">Нет подходящих реципиентов</div>
           )}
         </div>
       </div>

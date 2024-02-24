@@ -1,6 +1,6 @@
 import { BanksEndpoint } from "@/api/endpoints/banks.endpoint";
 import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
-import { Bank, Donation, FetchBanksParams, SocialDonation } from "@/api/models";
+import { Bank, BloodRequest, Donation, FetchBanksParams, SocialDonation } from "@/api/models";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
 
@@ -16,6 +16,7 @@ export class HomeStore {
   banks: Bank[] = [];
   donations: Donation[] = [];
   socialDonations: SocialDonation[] = [];
+  requests: BloodRequest[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -56,15 +57,18 @@ export class HomeStore {
     };
 
     try {
-      const [banksResponse, donationsResponse, socialDonations] = await Promise.all([
-        BanksEndpoint.fetchBanks(params),
-        BloodDonationsEndpoint.fetchBloodDonations(params),
-        BloodDonationsEndpoint.fetchSocialDonations(params)
-      ]);
+      const [banksResponse, donationsResponse, socialDonations, requestsResponse] =
+        await Promise.all([
+          BanksEndpoint.fetchBanks(params),
+          BloodDonationsEndpoint.fetchBloodDonations(params),
+          BloodDonationsEndpoint.fetchSocialDonations(params),
+          BloodDonationsEndpoint.fetchRequests(params)
+        ]);
 
       this.banks = banksResponse;
       this.donations = donationsResponse;
       this.socialDonations = socialDonations;
+      this.requests = requestsResponse;
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     } finally {
