@@ -23,7 +23,8 @@ def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
             "requests": [
                 {
                     "id": req.id,
-                    "date": req.date,
+                    "due_date": req.due_date,
+                    "date": req.created_at,
                     "amount": req.amount,
                 }
                 for req in db_pet.blood_requests
