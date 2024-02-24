@@ -13,6 +13,9 @@ import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { PopoverContent, Popover, PopoverTrigger } from "../ui/popover";
 import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
+import { Switch } from "../ui/switch";
+import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
+import { useToast } from "../ui/use-toast";
 
 type PetAvatarProps = {
   vm: ProfileStore;
@@ -77,6 +80,8 @@ type PetEditableCardProps = {
 };
 
 export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, index }) => {
+  const { toast } = useToast();
+
   return (
     <>
       <div className="relative flex flex-col bg-white rounded-sm w-full p-5">
@@ -236,6 +241,37 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
               variant="outline">
               Добавить прививку
             </Button>
+          </div>
+        </div>
+
+        <hr className="border-t border-gray-200 mt-5 mb-5" />
+
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-2">
+            <Switch id="airplane-mode" />
+            <Label htmlFor="airplane-mode">Нуждается в переливании</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            {pet.cooldown_donation_days <= 0 ? (
+              <>
+                <Switch
+                  defaultChecked={pet.able_to_donate}
+                  onCheckedChange={(value) => {
+                    PetsEndpoint.setPetAbleToDonate(pet.id, value).then(() => {
+                      toast({
+                        title: "Статус изменен",
+                        description: "Статус готовности к донорству изменен"
+                      });
+                    });
+                  }}
+                  id="airplane-mode"
+                />
+                <Label htmlFor="airplane-mode">Готов к донортсву</Label>
+              </>
+            ) : (
+              `До следующей возможной донорской крови: ${pet.cooldown_donation_days} дней`
+            )}
           </div>
         </div>
       </div>

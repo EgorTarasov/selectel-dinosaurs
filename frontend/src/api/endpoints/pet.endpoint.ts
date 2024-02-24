@@ -28,4 +28,8 @@ export namespace PetsEndpoint {
 
     return api.put<string>("/api/pets/pets/photo", formData);
   };
+
+  export const setPetAbleToDonate = async (id: number, able_to_donate: boolean) => {
+    return api.put<Pet>(`/api/pets/pets/${id}/able-to-donate`, { able_to_donate });
+  };
 }
