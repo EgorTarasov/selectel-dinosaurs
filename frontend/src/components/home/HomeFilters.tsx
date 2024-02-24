@@ -102,7 +102,7 @@ export const HomeFilters: FCVM<HomeStore> = observer(({ vm }) => {
                     {vm.expirationDate ? (
                       format(vm.expirationDate, "PPP")
                     ) : (
-                      <span>Выбирте дату</span>
+                      <span>Выберете дату</span>
                     )}
                   </Button>
                 </PopoverTrigger>

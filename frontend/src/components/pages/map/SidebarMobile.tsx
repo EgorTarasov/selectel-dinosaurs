@@ -1,7 +1,7 @@
 import { MapSidebar } from "@/stores/map-sidebar.store";
 import { FCVM } from "@/utils/vm";
 import { observer } from "mobx-react-lite";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Tabs } from "@/components/ui/tabs/Tabs";
 import { DonorTab } from "./DonorTab";
@@ -10,25 +10,59 @@ import { BloodFilter } from "./BloodFilter";
 import { BankCard } from "./BankCard";
 import { IconInput } from "@/components/ui/input";
 import SearchIcon from "@/assets/search.svg";
-import { SidebarMobile } from "./SidebarMobile";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from "@/components/ui/drawer";
+import { ELEVATION } from "./Map";
+import { useEffect, useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
-export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
+export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const onCloseClick = () => {
     if (vm) {
       vm.item = null;
     }
   };
 
+  useEffect(() => {
+    setDrawerOpen(vm.item !== null);
+  }, [vm.item]);
+
   return (
-    <>
-      <SidebarMobile vm={vm} />
-      <aside
+    <Drawer
+      open={drawerOpen && !isDesktop}
+      onOpenChange={(v) => {
+        if (!v) {
+          vm.item = null;
+        }
+        setDrawerOpen(v);
+      }}>
+      <DrawerTrigger
+        asChild
+        style={{ zIndex: ELEVATION.Sidebar }}
+        className="absolute max-w-14 max-h-14 bottom-4 right-4 flex md:hidden rounded-lg bg-primary justify-center items-center p-2 text-white">
+        <HamburgerMenuIcon className="w-full h-full" />
+      </DrawerTrigger>
+      <DrawerContent
         className={cn(
-          `absolute left-0 max-w-[450px] min-w-[450px] top-[14vh] bottom-0 hidden md:flex flex-col z-[200]`,
-          "transition-all duration-300 pointer-events-none"
+          `flex flex-col z-[200] h-[80vh] max-h-[80vh]`,
+          "transition-all duration-300"
         )}>
-        <div className="pointer-events-auto flex flex-col bg-white px-5 rounded-lg gap-5 relative overflow-y-auto shadow-md">
-          <div className="flex flex-col gap-5 sticky pt-5 top-0 bg-white">
+        <DrawerHeader className="flex justify-between">
+          <DrawerTitle>Банки</DrawerTitle>
+          <DrawerClose onClick={() => (vm.item = null)}>
+            <Cross1Icon className="size-6" />
+          </DrawerClose>
+        </DrawerHeader>
+        <div className="flex flex-col px-5 rounded-lg gap-5 relative overflow-y-auto">
+          <div className="flex flex-col gap-5 sticky top-0 bg-background">
             <div className="flex justify-between items-center">
               <Tabs
                 activeTab={vm.tab}
@@ -50,7 +84,6 @@ export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
             <BloodFilter vm={vm} />
             {!vm.item && (
               <IconInput
-                className="bg-gray-100"
                 placeholder="Введите название клиники"
                 value={vm.search}
                 onChange={(e) => (vm.search = e.target.value)}
@@ -75,7 +108,7 @@ export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
             )}
           </div>
         </div>
-      </aside>
-    </>
+      </DrawerContent>
+    </Drawer>
   );
 });
