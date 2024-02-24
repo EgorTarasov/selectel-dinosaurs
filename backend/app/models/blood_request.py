@@ -10,6 +10,8 @@ class BloodRequest(Base, TimestampMixin):
     pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id"))
     amount: Mapped[int] = mapped_column(sa.Integer)
     due_date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
+    msg: Mapped[sa.String] = mapped_column(sa.String, nullable=True)
+    address: Mapped[sa.String] = mapped_column(sa.String, nullable=True)
 
     pet = relationship("Pet", back_populates="blood_requests")
     blood_request_response = relationship(

@@ -10,11 +10,15 @@ class BloodRequestDto(BaseModel):
     due_date: datetime
     date: datetime
     pet: PetDto
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"
 
 
 class BloodRequestCreate(BaseModel):
     amount: int
     due_date: datetime
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"
 
 
 class BloodRequestResponseDto(BaseModel):
@@ -32,3 +36,5 @@ class BloodRequestResponseCreate(BaseModel):
 class BloodRequestUpdate(BaseModel):
     amount: Optional[int] = None
     due_date: Optional[datetime] = None
+    msg: Optional[str] = "Большая потеря крови"
+    address: Optional[str] = "Москва"

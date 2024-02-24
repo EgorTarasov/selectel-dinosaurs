@@ -10,6 +10,8 @@ def db_blood_donation_to_blood_donation_dto(db_blood_donation: BloodDonation) ->
         amount=db_blood_donation.amount,
         date=db_blood_donation.created_at,
         pet=db_pet_to_pet_dto(db_blood_donation.pet, is_full=False),
+        msg=db_blood_donation.msg,
+        address=db_blood_donation.address,
     )
 
 
@@ -27,7 +29,7 @@ def db_blood_donation_response_to_blood_donation_response_dto(
             db_blood_donation_response.blood_donation),
         msg=db_blood_donation_response.msg,
         amount=db_blood_donation_response.amount,
-        pet=db_pet_to_pet_dto(db_blood_donation_response.pet, is_full=False)
+        pet=db_pet_to_pet_dto(db_blood_donation_response.pet, is_full=False),
     )
 
 
