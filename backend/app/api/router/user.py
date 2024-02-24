@@ -39,6 +39,8 @@ async def get_me(
 ):
     requests = []
     donations = []
+    requests_id = []
+    donations_id = []
 
 
     stmt = (
@@ -48,16 +50,6 @@ async def get_me(
     )
 
     db_user = (await db.execute(stmt)).scalar_one_or_none()
-
-    for db_pet in db_user.pets:
-        await db.refresh(db_pet, ["blood_donations"])
-        for db_blood_donation in db_pet.blood_donations:
-            db_blood_donation.pet = db_pet
-            donations.append(db_blood_donation)
-        await db.refresh(db_pet, ["blood_requests"])
-        for db_blood_request in db_pet.blood_requests:
-            db_blood_request.pet = db_pet
-            requests.append(db_blood_request)
 
     if not db_user:
         raise HTTPException(
