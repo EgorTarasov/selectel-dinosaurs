@@ -27,8 +27,23 @@ export const Navigation = observer(() => {
           <Logo />
         </Link>
         <NavLink to="/">Поиск донора для питомца </NavLink>
-        <NavLink to="/map">Где питомцу сдать кровь?</NavLink>
-        <div className="ml-auto">
+        <NavLink to="/map">Карта банков</NavLink>
+        <div className="ml-auto flex items-center gap-3">
+          <Link to="/profile">
+            {AuthService.auth.state === "authenticated" && (
+              <div className="w-10 h-10 border rounded-full">
+                {AuthService.auth.user.avatar ? (
+                  <img
+                    className="object-cover w-10 h-10 rounded-full"
+                    src={AuthService.auth.user.avatar}
+                    alt="Ваш аватар"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-gray-300 rounded-full" />
+                )}
+              </div>
+            )}
+          </Link>
           {AuthService.auth.state !== "loading" && (
             <Link
               to="/login"

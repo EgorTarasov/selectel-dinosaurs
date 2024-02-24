@@ -9,6 +9,7 @@ configure({
 });
 // Import the generated route tree
 import { routeTree } from "../routeTree.gen";
+import { Toaster } from "@/components/ui/toaster";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -26,6 +27,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
+      <Toaster />
       <RouterProvider router={router} />
     </StrictMode>
   );

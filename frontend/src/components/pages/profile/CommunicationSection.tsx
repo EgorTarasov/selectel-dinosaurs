@@ -34,6 +34,8 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
     return m.toString().padStart(2, "0");
   };
 
+  console.log("item", vm.item.data!.avaliable_time);
+
   return (
     <div className="flex w-full flex-col sm:flex-row gap-16">
       <div className="flex flex-col flex-1">
@@ -56,7 +58,7 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
           Только в выходные
         </Label>
         <ul className="flex flex-col gap-3">
-          {vm.item.data.available_time.map((v, i) => (
+          {vm.item.data.avaliable_time.map((v, i) => (
             <li key={i} className="flex items-center gap-3">
               <div className="flex items-center gap-2">
                 <Input
@@ -64,11 +66,11 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
                   type="number"
                   placeholder="00"
                   max={23}
-                  value={Number(v.start.split(":")[0])}
+                  value={Number(v[0].split(":")[0])}
                   onChange={(e) => {
-                    const value = `${formatHours(e.target.value)}:${v.start.split(":")[1]}`;
+                    const value = `${formatHours(e.target.value)}:${v[0].split(":")[1]}`;
                     if (isValidTime(value)) {
-                      v.start = value;
+                      v[0] = value;
                     }
                   }}
                 />
@@ -78,11 +80,11 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
                   type="number"
                   max={59}
                   placeholder="00"
-                  value={Number(v.start.split(":")[1])}
+                  value={Number(v[0].split(":")[1])}
                   onChange={(e) => {
-                    const value = `${v.start.split(":")[0]}:${formatMinutes(e.target.value)}`;
+                    const value = `${v[0].split(":")[0]}:${formatMinutes(e.target.value)}`;
                     if (isValidTime(value)) {
-                      v.start = value;
+                      v[0] = value;
                     }
                   }}
                 />
@@ -92,11 +94,11 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
                   type="number"
                   max={23}
                   placeholder="00"
-                  value={Number(v.end.split(":")[0])}
+                  value={Number(v[1].split(":")[0])}
                   onChange={(e) => {
-                    const value = `${formatHours(e.target.value)}:${v.end.split(":")[1]}`;
+                    const value = `${formatHours(e.target.value)}:${v[1].split(":")[1]}`;
                     if (isValidTime(value)) {
-                      v.end = value;
+                      v[1] = value;
                     }
                   }}
                 />
@@ -106,11 +108,11 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
                   type="number"
                   max={59}
                   placeholder="00"
-                  value={Number(v.end.split(":")[1])}
+                  value={Number(v[1].split(":")[1])}
                   onChange={(e) => {
-                    const value = `${v.end.split(":")[0]}:${formatMinutes(e.target.value)}`;
+                    const value = `${v[1].split(":")[0]}:${formatMinutes(e.target.value)}`;
                     if (isValidTime(value)) {
-                      v.end = value;
+                      v[1] = value;
                     }
                   }}
                 />
@@ -119,7 +121,7 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
                 size="icon"
                 className="w-fit"
                 variant="ghost"
-                onClick={() => vm.item.data!.available_time.splice(i, 1)}>
+                onClick={() => vm.item.data!.avaliable_time.splice(i, 1)}>
                 <MinusCircledIcon />
               </Button>
             </li>
@@ -127,7 +129,7 @@ export const CommunicationSection: FCVM<ProfileStore> = observer(({ vm }) => {
           <Button
             className="w-fit"
             variant="secondary"
-            onClick={() => vm.item.data!.available_time.push({ start: "9:00", end: "17:00" })}>
+            onClick={() => vm.item.data!.avaliable_time.push(["9:00", "17:00"])}>
             Добавить время
           </Button>
         </ul>

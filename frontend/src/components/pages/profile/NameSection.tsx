@@ -13,11 +13,11 @@ export const NameSection: FCVM<ProfileStore> = observer(({ vm }) => {
   }
 
   return (
-    <div className="flex items-center gap-9">
+    <div className="flex items-center gap-9 flex-col md:flex-row mt-6 md:mt-0">
       <Avatar vm={vm} />
       <div className="flex flex-col justify-between h-full">
         <Text.H4>Основное</Text.H4>
-        <div className="flex gap-5">
+        <div className="flex gap-5 flex-wrap">
           <fieldset className="gap-2 flex flex-col">
             <Label htmlFor="first_name">Имя</Label>
             <Input

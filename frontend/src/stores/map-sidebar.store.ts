@@ -99,10 +99,12 @@ export class MapSidebar {
 
     this.canGetBlood = true;
     return (
-      Number(this.bloodRequiredCount) *
-      BLOOD_PRICE_RUB *
-      DEFICIT_COEF[this.bloodCount.find((v) => v.type === this.selectedBloodType)!.level]
-    ).toFixed(2);
+      (
+        Number(this.bloodRequiredCount) *
+        BLOOD_PRICE_RUB *
+        DEFICIT_COEF[this.bloodCount.find((v) => v.type === this.selectedBloodType)!.level]
+      ).toFixed(2) + " руб"
+    );
   }
   async submit() {
     this.loading = true;

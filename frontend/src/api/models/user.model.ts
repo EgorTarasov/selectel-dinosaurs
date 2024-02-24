@@ -1,9 +1,4 @@
 export namespace UserDto {
-  interface AvailableTime {
-    start: string;
-    end: string;
-  }
-
   export interface Item {
     id: number;
     email: string;
@@ -19,9 +14,23 @@ export namespace UserDto {
     vkid: null | string;
     wishes: string;
     available_weekends_only: boolean;
-    available_time: AvailableTime[];
+    avaliable_time: [string, string][];
     avatar?: string;
   }
 
-  export interface Update {}
+  export interface Update {
+    email: string;
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    city: string;
+    wishes: string;
+    available_weekends_only: boolean;
+    avaliable_time: [string, string][];
+    contact_group: {
+      hidden: boolean;
+      phone: string;
+      email: string;
+    };
+  }
 }
