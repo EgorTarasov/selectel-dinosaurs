@@ -7,8 +7,10 @@ from .blood_donation import BloodDonation, BloodDonationResponse
 from .blood_request import BloodRequest, BloodRequestResponse
 from .response import Response
 from .resetcode import ResetCode
+from .social import SocialMediaPost
 
 __all__ = [
+    "SocialMediaPost",
     "ResetCode",
     "Bank",
     "DogBloodStorage",

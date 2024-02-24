@@ -17,8 +17,11 @@ from .blood_donation import (
 )
 from .vaccine import VaccineDto, VaccineCreate
 from .bank import BankDto, BankResponse
+from .social import SocialMediaPostCreate, SocialMediaPostDto
 
 __all__ = [
+    "SocialMediaPostCreate",
+    "SocialMediaPostDto",
     "BloodDonationSearchResult",
     "BankResponse",
     "map_blood_type",
