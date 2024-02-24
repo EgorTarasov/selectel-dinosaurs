@@ -16,6 +16,8 @@ import { Calendar } from "../ui/calendar";
 import { Switch } from "../ui/switch";
 import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
 import { useToast } from "../ui/use-toast";
+import { homeStore } from "@/stores/home.service";
+import { Link } from "@tanstack/react-router";
 
 type PetAvatarProps = {
   vm: ProfileStore;
@@ -80,7 +82,18 @@ type PetEditableCardProps = {
 };
 
 export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, index }) => {
+  const [illness, setIllness] = useState("");
+  const [bloodVolume, setBloodVolume] = useState("");
+  const [expirationDate, setExpirationDate] = useState<Date | undefined>(undefined);
+  const [isNeedDonation, setIsNeedDonation] = useState(false);
   const { toast } = useToast();
+
+  const applyFilters = () => {
+    homeStore.bloodType = pet.bloodType as DogBloodType | CatBloodType | null;
+    homeStore.bloodVolume = +bloodVolume;
+    homeStore.expirationDate = expirationDate;
+    homeStore.animal = pet.type === "dog" ? Animal.Dog : Animal.Cat;
+  };
 
   return (
     <>
@@ -248,14 +261,23 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
 
         <div className="flex justify-between">
           <div className="flex items-center space-x-2">
-            <Switch id="airplane-mode" />
-            <Label htmlFor="airplane-mode">Нуждается в переливании</Label>
+            <Switch
+              onCheckedChange={(value) => {
+                setIsNeedDonation(value);
+                if (value) {
+                  pet.able_to_donate = false;
+                }
+              }}
+              id="needDonation"
+            />
+            <Label htmlFor="needDonation">Нуждается в переливании</Label>
           </div>
 
           <div className="flex items-center space-x-2">
             {pet.cooldown_donation_days <= 0 ? (
               <>
                 <Switch
+                  checked={pet.able_to_donate}
                   defaultChecked={pet.able_to_donate}
                   onCheckedChange={(value) => {
                     PetsEndpoint.setPetAbleToDonate(pet.id, value).then(() => {
@@ -265,15 +287,75 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                       });
                     });
                   }}
-                  id="airplane-mode"
+                  id="readyToDonate"
                 />
-                <Label htmlFor="airplane-mode">Готов к донортсву</Label>
+                <Label htmlFor="readyToDonate">Готов к донортсву</Label>
               </>
             ) : (
-              `До следующей возможной донорской крови: ${pet.cooldown_donation_days} дней`
+              `До следующей донации должно пройти ещё ${pet.cooldown_donation_days} дней`
             )}
           </div>
         </div>
+
+        {isNeedDonation && (
+          <div className="flex gap-5 flex-wrap w-full mt-10">
+            <div className="grid flex-auto items-center gap-1.5">
+              <Label htmlFor="illness">Заболевание</Label>
+              <Input
+                onChange={(e) => setIllness(e.target.value)}
+                value={illness}
+                type="illness"
+                id="illness"
+                placeholder="Город"
+              />
+            </div>
+
+            <div className="grid flex-auto items-center gap-1.5">
+              <Label htmlFor="bloodVolume">Количество крови, мл</Label>
+              <Input
+                value={bloodVolume?.toString() ?? ""}
+                onChange={(e) => setBloodVolume(e.target.value.replace(/[^0-9]/g, ""))}
+                type="bloodVolume"
+                id="bloodVolume"
+                placeholder="0"
+              />
+            </div>
+
+            <div className="grid flex-auto items-center gap-1.5">
+              <Label htmlFor="bloodVolume">Дата окончания поиска</Label>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "justify-start text-left font-normal",
+                      !expirationDate && "text-muted-foreground"
+                    )}>
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {expirationDate ? format(expirationDate, "PPP") : <span>Выбирте дату</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={expirationDate}
+                    onSelect={(date) => setExpirationDate(date)}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="grid flex-auto items-center gap-1.5 mt-10">
+              <Link to={"/"}>
+                <Button className={`relative min-w-40}`} onClick={() => applyFilters()}>
+                  Найти донора
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
