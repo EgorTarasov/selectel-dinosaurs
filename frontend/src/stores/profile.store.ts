@@ -4,11 +4,14 @@ import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
 import { Pet } from "@/api/models";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
+import { AuthService } from "./auth.service";
+import { toast } from "@/components/ui/use-toast";
 
 export class ProfileStore {
   tab: "settings" | "pets" = "settings";
   isEditing = false;
   isPetsLoading = false;
+  isProfileSubmitDisabled = false;
   item:
     | {
         loading: false;
@@ -34,25 +37,32 @@ export class ProfileStore {
       loading: false,
       data: await UserEndpoint.current()
     };
-    this.item.data!.available_time = [
-      { start: "10:00", end: "12:00" },
-      { start: "13:00", end: "15:00" }
-    ];
   }
 
   tempImage: string | null = null;
   async onImageUpload(file: File) {
     if (this.item.loading) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result;
-      if (typeof result === "string") {
-        this.item.data!.avatar = result;
-        console.log(this.item.data!.avatar);
+    try {
+      const res = await UserEndpoint.uploadPicture(file);
+      if (res) {
+        if (AuthService.auth.state === "authenticated") {
+          AuthService.auth.user = res;
+        }
+        this.item = { loading: false, data: res };
       }
-    };
-    reader.readAsDataURL(file);
+      toast({
+        variant: "default",
+        title: "Успешно",
+        description: "Аватар успешно обновлён"
+      });
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось обновить аватар"
+      });
+    }
   }
 
   getBloodTypes(index: number) {
@@ -130,7 +140,7 @@ export class ProfileStore {
         vkid: "",
         wishes: "",
         available_weekends_only: false,
-        available_time: [],
+        avaliable_time: [],
         avatar: ""
       },
       cooldown_donation_days: 0,
@@ -189,6 +199,47 @@ export class ProfileStore {
         .finally(() => {
           this.isPetsLoading = false;
         });
+    }
+  }
+
+  async updateUser() {
+    if (!this.item.data) return;
+
+    const update: UserDto.Update = {
+      email: this.item.data.email,
+      first_name: this.item.data.first_name,
+      middle_name: this.item.data.middle_name,
+      last_name: this.item.data.last_name,
+      contact_group: this.item.data.contact_group,
+      city: this.item.data.city ?? "",
+      wishes: this.item.data.wishes,
+      available_weekends_only: this.item.data.available_weekends_only,
+      avaliable_time: this.item.data.avaliable_time
+    };
+
+    this.isProfileSubmitDisabled = true;
+
+    try {
+      const res = await UserEndpoint.updateProfile(update);
+      if (res) {
+        if (AuthService.auth.state === "authenticated") {
+          AuthService.auth.user = res;
+        }
+        this.item = { loading: false, data: res };
+      }
+      toast({
+        variant: "default",
+        title: "Успешно",
+        description: "Профиль успешно обновлён"
+      });
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Ошибка",
+        description: "Не удалось обновить профиль"
+      });
+    } finally {
+      this.isProfileSubmitDisabled = false;
     }
   }
 }

@@ -39,16 +39,14 @@ export const SeekTab: FCVM<MapSidebar> = observer(({ vm }) => {
           />
           <Text.Subtle className="text-slate-400">мл</Text.Subtle>
         </div>
-        {vm.selectedBloodType === "ALL" && (
-          <Text.Error className="text-left">Сначала выберите группу крови</Text.Error>
+        {vm.canGetBlood ? (
+          <Text.Subtle>{vm.bloodPrice}</Text.Subtle>
+        ) : (
+          <Text.Error className="text-left">{vm.bloodPrice}</Text.Error>
         )}
       </div>
       <span className="h-px bg-slate-200 w-full block" />
-      {vm.canGetBlood ? (
-        <Text.Subtle>{vm.bloodPrice}</Text.Subtle>
-      ) : (
-        <Text.Error>{vm.bloodPrice}</Text.Error>
-      )}
+
       <Button disabled={!vm.canGetBlood || vm.loading} onClick={() => vm.submit()}>
         Забронировать
       </Button>

@@ -10,7 +10,7 @@ export const Avatar: FCVM<ProfileStore> = observer(({ vm }) => {
 
   if (vm.item.loading) {
     return (
-      <div className="w-28 h-28 rounded-md bg-slate-200 flex items-center justify-center">
+      <div className="min-w-28 min-h-28 max-h-28 max-w-28 rounded-md bg-slate-200 flex items-center justify-center">
         <div className="w-10 h-10">
           <div className="animate-pulse bg-slate-300 rounded-full w-full h-full" />
         </div>
@@ -21,7 +21,7 @@ export const Avatar: FCVM<ProfileStore> = observer(({ vm }) => {
   return (
     <div
       className={cn(
-        "w-32 h-32 rounded-md overflow-hidden relative",
+        "min-w-32 w-32 min-h-32 h-32 max-h-32 max-w-32 rounded-md overflow-hidden relative",
         dragOverImage && "border-2 border-slate-500"
       )}>
       <input
