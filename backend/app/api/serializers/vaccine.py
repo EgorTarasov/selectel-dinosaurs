@@ -11,7 +11,6 @@ def db_vaccine_to_vaccine_dto(db_vaccine: Vaccine) -> VaccineDto:
         name=db_vaccine.name,
         date=db_vaccine.date,
         expire_date=db_vaccine.expire_date,
-        pet=db_pet_to_pet_dto(db_vaccine.pet, is_full=False),
     )
 
 

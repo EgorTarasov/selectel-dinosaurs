@@ -3,7 +3,15 @@ from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime
 from enum import Enum
 
-from .user import UserDto
+from .blood_request import BloodRequestDto
+from .vaccine import VaccineDto
+
+# from .vaccine import VaccineDto, VaccineCreate
+
+
+class PetVaccineCreate(BaseModel):
+    name: str
+    date: datetime
 
 
 class PetType(str, Enum):
@@ -20,31 +28,38 @@ class PetDto(BaseModel):
     age: int
     weight: float
     able_to_donate: bool
-    owner: UserDto
-    donations: List
-    requests: List
-    vaccines: List
+    donations: list
+    requests: list[BloodRequestDto]
+    vaccines: list[VaccineDto]
     cooldown_donation_days: int
 
 
 class PetCreate(BaseModel):
     type: PetType
     breed: str
-    avatar: Optional[HttpUrl] = "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
+    avatar: Optional[HttpUrl] = (
+        "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
+    )
     name: str
     age: int
     weight: float
     able_to_donate: bool
+    # изменение вакцинации
+    vaccines: list[PetVaccineCreate]
 
 
 class PetUpdate(BaseModel):
     type: Optional[PetType] = None
     breed: Optional[str] = None
-    avatar: Optional[HttpUrl] = "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
+    avatar: Optional[HttpUrl] = (
+        "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
+    )
     name: Optional[str] = None
     age: Optional[int] = None
     weight: Optional[float] = None
     able_to_donate: Optional[bool] = None
+    # изменение вакцинации
+    vaccines: list[PetVaccineCreate]
 
 
 class PetDonateAble(BaseModel):
