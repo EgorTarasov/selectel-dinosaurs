@@ -1,5 +1,5 @@
 import fastapi
-from fastapi import FastAPI, HTTPException, Depends, Form, APIRouter
+from fastapi import FastAPI, HTTPException, Depends, Form, APIRouter, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
@@ -18,8 +18,15 @@ router: tp.Final[APIRouter] = APIRouter(prefix="/social")
 @router.get("/social", response_model=tp.List[SocialMediaPostDto])
 async def get_social_posts(
     db: AsyncSession = Depends(get_session),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(10, ge=0, le=100),
 ):
-    stmt = sa.select(SocialMediaPost).order_by(sa.desc(SocialMediaPost.date))
+    stmt = (
+        sa.select(SocialMediaPost)
+        .order_by(sa.desc(SocialMediaPost.date))
+        .offset(offset)
+        .limit(limit)
+    )
     db_posts = list((await db.execute(stmt)).scalars().all())
     return [SocialMediaPostDto.model_validate(post) for post in db_posts]
 

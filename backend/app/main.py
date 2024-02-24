@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from .db import Database
 
 from .settings import Settings
-
+from .api.middlewares import LimitUploadSize
 
 from .api.router import create_api_router
 
@@ -36,6 +36,8 @@ def create_app() -> FastAPI:
         # openapi_url=None,
         lifespan=lifespan,
     )
+
+    app.add_middleware(LimitUploadSize, max_upload_size=settings.max_upload_size)
 
     app.add_middleware(
         CORSMiddleware,
