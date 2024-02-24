@@ -7,7 +7,7 @@ const MapPage = observer(() => {
   const vm = MapStore;
 
   return (
-    <main className="h-full relative">
+    <main className="h-full relative overflow-hidden">
       <Map />
     </main>
   );

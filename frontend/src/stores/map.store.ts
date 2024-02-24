@@ -8,7 +8,7 @@ import { MapSidebar } from "./map-sidebar.store";
 class _MapStore {
   Map: ElementRef<typeof Common.YMap> | null = null;
   locations: PointFeature[] = [];
-  selectedLocation: MapSidebar | null = null;
+  selectedLocation: MapSidebar = new MapSidebar();
 
   constructor() {
     makeAutoObservable(this);
@@ -21,19 +21,20 @@ class _MapStore {
     const mock: Bank[] = [
       {
         id: 3,
-        name: "Vet Unio",
-        address: " г. Москва, ул. Профсоюзная, д. 45",
-        longitude: 37.552148,
-        latitude: 55.666599,
-        pricePerMil: 1000,
+        name: "Шанс Био",
+        address: "г. Москва, ул. Гостиничная, дом 10, корп 5",
+        longitude: 37.581146,
+        latitude: 55.846199,
+        advantages: ["Лучший", "Просто чел хорош 2"],
+        pricePerMil: 100,
         amountOfBlood: 0,
-        phone: "8 (800) 200 85 65",
-        link: "https://vetunion.ru/lab/",
+        phone: "+7 495 260 0 260",
+        link: "https://vetlab.ru/",
         dogStorage: {
-          DEA_1_1: 0,
-          DEA_1_2: 0,
-          DEA_3: 0,
-          DEA_4: 0,
+          DEA_1_1: 700,
+          DEA_1_2: 100,
+          DEA_3: 501,
+          DEA_4: 900,
           DEA_5: 0,
           DEA_7: 0
         },
@@ -55,11 +56,10 @@ class _MapStore {
     }));
 
     this.locations = data;
-    console.log(data);
   }
 
   onMarkerClick(location: PointFeature) {
-    this.selectedLocation = new MapSidebar(location);
+    this.selectedLocation.item = location;
   }
 }
 

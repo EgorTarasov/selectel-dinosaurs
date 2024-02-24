@@ -8,6 +8,7 @@ export interface Bank {
   latitude: number;
   pricePerMil: number;
   amountOfBlood: number;
+  advantages: string[];
   phone: string;
   link: string;
   dogStorage: Record<keyof typeof DogBloodType, number>;

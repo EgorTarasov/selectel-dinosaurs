@@ -17,7 +17,19 @@ export const Text = {
   SubleSemi: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
     <p className={cn("text-sm font-semibold", className)} {...props}></p>
   ),
+  Subtle: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
+    <p className={cn("text-sm", className)} {...props}></p>
+  ),
   Small: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
     <p className={cn("text-sm leading-4 font-medium", className)} {...props}></p>
+  ),
+  UI: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
+    <p className={cn("text-base", className)} {...props}></p>
+  ),
+  Detail: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
+    <p className={cn("text-xs leading-5 font-medium", className)} {...props}></p>
+  ),
+  Error: ({ className, ...props }: HTMLProps<HTMLHeadingElement>): JSX.Element => (
+    <p className={cn("text-sm text-red-500 text-center", className)} {...props}></p>
   )
 };

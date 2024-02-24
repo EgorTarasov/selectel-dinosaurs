@@ -22,7 +22,7 @@ const MarkerBase = (feature: PointFeature) => {
           MapStore.onMarkerClick(feature);
         }}>
         <div className="p-3">
-          {!MapStore.selectedLocation || MapStore.selectedLocation?.item.id === feature.id ? (
+          {!MapStore.selectedLocation.item || MapStore.selectedLocation.item.id === feature.id ? (
             <Location />
           ) : (
             <UnfocusedLocation />

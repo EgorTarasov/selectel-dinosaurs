@@ -2,57 +2,76 @@ import { MapSidebar } from "@/stores/map-sidebar.store";
 import { FCVM } from "@/utils/vm";
 import { observer } from "mobx-react-lite";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { MapStore } from "@/stores/map.store";
 import { cn } from "@/lib/utils";
 import { Tabs } from "@/components/ui/tabs/Tabs";
-import { useEffect, useState } from "react";
 import { DonorTab } from "./DonorTab";
 import { SeekTab } from "./SeekTab";
+import { BloodFilter } from "./BloodFilter";
+import { BankCard } from "./BankCard";
+import { IconInput } from "@/components/ui/input";
+import SearchIcon from "@/assets/search.svg";
 
-export const Sidebar: FCVM<MapSidebar | null> = observer(({ vm }) => {
-  const [hidden, setHidden] = useState(true);
-
-  useEffect(() => {
-    if (vm) {
-      setHidden(false);
-    } else {
-      setHidden(true);
-    }
-  }, [vm]);
-
+export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
   const onCloseClick = () => {
-    setHidden(true);
-    setTimeout(() => {
-      MapStore.selectedLocation = null;
-    }, 300);
+    if (vm) {
+      vm.item = null;
+    }
   };
 
   return (
     <aside
       className={cn(
-        `absolute left-0 min-w-[450px] bottom-0 top-16 bg-white flex flex-col rounded-lg p-5 z-[200]`,
-        "transition-all duration-300",
-        hidden ? "transform -translate-x-1/2 opacity-0" : "transform translate-x-0 opacity-100"
+        `absolute left-0 max-w-[450px] min-w-[450px] top-[14vh] bottom-0 flex flex-col z-[200]`,
+        "transition-all duration-300 shadow-md"
       )}>
-      {vm && (
-        <>
+      <div className="flex flex-col bg-white px-5 rounded-lg gap-5 relative overflow-y-auto">
+        <div className="flex flex-col gap-5 sticky pt-5 top-0 bg-white">
           <div className="flex justify-between items-center">
             <Tabs
               activeTab={vm.tab}
-              renderTab={(v) => (v === "donor" ? "Донор" : "Больной")}
+              renderTab={(v) => (v === "donor" ? "Донор" : "Реципиент")}
               variant="secondary"
               onTabChange={(v) => (vm!.tab = v)}
               tabs={["donor", "seek"]}
+              disabled={vm.loading}
             />
-            <button
-              className="rounded-full w-10 h-10 flex items-center justify-center border border-slate-200"
-              onClick={onCloseClick}>
-              <Cross1Icon />
-            </button>
-            {vm.tab === "donor" ? <DonorTab vm={vm} /> : <SeekTab vm={vm} />}
+            {vm.item && (
+              <button
+                disabled={vm.loading}
+                className="rounded-full w-10 h-10 flex items-center justify-center border border-slate-200"
+                onClick={onCloseClick}>
+                <Cross1Icon />
+              </button>
+            )}
           </div>
-        </>
-      )}
+          <BloodFilter vm={vm} />
+          {!vm.item && (
+            <IconInput
+              className="bg-gray-100"
+              placeholder="Введите название клиники"
+              value={vm.search}
+              onChange={(e) => (vm.search = e.target.value)}
+              leftIcon={<SearchIcon />}
+            />
+          )}
+        </div>
+        <div className="flex flex-col flex-1 pb-5">
+          {vm.item ? (
+            vm.tab === "donor" ? (
+              <DonorTab vm={vm} />
+            ) : (
+              <SeekTab vm={vm} />
+            )
+          ) : (
+            vm.banks.map((v) => (
+              <>
+                <BankCard key={v.id} item={v.data!} onClick={() => (vm.item = v)} />
+                <span className="h-px bg-slate-200 my-3 last:hidden" />
+              </>
+            ))
+          )}
+        </div>
+      </div>
     </aside>
   );
 });
