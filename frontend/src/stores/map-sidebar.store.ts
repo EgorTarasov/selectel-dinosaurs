@@ -172,7 +172,7 @@ export class MapSidebar {
         count: Number(this.bloodRequiredCount),
         bank: this.item!.data!.id,
         date: new Date(),
-        time: new Date().toLocaleTimeString()
+        time: "12:00"
       };
 
       await BankDonationEndpoint.create(template);
