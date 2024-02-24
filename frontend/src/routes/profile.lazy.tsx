@@ -2,6 +2,7 @@ import { PrivateRoute } from "@/components/hoc/PrivateRoute";
 import { CommunicationSection } from "@/components/pages/profile/CommunicationSection";
 import { ContactsSection } from "@/components/pages/profile/ContactsSection";
 import { NameSection } from "@/components/pages/profile/NameSection";
+import { PetsSection } from "@/components/pages/profile/PetsSection";
 import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs/Tabs";
 import { ProfileStore } from "@/stores/profile.store";
@@ -37,6 +38,31 @@ const Profile = observer(() => {
       <ContactsSection vm={vm} />
       <span className="h-16" />
       <CommunicationSection vm={vm} />
+
+      {vm.tab === "settings" && (
+        <>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              vm.save();
+            }}
+            className="flex flex-col"></form>
+          <div className="flex justify-end">
+            <Button variant="secondary">Обновить данные</Button>
+          </div>
+          <NameSection vm={vm} />
+          <span className="h-16" />
+          <ContactsSection vm={vm} />
+          <span className="h-16" />
+          <CommunicationSection vm={vm} />
+        </>
+      )}
+
+      {vm.tab === "pets" && (
+        <>
+          <PetsSection vm={vm} />
+        </>
+      )}
     </div>
   );
 });

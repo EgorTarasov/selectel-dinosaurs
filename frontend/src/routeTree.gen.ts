@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const ProfileLazyImport = createFileRoute('/profile')()
 const MapLazyImport = createFileRoute('/map')()
+const PlaygroundLazyImport = createFileRoute('/playground')()
 const LoginLazyImport = createFileRoute('/login')()
 const HomeLazyImport = createFileRoute('/home')()
 const IndexLazyImport = createFileRoute('/')()
@@ -26,6 +27,11 @@ const IndexLazyImport = createFileRoute('/')()
 
 const ProfileLazyRoute = ProfileLazyImport.update({
   path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
+
+const PlaygroundLazyRoute = PlaygroundLazyImport.update({
+  path: '/playground',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
 
@@ -73,6 +79,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/profile': {
+      preLoaderRoute: typeof ProfileLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -83,6 +93,7 @@ export const routeTree = rootRoute.addChildren([
   HomeLazyRoute,
   LoginLazyRoute,
   MapLazyRoute,
+  PlaygroundLazyRoute,
   ProfileLazyRoute,
 ])
 

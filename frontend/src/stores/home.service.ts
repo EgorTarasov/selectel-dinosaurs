@@ -7,7 +7,7 @@ import { makeAutoObservable } from "mobx";
 export class HomeStore {
   isLoading = false;
 
-  animal: Animal | null = null;
+  animal: Animal | null = Animal.Dog;
   city: string | null = null;
   bloodType: DogBloodType | CatBloodType | null = null;
   bloodVolume: number | null = null;
@@ -15,17 +15,7 @@ export class HomeStore {
 
   banks: Bank[] = [];
   donations: Donation[] = [];
-  socialDonations: SocialDonation[] = [
-    {
-      id: 1,
-      city: "Москва",
-      name: "Ветлаб",
-      link: "https://vetlab.ru/",
-      phone: "+74952600260",
-      blood: "O+",
-      pet: "Кот"
-    }
-  ];
+  socialDonations: SocialDonation[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -66,13 +56,15 @@ export class HomeStore {
     };
 
     try {
-      const [banksResponse, donationsResponse] = await Promise.all([
+      const [banksResponse, donationsResponse, socialDonations] = await Promise.all([
         BanksEndpoint.fetchBanks(params),
-        BloodDonationsEndpoint.fetchBloodDonations(params)
+        BloodDonationsEndpoint.fetchBloodDonations(params),
+        BloodDonationsEndpoint.fetchSocialDonations(params)
       ]);
 
       this.banks = banksResponse;
       this.donations = donationsResponse;
+      this.socialDonations = socialDonations;
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     } finally {

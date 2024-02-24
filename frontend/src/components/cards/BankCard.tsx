@@ -42,9 +42,11 @@ const BankCard = ({ address, link, name, phone, pricePerMil }: Bank) => {
         <p className="text-sm font-semibold mb-3">Стоимость {pricePerMil} руб.</p>
 
         <div className="flex justify-end w-full flex-col h-full">
-          <Button className="w-full bottom-0 relative" variant="outline">
-            Забронировать
-          </Button>
+          <a href={link} target="_blank" rel="noreferrer">
+            <Button className="w-full bottom-0 relative" variant="outline">
+              Забронировать
+            </Button>
+          </a>
         </div>
       </div>
     </>
