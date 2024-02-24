@@ -61,8 +61,8 @@ class PetUpdate(BaseModel):
     weight: Optional[float] = None
     able_to_donate: Optional[bool] = None
     # изменение вакцинации
-    vaccines: list[PetVaccineCreate]
-    blood_type: str = Field(..., alias="bloodType")
+    vaccines: Optional[list[PetVaccineCreate]] = None
+    blood_type: Optional[str] = Field(None, alias="bloodType")
 
 
 class PetDonateAble(BaseModel):

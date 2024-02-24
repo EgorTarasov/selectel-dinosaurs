@@ -96,6 +96,9 @@ async def update_pet(
         if pet_update.blood_type:
             pet.blood_type = pet_update.blood_type
 
+        if pet_update.avatar:
+            pet.avatar = pet_update.avatar
+
         await db.commit()
         await db.refresh(pet, ["vaccines", "blood_donations", "blood_requests"])
         return pet
