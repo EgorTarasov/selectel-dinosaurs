@@ -4,7 +4,11 @@ import { Button } from "../ui/button";
 import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
 import { useToast } from "../ui/use-toast";
 
-const BloodRequestCard = ({ id, pet: { avatar, name, age, bloodType, weight } }: BloodRequest) => {
+const BloodRequestCard = ({
+  id,
+  pet: { avatar, name, age, bloodType, weight },
+  msg
+}: BloodRequest) => {
   const { toast } = useToast();
 
   return (
@@ -81,7 +85,7 @@ const BloodRequestCard = ({ id, pet: { avatar, name, age, bloodType, weight } }:
 
       <div className="donation-description">
         <span className="text-sm font-semibold">Пожелания владельца:</span>
-        <span className="text-sm">пожеланий нет</span>
+        <span className="text-sm">{msg}</span>
       </div>
 
       <div className="flex justify-end w-full flex-col h-full mt-3">

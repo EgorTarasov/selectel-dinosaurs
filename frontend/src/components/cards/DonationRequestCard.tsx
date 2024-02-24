@@ -7,7 +7,9 @@ import { useToast } from "../ui/use-toast";
 const DonationRequestCard = ({
   id,
   amount,
-  pet: { avatar, name, age, bloodType }
+  pet: { avatar, name, age, bloodType },
+  msg,
+  address
 }: DonationRequest) => {
   const { toast } = useToast();
 
@@ -27,9 +29,7 @@ const DonationRequestCard = ({
             {name}, {age} {getYearDeclension(age)}
           </span>
 
-          <span className="text-slate-500 text-sm flex gap-1 items-center">
-            Заболевание: гемофилия
-          </span>
+          <span className="text-slate-500 text-sm flex gap-1 items-center">Заболевание: {msg}</span>
         </div>
       </div>
 
@@ -42,7 +42,7 @@ const DonationRequestCard = ({
 
       <div className="donation-description">
         <span className="text-sm font-semibold">Адрес клиники:</span>
-        <span className="text-sm">г. Москва, Электролитный проезд, дом 3 стр. 12</span>
+        <span className="text-sm">{address}</span>
       </div>
 
       <div className="flex justify-end w-full flex-col h-full mt-3">
