@@ -156,7 +156,9 @@ export class ProfileStore {
   async postPetPhoto(photo: File, index: number) {
     this.pets[index].avatar = await PetsEndpoint.postPetPhoto(photo);
 
-    console.log(this.pets[index].avatar);
+    this.pets.forEach((pet) => {
+      console.log(pet.avatar);
+    });
   }
 
   async savePet(index: number) {
@@ -173,8 +175,13 @@ export class ProfileStore {
       age,
       weight,
       able_to_donate,
-      vaccines
+      vaccines: vaccines.map((vaccine) => ({
+        name: vaccine.name,
+        date: vaccine.date.slice(0, -1)
+      }))
     };
+
+    console.log(payload);
 
     if (avatar !== "") {
       payload.avatar = avatar;
@@ -200,6 +207,17 @@ export class ProfileStore {
           this.isPetsLoading = false;
         });
     }
+  }
+
+  addVaccine(index: number) {
+    this.pets[index].vaccines.push({
+      name: "",
+      date: ""
+    });
+  }
+
+  removeVaccine(index: number, vaccineIndex: number) {
+    this.pets[index].vaccines.splice(vaccineIndex, 1);
   }
 
   async updateUser() {
