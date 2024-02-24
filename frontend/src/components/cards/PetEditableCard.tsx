@@ -7,9 +7,15 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, CrossCircledIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
+import { PopoverContent, Popover, PopoverTrigger } from "../ui/popover";
+import { format } from "date-fns";
+import { Calendar } from "../ui/calendar";
+import { Switch } from "../ui/switch";
+import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
+import { useToast } from "../ui/use-toast";
 
 type PetAvatarProps = {
   vm: ProfileStore;
@@ -74,6 +80,8 @@ type PetEditableCardProps = {
 };
 
 export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, index }) => {
+  const { toast } = useToast();
+
   return (
     <>
       <div className="relative flex flex-col bg-white rounded-sm w-full p-5">
@@ -170,6 +178,101 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
               onChange={(e) => vm.setWeight(e.target.value.replace(/[^0-9]/g, ""), index)}
             />
           </fieldset>
+        </div>
+
+        <div className="flex flex-col justify-between mt-5 w-full sm:w-1/2 gap-4">
+          <Text.H4>Прививки</Text.H4>
+
+          {pet.vaccines.map((vaccine, vaccineId) => (
+            <>
+              <div key={vaccineId} className="flex justify-between gap-4 items-end">
+                <fieldset className="gap-2 flex flex-col">
+                  {vaccineId === 0 && <Label htmlFor="vaccine">Название прививки</Label>}
+                  <Input
+                    id="vaccine"
+                    value={vm.pets[index].vaccines[vaccineId].name}
+                    onChange={(v) => (vm.pets[index].vaccines[vaccineId].name = v.target.value)}
+                  />
+                </fieldset>
+
+                <fieldset className="grid flex-auto items-center gap-1.5">
+                  {vaccineId === 0 && <Label htmlFor="date">Дата прививки</Label>}
+
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "justify-start text-left font-normal",
+                          !vaccine.date && "text-muted-foreground"
+                        )}>
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {vaccine.date ? format(vaccine.date, "PPP") : <span>Выбирте дату</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={new Date(vaccine.date)}
+                        onSelect={(date) => (vaccine.date = date?.toISOString() ?? "")}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </fieldset>
+
+                <Button
+                  onClick={() => {
+                    vm.removeVaccine(index, vaccineId);
+                  }}
+                  variant="outline"
+                  size="icon">
+                  <CrossCircledIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </>
+          ))}
+
+          <div className="flex justify-end w-full mt-5">
+            <Button
+              onClick={() => {
+                vm.addVaccine(index);
+              }}
+              variant="outline">
+              Добавить прививку
+            </Button>
+          </div>
+        </div>
+
+        <hr className="border-t border-gray-200 mt-5 mb-5" />
+
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-2">
+            <Switch id="airplane-mode" />
+            <Label htmlFor="airplane-mode">Нуждается в переливании</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            {pet.cooldown_donation_days <= 0 ? (
+              <>
+                <Switch
+                  defaultChecked={pet.able_to_donate}
+                  onCheckedChange={(value) => {
+                    PetsEndpoint.setPetAbleToDonate(pet.id, value).then(() => {
+                      toast({
+                        title: "Статус изменен",
+                        description: "Статус готовности к донорству изменен"
+                      });
+                    });
+                  }}
+                  id="airplane-mode"
+                />
+                <Label htmlFor="airplane-mode">Готов к донортсву</Label>
+              </>
+            ) : (
+              `До следующей возможной донорской крови: ${pet.cooldown_donation_days} дней`
+            )}
+          </div>
         </div>
       </div>
     </>

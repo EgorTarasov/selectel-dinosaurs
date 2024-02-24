@@ -3,7 +3,7 @@ import { CreatePetParams, Pet, UpdatePetParams } from "../models";
 
 export namespace PetsEndpoint {
   export const fetchOwnPets = async () => {
-    return api.get<Pet[]>("/api/pets/pets");
+    return api.get<Pet[]>("/api/pets/pets/my");
   };
 
   export const fetchPet = async (id: number) => {
@@ -20,5 +20,16 @@ export namespace PetsEndpoint {
 
   export const updatePet = async ({ id, ...params }: UpdatePetParams) => {
     return api.put<Pet>(`/api/pets/pets/${id}`, params);
+  };
+
+  export const postPetPhoto = async (photo: File) => {
+    const formData = new FormData();
+    formData.append("photo", photo);
+
+    return api.put<string>("/api/pets/pets/photo", formData);
+  };
+
+  export const setPetAbleToDonate = async (id: number, able_to_donate: boolean) => {
+    return api.put<Pet>(`/api/pets/pets/${id}/able-to-donate`, { able_to_donate });
   };
 }

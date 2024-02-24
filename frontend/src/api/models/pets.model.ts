@@ -21,7 +21,7 @@ export interface Pet {
 export interface CreatePetParams {
   type: string;
   breed: string;
-  avatar: string;
+  avatar?: string;
   name: string;
   bloodType: string | null;
   age: number;
@@ -39,7 +39,7 @@ export interface UpdatePetParams {
   id: number;
   type: string;
   breed: string;
-  avatar: string;
+  avatar?: string;
   name: string;
   bloodType: string | null;
   age: number;
