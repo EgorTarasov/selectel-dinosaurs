@@ -81,27 +81,14 @@ async def get_all_pets(db: AsyncSession = Depends(get_session)):
 
 
 @router.put(
-    "/pets/{pet_id}/photo",
+    "/pets/photo",
 )
 async def update_photo(
-    pet_id: int,
     photo: UploadFile = File(...),
     current_user: UserTokenData = Depends(get_current_user),
-    db: AsyncSession = Depends(get_session),
 ):
-    stmt = sa.select(Pet).where(
-        sa.and_(Pet.id == pet_id, Pet.owner_id == current_user.user_id)
-    )
-    db_pet = (await db.execute(stmt)).scalar()
-    if not db_pet:
-        raise fastapi.HTTPException(
-            status_code=404, detail=f"Pet with id {pet_id} not found"
-        )
     try:
         photo_url = await save_image(photo, current_user.user_id, "pet")
-        db_pet.avatar = photo_url
-        db.add(db_pet)
-        await db.commit()
         return photo_url
     except Exception as e:
         print(e)
