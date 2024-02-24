@@ -10,6 +10,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, 
 from fastapi.responses import Response
 
 from fastapi.security import OAuth2PasswordRequestForm
+from app.worker import send_recovery_code
 
 
 from ..middlewares.db_session import get_session
@@ -141,7 +142,7 @@ async def auth_vk(
 
 
 @router.post("/password-code")
-async def reset_password(
+async def password_code(
     background_tasks: BackgroundTasks,
     email: str,
     db: AsyncSession = Depends(get_session),
@@ -155,17 +156,18 @@ async def reset_password(
     code = password.PasswordManager.get_reset_code(email)
 
     # send email with token
-    email_client = EmailClient(settings.mail_user, settings.mail_password)
-    logging.debug("sending email about password recover")
-    subject = "Смена пароля"
-    template = "password_recover.jinja"
-    link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
+    # email_client = EmailClient(settings.mail_user, settings.mail_password)
+    # logging.debug("sending email about password recover")
+    # subject = "Смена пароля"
+    # template = "password_recover.jinja"
+    # link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
 
-    data = {
-        "fullname": f"{db_user.first_name} {db_user.last_name}",
-        "link_on_password_recover": link_on_password_recover,
-    }
-    email_client.send_mailing(email, subject, template, data)
+    # data = {
+    #     "fullname": f"{db_user.first_name} {db_user.last_name}",
+    #     "link_on_password_recover": link_on_password_recover,
+    # }
+    # email_client.send_mailing(email, subject, template, data)
+    send_recovery_code.delay(email, db_user.first_name, db_user.last_name, code)
 
     db_reset_code = ResetCode(user_id=db_user.id, code=code)
     db.add(db_reset_code)

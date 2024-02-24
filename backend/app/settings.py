@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     postgres_user: str
     postgres_password: str
 
+    # celery settings
+    rabbitmq_default_user: str
+    rabbitmq_default_pass: str
+    rabbitmq_host: str = "localhost"
+    rabbitmq_port: int = 5672
+
     domain: str = "localhost"
     static_dir: str = "static"
     vk_client_id: str
@@ -40,6 +46,10 @@ class Settings(BaseSettings):
             f"{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
+
+    @property
+    def rabbitmq_url(self) -> str:
+        return f"amqp://{self.rabbitmq_default_user}:{self.rabbitmq_default_pass}@{self.rabbitmq_host}:{self.rabbitmq_port}"
 
 
 settings: tp.Final[Settings] = Settings()  # type: ignore

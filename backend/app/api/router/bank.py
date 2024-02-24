@@ -6,7 +6,7 @@ import datetime as dt
 from typing import List
 
 from random import randint
-from yandex_geocoder import Client
+from yandex_geocoder import Client  # type: ignore
 
 
 from ..serializers.bank import db_bank_to_bank_dto

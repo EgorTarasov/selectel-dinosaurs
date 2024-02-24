@@ -1,7 +1,7 @@
-import { UserEndpoint } from "@/api/endpoints/user.endpoint";
-import { UserDto } from "@/api/models/user.model";
 import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
-import { Pet } from "@/api/models";
+import { UserEndpoint } from "@/api/endpoints/user.endpoint";
+import { CreatePetParams, Pet } from "@/api/models";
+import { UserDto } from "@/api/models/user.model";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
 import { AuthService } from "./auth.service";
@@ -99,8 +99,7 @@ export class ProfileStore {
     reader.onload = (e) => {
       const result = e.target?.result;
       if (typeof result === "string") {
-        this.pets[index].avatar = result;
-        console.log(this.pets[index].avatar);
+        this.postPetPhoto(file, index);
       }
     };
     reader.readAsDataURL(file);
@@ -154,26 +153,42 @@ export class ProfileStore {
     return this.pets[index].owner && this.pets[index].owner.id === -1;
   }
 
+  async postPetPhoto(photo: File, index: number) {
+    this.pets[index].avatar = await PetsEndpoint.postPetPhoto(photo);
+
+    this.pets.forEach((pet) => {
+      console.log(pet.avatar);
+    });
+  }
+
   async savePet(index: number) {
-    console.log(this.pets[index]);
     this.isPetsLoading = true;
 
-    const { type, breed, bloodType, name, age, weight, able_to_donate, vaccines } =
+    const { type, breed, bloodType, name, avatar, age, weight, able_to_donate, vaccines } =
       this.pets[index];
-    console.log(bloodType);
+
+    const payload: CreatePetParams = {
+      type,
+      breed,
+      bloodType,
+      name,
+      age,
+      weight,
+      able_to_donate,
+      vaccines: vaccines.map((vaccine) => ({
+        name: vaccine.name,
+        date: vaccine.date.slice(0, -1)
+      }))
+    };
+
+    console.log(payload);
+
+    if (avatar !== "") {
+      payload.avatar = avatar;
+    }
 
     if (this.getIsNewPet(index)) {
-      await PetsEndpoint.createPet({
-        type,
-        breed,
-        bloodType,
-        avatar: "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg",
-        name,
-        age,
-        weight,
-        able_to_donate,
-        vaccines
-      })
+      await PetsEndpoint.createPet(payload)
         .then(() => {
           this.fetchPets();
         })
@@ -183,15 +198,7 @@ export class ProfileStore {
     } else {
       await PetsEndpoint.updatePet({
         id: this.pets[index].id,
-        type,
-        breed,
-        bloodType,
-        avatar: "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg",
-        name,
-        age,
-        weight,
-        able_to_donate,
-        vaccines
+        ...payload
       })
         .then(() => {
           this.fetchPets();
@@ -200,6 +207,17 @@ export class ProfileStore {
           this.isPetsLoading = false;
         });
     }
+  }
+
+  addVaccine(index: number) {
+    this.pets[index].vaccines.push({
+      name: "",
+      date: ""
+    });
+  }
+
+  removeVaccine(index: number, vaccineIndex: number) {
+    this.pets[index].vaccines.splice(vaccineIndex, 1);
   }
 
   async updateUser() {
