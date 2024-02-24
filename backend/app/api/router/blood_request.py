@@ -13,24 +13,25 @@ from ..schemas import (
     BloodRequestResponseDto,
 )
 from ...models import User, BloodRequest, BloodRequestResponse
-from ..serializers import db_blood_request_to_blood_request_dto, \
-    db_blood_request_response_to_blood_request_response_dto, \
-    db_blood_request_responses_to_blood_request_response_dtos, db_blood_requests_to_blood_request_dtos
+from ..serializers import (
+    db_blood_request_to_blood_request_dto,
+    db_blood_request_response_to_blood_request_response_dto,
+    db_blood_request_responses_to_blood_request_response_dtos,
+    db_blood_requests_to_blood_request_dtos,
+)
 
 router = APIRouter(prefix="/blood-requests")
 
 
 @router.get("/", response_model=List[BloodRequestDto])
 async def get_all_blood_requests(
-        type: Optional[str] = None,
-        breed: Optional[str] = None,
-        weight: Optional[float] = None,
-        amount: Optional[int] = None,
-        db: AsyncSession = Depends(get_session),
+    type: Optional[str] = None,
+    breed: Optional[str] = None,
+    weight: Optional[float] = None,
+    amount: Optional[int] = None,
+    db: AsyncSession = Depends(get_session),
 ):  # -> list[Any]:
-    stmt = sa.select(BloodRequest).options(
-        orm.selectinload(BloodRequest.pet)
-    )
+    stmt = sa.select(BloodRequest).options(orm.selectinload(BloodRequest.pet))
 
     res = []
     for t in (await db.execute(stmt)).all():
@@ -52,16 +53,15 @@ async def get_all_blood_requests(
 
 @router.post("/pet/{pet_id}", response_model=BloodRequestDto)
 async def create_blood_request_request(
-        pet_id: int,
-        payload: BloodRequestCreate,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    pet_id: int,
+    payload: BloodRequestCreate,
+    db: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
     blood_request = BloodRequest(
         pet_id=pet_id,
         amount=payload.amount,
         due_date=payload.due_date,
-
     )
     db.add(blood_request)
     await db.commit()
@@ -77,15 +77,13 @@ async def create_blood_request_request(
     return db_blood_request_to_blood_request_dto(blood_request)
 
 
-@router.post(
-    "/{blood_request_id}/pet/{pet_id}", response_model=BloodRequestResponseDto
-)
+@router.post("/{blood_request_id}/pet/{pet_id}", response_model=BloodRequestResponseDto)
 async def create_response_to_blood_request(
-        blood_request_id: int,
-        pet_id: int,
-        blood_response: BloodRequestResponseCreate,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    blood_request_id: int,
+    pet_id: int,
+    blood_response: BloodRequestResponseCreate,
+    db: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
     db_blood_response = BloodRequestResponse(
         blood_request_id=blood_request_id,
@@ -102,8 +100,7 @@ async def create_response_to_blood_request(
         ["id", "owner"],
     )
     await db.refresh(db_blood_response.blood_request, ["id", "pet"])
-    await db.refresh(db_blood_response.blood_request.pet,
-                     ["id", "owner"])
+    await db.refresh(db_blood_response.blood_request.pet, ["id", "owner"])
 
     return db_blood_request_response_to_blood_request_response_dto(db_blood_response)
 
@@ -113,14 +110,18 @@ async def create_response_to_blood_request(
     "/response/{blood_request_id}", response_model=List[BloodRequestResponseDto]
 )
 async def get_responses_for_blood_request_request(
-        blood_request_id: int,
-        db: AsyncSession = Depends(get_session),
-        current_user: User = Depends(get_current_user),
+    blood_request_id: int,
+    db: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
-    stmt = sa.select(BloodRequestResponse).options(
-        orm.selectinload(BloodRequestResponse.pet),
-        orm.selectinload(BloodRequestResponse.blood_request),
-    ).where(BloodRequestResponse.blood_request_id == blood_request_id)
+    stmt = (
+        sa.select(BloodRequestResponse)
+        .options(
+            orm.selectinload(BloodRequestResponse.pet),
+            orm.selectinload(BloodRequestResponse.blood_request),
+        )
+        .where(BloodRequestResponse.blood_request_id == blood_request_id)
+    )
 
     res = []
     for t in (await db.execute(stmt)).all():
@@ -131,18 +132,23 @@ async def get_responses_for_blood_request_request(
             ["id", "owner"],
         )
         await db.refresh(db_blood_response.blood_request, ["id", "pet"])
-        await db.refresh(db_blood_response.blood_request.pet,
-                         ["id", "owner"])
+        await db.refresh(db_blood_response.blood_request.pet, ["id", "owner"])
         res.append(db_blood_response)
 
     return db_blood_request_responses_to_blood_request_response_dtos(res)
 
 
 @router.delete("/{blood_request_id}")
-async def delete_blood_request(blood_request_id: int, db: AsyncSession = Depends(get_session),
-                               current_user: User = Depends(get_current_user)):
-    row = await db.execute(sa.select(BloodRequest).options(orm.selectinload(BloodRequest.blood_request_response)).where(
-        BloodRequest.id == blood_request_id))
+async def delete_blood_request(
+    blood_request_id: int,
+    db: AsyncSession = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    row = await db.execute(
+        sa.select(BloodRequest)
+        .options(orm.selectinload(BloodRequest.blood_request_response))
+        .where(BloodRequest.id == blood_request_id)
+    )
     row = row.scalar_one_or_none()
     if row:
         for t in row.blood_request_response:

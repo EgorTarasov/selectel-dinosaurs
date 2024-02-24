@@ -18,6 +18,7 @@ def db_pet_to_pet_dto(db_pet: Pet, is_full=True):
             "name": db_pet.name,
             "age": db_pet.age,
             "weight": db_pet.weight,
+            "bloodType": db_pet.blood_type,
             "able_to_donate": db_pet.able_to_donate,
             "donations": [
                 {

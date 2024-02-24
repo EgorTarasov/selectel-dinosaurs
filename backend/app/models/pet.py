@@ -13,6 +13,7 @@ class Pet(Base, TimestampMixin):
     avatar: Mapped[str] = mapped_column(sa.Text)
     name: Mapped[str] = mapped_column(sa.Text)
     age: Mapped[int] = mapped_column(sa.Integer)
+    blood_type: Mapped[str] = mapped_column(sa.Text, nullable=False)
     weight: Mapped[float] = mapped_column(sa.Float)
     able_to_donate: Mapped[bool] = mapped_column(sa.Boolean)
     owner_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("users.id"))

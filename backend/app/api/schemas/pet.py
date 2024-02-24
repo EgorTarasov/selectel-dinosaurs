@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field
 from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime
 from enum import Enum
@@ -32,6 +32,7 @@ class PetDto(BaseModel):
     requests: list[BloodRequestDto]
     vaccines: list[VaccineDto]
     cooldown_donation_days: int
+    blood_type: str = Field(..., alias="bloodType")
 
 
 class PetCreate(BaseModel):
@@ -44,6 +45,7 @@ class PetCreate(BaseModel):
     age: int
     weight: float
     able_to_donate: bool
+    blood_type: str = Field(..., alias="bloodType")
     # изменение вакцинации
     vaccines: list[PetVaccineCreate]
 
@@ -60,6 +62,7 @@ class PetUpdate(BaseModel):
     able_to_donate: Optional[bool] = None
     # изменение вакцинации
     vaccines: list[PetVaccineCreate]
+    blood_type: str = Field(..., alias="bloodType")
 
 
 class PetDonateAble(BaseModel):

@@ -22,6 +22,7 @@ async def create_pet(owner_id: int, pet_create: PetCreate, db: AsyncSession) -> 
         ]
 
         db.add_all(vacs)
+
     pet = Pet(
         type=pet_create.type,
         breed=pet_create.breed,
@@ -32,6 +33,7 @@ async def create_pet(owner_id: int, pet_create: PetCreate, db: AsyncSession) -> 
         able_to_donate=pet_create.able_to_donate,
         owner_id=owner_id,
         vaccines=vacs,
+        blood_type=pet_create.blood_type,
     )
     db.add(pet)
     await db.commit()
@@ -90,6 +92,9 @@ async def update_pet(
             pet.weight = pet_update.weight
         if pet_update.able_to_donate:
             pet.able_to_donate = pet_update.able_to_donate
+
+        if pet_update.blood_type:
+            pet.blood_type = pet_update.blood_type
 
         await db.commit()
         await db.refresh(pet, ["vaccines", "blood_donations", "blood_requests"])

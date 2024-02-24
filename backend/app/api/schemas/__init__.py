@@ -13,11 +13,13 @@ from .blood_donation import (
     BloodDonationCreate,
     BloodDonationResponseCreate,
     BloodDonationResponseDto,
+    BloodDonationSearchResult,
 )
 from .vaccine import VaccineDto, VaccineCreate
 from .bank import BankDto, BankResponse
 
 __all__ = [
+    "BloodDonationSearchResult",
     "BankResponse",
     "map_blood_type",
     "QueryFilters",
