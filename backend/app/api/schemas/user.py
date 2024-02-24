@@ -19,10 +19,10 @@ class VkUser(BaseModel):
     id: int
     first_name: str
     last_name: str
-    avatar: str
+    avatar: tp.Optional[str]
     avatar_base: tp.Optional[str]
-    phone: str
-    email: str
+    phone: tp.Optional[str]
+    email: tp.Optional[str]
 
 
 class VkPayload(BaseModel):
