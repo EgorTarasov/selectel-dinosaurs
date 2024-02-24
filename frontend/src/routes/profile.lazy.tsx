@@ -3,6 +3,7 @@ import { CommunicationSection } from "@/components/pages/profile/CommunicationSe
 import { ContactsSection } from "@/components/pages/profile/ContactsSection";
 import { NameSection } from "@/components/pages/profile/NameSection";
 import { PetsSection } from "@/components/pages/profile/PetsSection";
+import { RequestsSection } from "@/components/pages/profile/RequestsSection";
 import { Button } from "@/components/ui/button";
 import { LoadingWrapper } from "@/components/ui/loaders/LoadingWrapper";
 import { Tabs } from "@/components/ui/tabs/Tabs";
@@ -23,8 +24,10 @@ const Profile = observer(() => {
           activeTab={vm.tab}
           variant="secondary"
           onTabChange={(tab) => (vm.tab = tab)}
-          tabs={["settings", "pets"]}
-          renderTab={(tab) => (tab === "settings" ? "Мой профиль" : "Мои питомцы")}
+          tabs={["settings", "pets", "requests"]}
+          renderTab={(tab) =>
+            tab === "settings" ? "Мой профиль" : tab === "pets" ? "Мои питомцы" : "Запросы"
+          }
         />
       </div>
 
@@ -65,6 +68,12 @@ const Profile = observer(() => {
       {vm.tab === "pets" && (
         <>
           <PetsSection vm={vm} />
+        </>
+      )}
+
+      {vm.tab === "requests" && (
+        <>
+          <RequestsSection vm={vm} />
         </>
       )}
     </div>

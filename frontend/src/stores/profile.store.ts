@@ -1,6 +1,6 @@
 import { PetsEndpoint } from "@/api/endpoints/pet.endpoint";
 import { UserEndpoint } from "@/api/endpoints/user.endpoint";
-import { CreatePetParams, Pet } from "@/api/models";
+import { BloodRequest, CreatePetParams, DonationRequest, Pet } from "@/api/models";
 import { UserDto } from "@/api/models/user.model";
 import { Animal, CatBloodType, DogBloodType } from "@/constants";
 import { makeAutoObservable } from "mobx";
@@ -8,9 +8,10 @@ import { AuthService } from "./auth.service";
 import { toast } from "@/components/ui/use-toast";
 
 export class ProfileStore {
-  tab: "settings" | "pets" = "settings";
+  tab: "settings" | "pets" | "requests" = "settings";
   isEditing = false;
   isPetsLoading = false;
+  isRequestsLoading = false;
   isProfileSubmitDisabled = false;
   item:
     | {
@@ -26,6 +27,9 @@ export class ProfileStore {
   };
 
   pets: Pet[] = [];
+
+  bloodRequests: BloodRequest[] = [];
+  donationRequests: DonationRequest[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -113,6 +117,19 @@ export class ProfileStore {
     this.isPetsLoading = false;
   }
 
+  async fetchRequests() {
+    this.isRequestsLoading = true;
+
+    console.log("request");
+
+    const user = await UserEndpoint.current();
+
+    this.bloodRequests = user.requests;
+    this.donationRequests = user.donations;
+
+    this.isRequestsLoading = false;
+  }
+
   addPet() {
     this.pets.unshift({
       id: Math.floor(Math.random() * 1000) + 1,
@@ -140,7 +157,9 @@ export class ProfileStore {
         wishes: "",
         available_weekends_only: false,
         avaliable_time: [],
-        avatar: ""
+        avatar: "",
+        donations: [],
+        requests: []
       },
       cooldown_donation_days: 0,
       donations: [],

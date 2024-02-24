@@ -1,5 +1,11 @@
 import api from "api/utils/api";
-import { CreateDonationParams, Donation, FetchDonationsParams, SocialDonation } from "../models";
+import {
+  CreateDonationParams,
+  CreateRequestParams,
+  Donation,
+  FetchDonationsParams,
+  SocialDonation
+} from "../models";
 
 export namespace BloodDonationsEndpoint {
   export const fetchBloodDonations = async (params: FetchDonationsParams) => {
@@ -19,15 +25,21 @@ export namespace BloodDonationsEndpoint {
 
   export const postDonation = async ({ petId, ...params }: CreateDonationParams) => {
     return api.post<{}>(`/api/blood-donations/pet/${petId}`, {
-      ...params,
-      date: new Date().toISOString().slice(0, -1)
+      ...params
     });
   };
 
-  export const postRequest = async ({ petId, ...params }: CreateDonationParams) => {
+  export const postRequest = async ({ petId, ...params }: CreateRequestParams) => {
     return api.post<{}>(`/api/blood-requests/pet/${petId}`, {
-      ...params,
-      due_date: new Date().toISOString().slice(0, -1)
+      ...params
     });
+  };
+
+  export const deleteBloodDonation = async (id: number) => {
+    return api.delete<{}>(`/api/blood-donations/${id}`);
+  };
+
+  export const deleteBloodRequest = async (id: number) => {
+    return api.delete<{}>(`/api/blood-requests/${id}`);
   };
 }
