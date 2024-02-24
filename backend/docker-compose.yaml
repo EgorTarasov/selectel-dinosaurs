@@ -23,7 +23,7 @@ services:
     environment:
       - POSTGRES_HOST=postgres
     ports:
-      - "8000:8000"
+      - "9000:8000"
   rabbitmq:
     image: rabbitmq:3.10.7-management
     hostname: rabbitmq
@@ -36,22 +36,22 @@ services:
       - "15672:15672"
       - "5672:5672"
 
-  # worker:
-  #   build:
-  #     context: ../backend/
-  #     dockerfile: Dockerfile
-  #   command: celery -A app.worker.celery worker --loglevel=info
-  #   volumes:
-  #     - ./project:/usr/src/app
-  #     - static-data:/code/static
-  #   env_file:
-  #     - ../backend/.env
-  #   environment:
-  #     - POSTGRES_HOST=postgres
-  #     - RABBITMQ_HOST=rabbitmq
-  #   depends_on:
-  #     - rabbitmq
-  #     - postgres
+  worker:
+     build:
+       context: "."
+       dockerfile: "Dockerfile"
+     command: celery -A app.worker.celery worker --loglevel=info
+     volumes:
+       - ./project:/usr/src/app
+       - static-volume:/app/static
+     env_file:
+       - ".env"
+     environment:
+       - POSTGRES_HOST=postgres
+       - RABBITMQ_HOST=rabbitmq
+     depends_on:
+       - rabbitmq
+       - postgres
 
 volumes:
   postgres-data:
