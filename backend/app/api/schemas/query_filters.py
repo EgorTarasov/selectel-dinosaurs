@@ -38,5 +38,5 @@ class QueryFilters(BaseModel):
     blood_type: tp.Optional[str] = Field(None, min_length=1, max_length=7)
     amount: tp.Optional[int] = Field(0, ge=0)
     city: tp.Optional[str] = Field(None, min_length=3, max_length=50)
-    pet_type: tp.Literal["dog", "cat"] = Field(None)
+    pet_type: tp.Literal["dog", "cat", "any"] | None = Field(None)
     due_date: tp.Optional[dt.datetime] = Field(None)
