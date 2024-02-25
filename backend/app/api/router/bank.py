@@ -23,7 +23,6 @@ router = APIRouter(prefix="/banks")
 async def get_all_blood_donations(
     filters: QueryFilters = Depends(),
     db: AsyncSession = Depends(get_session),
-    current_user: UserTokenData = Depends(get_current_user),
 ):
 
     stmt = sa.select(Bank)

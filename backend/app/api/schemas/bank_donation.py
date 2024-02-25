@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field, ConfigDict
 
 class BankDonation(BaseModel):
     """
-        реципиент
-        {
+    реципиент
+    {
 
       date: new Date('2024-02-28T21:00:00.000Z'),
 
