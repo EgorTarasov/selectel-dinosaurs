@@ -26,10 +26,11 @@ type Props = {
   title: string;
   description: string;
   confirmLabel: string;
+  msgLabel: string;
   initialValue?: number;
 };
 
-const DonationDialog = ({ callback, title, description, confirmLabel }: Props) => {
+const DonationDialog = ({ callback, title, description, confirmLabel, msgLabel }: Props) => {
   const [amount, setAmount] = useState(0);
   const [expirationDate, setExpirationDate] = useState<Date | undefined>(undefined);
   const [address, setAddress] = useState("");
@@ -89,7 +90,7 @@ const DonationDialog = ({ callback, title, description, confirmLabel }: Props) =
         </div>
 
         <div className="grid flex-auto items-center gap-1.5">
-          <Label htmlFor="msg">Сообщение</Label>
+          <Label htmlFor="msg">{msgLabel}</Label>
           <Input
             onChange={(e) => setMsg(e.target.value)}
             type="msg"

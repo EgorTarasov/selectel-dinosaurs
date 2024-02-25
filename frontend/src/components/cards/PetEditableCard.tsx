@@ -281,6 +281,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                   pet.able_to_donate = false;
                 }
               }}
+              checked={isNeedDonation}
               id="needDonation"
             />
             <Label htmlFor="needDonation">Нуждается в переливании</Label>
@@ -293,6 +294,8 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                   checked={pet.able_to_donate}
                   defaultChecked={pet.able_to_donate}
                   onCheckedChange={(value) => {
+                    vm.pets[index].able_to_donate = value;
+
                     PetsEndpoint.setPetAbleToDonate(pet.id, value).then(() => {
                       toast({
                         title: "Статус изменен",
@@ -380,6 +383,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                 confirmLabel="Добавить"
                 description="Чтобы ее могли видеть другие пользователи"
                 title="Добавить заявку на донорство"
+                msgLabel="Пожелание"
                 initialValue={0}
                 callback={({ address, amount, date, msg }) => {
                   BloodDonationsEndpoint.postDonation({
@@ -409,6 +413,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                 description="Чтобы ее могли видеть другие пользователи"
                 title="Добавить заявку на переливание"
                 initialValue={0}
+                msgLabel="Заболевание"
                 callback={({ address, amount, date, msg }) => {
                   BloodDonationsEndpoint.postRequest({
                     amount,

@@ -71,7 +71,7 @@ const BloodRequestCard = ({
                 strokeLinejoin="round"
               />
             </svg>
-            {id} {getDonationDeclension(id)}
+            {id % 10} {getDonationDeclension(id % 10)}
           </span>
         </div>
       </div>
