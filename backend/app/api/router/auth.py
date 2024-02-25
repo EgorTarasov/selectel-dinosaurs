@@ -96,7 +96,7 @@ async def auth_vk(
     db: AsyncSession = Depends(get_session),
 ) -> Token:
     """Вход через ВКонтакте"""
-    stmt = sa.select(User).where(User.email == payload.user.email)
+    stmt = sa.select(User).where(User.vkid == payload.user.id)
     db_user: User | None = (await db.execute(stmt)).unique().scalar_one_or_none()
 
     if db_user:
