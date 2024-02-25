@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     rabbitmq_port: int = 5672
 
     domain: str = "localhost"
+    frontend_domain: str
     static_dir: str = "static"
     vk_client_id: str
     vk_secure_token: str
