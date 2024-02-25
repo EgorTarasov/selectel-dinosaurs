@@ -188,4 +188,5 @@ async def reset_password(
     db_user.password = password.PasswordManager.hash_password(newPassword)
     db.add(db_user)
     await db.commit()
-    return Response(status_code=status.HTTP_200_OK)
+    token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
+    return Token(access_token=token, token_type="Bearer")
