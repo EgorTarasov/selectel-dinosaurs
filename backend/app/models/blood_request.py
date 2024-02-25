@@ -7,7 +7,7 @@ from .base import Base, TimestampMixin
 
 class BloodRequest(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id"))
+    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id", ondelete='CASCADE'))
     amount: Mapped[int] = mapped_column(sa.Integer)
     due_date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
     msg: Mapped[sa.String] = mapped_column(sa.String, nullable=True)

@@ -53,9 +53,7 @@ class PetCreate(BaseModel):
 class PetUpdate(BaseModel):
     type: Optional[PetType] = None
     breed: Optional[str] = None
-    avatar: Optional[str] = (
-        "https://basetop.ru/wp-content/uploads/2018/10/hrkwaacv.jpg"
-    )
+    avatar: Optional[str] = None
     name: Optional[str] = None
     age: Optional[int] = None
     weight: Optional[float] = None
