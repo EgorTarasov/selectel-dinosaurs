@@ -21,6 +21,7 @@ import {
 import { ELEVATION } from "./Map";
 import { useEffect, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { Toaster } from "@/components/ui/toaster";
 
 export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -47,9 +48,10 @@ export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
       </DrawerTrigger>
       <DrawerContent
         className={cn(
-          `flex flex-col z-[200] h-[80vh] max-h-[80vh]`,
+          `flex flex-col z-[200] h-[80vh] max-h-[80vh] bg-white`,
           "transition-all duration-300"
         )}>
+        <Toaster />
         <DrawerHeader className="flex justify-between">
           <DrawerTitle>Банки крови</DrawerTitle>
           <DrawerClose onClick={() => (vm.item = null)}>
@@ -57,7 +59,7 @@ export const SidebarMobile: FCVM<MapSidebar> = observer(({ vm }) => {
           </DrawerClose>
         </DrawerHeader>
         <div className="flex flex-col px-5 rounded-lg gap-5 relative overflow-y-auto">
-          <div className="flex flex-col gap-5 sticky top-0 bg-background">
+          <div className="flex flex-col gap-5 sticky top-0 bg-white">
             <div className="flex justify-between items-center">
               <Tabs
                 activeTab={vm.tab}

@@ -1,9 +1,11 @@
+import { ForgotPassword } from "@/components/buttons/ForgotPassword";
 import { VkLoginButton } from "@/components/buttons/VkLoginButton";
 import { Text } from "@/components/typography/Text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs } from "@/components/ui/tabs/Tabs";
+import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { LoginStore } from "@/stores/login.store";
 import { createFileRoute } from "@tanstack/react-router";
@@ -16,6 +18,7 @@ const Login = observer(() => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
+      <Toaster />
       <div className="flex flex-col rounded-lg bg-white w-96 p-6">
         <Tabs
           tabs={["login", "register"]}
@@ -48,13 +51,7 @@ const Login = observer(() => {
               value={vm.password}
               onChange={(e) => (vm.password = e.target.value)}
             />
-            {vm.tab === "login" && (
-              <button
-                type="button"
-                className="absolute right-2 bottom-1.5 text-slate-600 hover:underline">
-                Забыли?
-              </button>
-            )}
+            {vm.tab === "login" && <ForgotPassword />}
           </fieldset>
           {vm.isErrored && (
             <Text.UiMedium className="text-destructive mt-2 text-center">

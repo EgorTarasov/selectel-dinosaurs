@@ -1,10 +1,11 @@
 import VkIcon from "@/assets/vk.svg";
 import { Text } from "../typography/Text";
 import * as VKID from "@vkid/sdk";
+import { toast } from "../ui/use-toast";
 
 export const VkLoginButton = () => {
   const onClick = () => {
-    VKID.Auth.login();
+    VKID.Auth.login()
   };
 
   return (

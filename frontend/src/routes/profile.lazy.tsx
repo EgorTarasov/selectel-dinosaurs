@@ -7,6 +7,7 @@ import { RequestsSection } from "@/components/pages/profile/RequestsSection";
 import { Button } from "@/components/ui/button";
 import { LoadingWrapper } from "@/components/ui/loaders/LoadingWrapper";
 import { Tabs } from "@/components/ui/tabs/Tabs";
+import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileStore } from "@/stores/profile.store";
 import { createFileRoute } from "@tanstack/react-router";
@@ -19,6 +20,7 @@ const Profile = observer(() => {
 
   return (
     <div className="section flex flex-col pt-6 pb-24">
+      <Toaster />
       <div className="w-fit">
         <Tabs
           activeTab={vm.tab}

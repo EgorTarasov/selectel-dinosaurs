@@ -6,6 +6,7 @@ import { BankRequestEndpoint } from "@/api/endpoints/bank-request.endpoint";
 import { toast } from "@/components/ui/use-toast";
 import { BankDonationEndpoint } from "@/api/endpoints/bank-donation.endpoint";
 import { BankDonationDto } from "@/api/models/bank-donation.model";
+import { AuthService } from "./auth.service";
 
 const BLOOD_PRICE_RUB = 350;
 const DEFICIT_COEF = {
@@ -116,6 +117,14 @@ export class MapSidebar {
 
   async submit() {
     this.errorText = null;
+    if (AuthService.auth.state !== "authenticated") {
+      toast({
+        variant: "destructive",
+        description: "Войдите в аккаунт чтобы отправить заявку",
+        title: "Требуется авторизация"
+      });
+      return;
+    }
 
     if (this.tab === "donor") {
       if (!this.date) {

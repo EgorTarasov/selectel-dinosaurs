@@ -11,6 +11,7 @@ import { BankCard } from "./BankCard";
 import { IconInput } from "@/components/ui/input";
 import SearchIcon from "@/assets/search.svg";
 import { SidebarMobile } from "./SidebarMobile";
+import { Toaster } from "@/components/ui/toaster";
 
 export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
   const onCloseClick = () => {
@@ -27,6 +28,7 @@ export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
           `absolute left-0 max-w-[450px] min-w-[450px] top-[14vh] bottom-0 hidden md:flex flex-col z-[200]`,
           "transition-all duration-300 pointer-events-none"
         )}>
+        <Toaster />
         <div className="pointer-events-auto flex flex-col bg-white px-5 rounded-lg gap-5 relative overflow-y-auto shadow-md">
           <div className="flex flex-col gap-5 sticky pt-5 top-0 bg-white">
             <div className="flex justify-between items-center">
