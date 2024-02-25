@@ -25,11 +25,10 @@ export const Sidebar: FCVM<MapSidebar> = observer(({ vm }) => {
       <SidebarMobile vm={vm} />
       <aside
         className={cn(
-          `absolute left-0 max-w-[450px] min-w-[450px] top-[14vh] bottom-0 hidden md:flex flex-col z-[200]`,
-          "transition-all duration-300 pointer-events-none"
+          `absolute left-0 max-w-[450px] min-w-[450px] top-0 bottom-0 hidden md:flex flex-col z-[200] p-2`
         )}>
         <Toaster />
-        <div className="pointer-events-auto flex flex-col bg-white px-5 rounded-lg gap-5 relative overflow-y-auto shadow-md">
+        <div className="pointer-events-auto flex flex-col px-5 rounded-lg gap-5 relative overflow-y-auto bg-white shadow-md">
           <div className="flex flex-col gap-5 sticky pt-5 top-0 bg-white">
             <div className="flex justify-between items-center">
               <Tabs
