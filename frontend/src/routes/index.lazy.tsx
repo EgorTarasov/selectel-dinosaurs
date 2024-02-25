@@ -4,6 +4,7 @@ import HomeRequestCard from "@/components/cards/HomeRequestCard";
 import SocialDonationCard from "@/components/cards/SocialDonationCard";
 import { HomeFilters } from "@/components/home/HomeFilters";
 import HomeSceleton from "@/components/home/HomeSceleton";
+import { Toaster } from "@/components/ui/toaster";
 import { homeStore } from "@/stores/home.service";
 import { createFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
@@ -18,6 +19,7 @@ const Index = observer(() => {
 
   return (
     <div className="pb-10">
+      <Toaster />
       <HomeFilters vm={vm} />
 
       <div className="section mt-8 mb-7">

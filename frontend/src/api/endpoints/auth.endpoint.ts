@@ -52,4 +52,18 @@ export namespace AuthEndpoint {
     setStoredAuthToken(result);
     return parseJwt<AuthDto.Item>(result);
   };
+
+  export const requestResetPassword = async (email: string) => {
+    const result = await api.post<string>(`/api/auth/password-code?email=${email}`);
+
+    return result;
+  };
+
+  export const resetPassword = async (token: string, newPassword: string) => {
+    const result = await api.get<string>(
+      `/api/auth/password-reset?token=${token}&newPassword=${newPassword}`
+    );
+
+    return result;
+  };
 }

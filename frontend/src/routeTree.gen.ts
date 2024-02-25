@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const MapLazyImport = createFileRoute('/map')()
 const LoginVkLazyImport = createFileRoute('/login-vk')()
@@ -24,6 +25,13 @@ const LeaderboardLazyImport = createFileRoute('/leaderboard')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const ResetPasswordLazyRoute = ResetPasswordLazyImport.update({
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/reset-password.lazy').then((d) => d.Route),
+)
 
 const ProfileLazyRoute = ProfileLazyImport.update({
   path: '/profile',
@@ -83,6 +91,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
+    '/reset-password': {
+      preLoaderRoute: typeof ResetPasswordLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -95,6 +107,7 @@ export const routeTree = rootRoute.addChildren([
   LoginVkLazyRoute,
   MapLazyRoute,
   ProfileLazyRoute,
+  ResetPasswordLazyRoute,
 ])
 
 /* prettier-ignore-end */

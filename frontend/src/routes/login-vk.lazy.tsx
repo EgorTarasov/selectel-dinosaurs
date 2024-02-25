@@ -4,6 +4,7 @@ import { Navigate, createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import VkLogo from "@/assets/vk.svg";
 import { Text } from "@/components/typography/Text";
+import { Toaster } from "@/components/ui/toaster";
 
 const Login = () => {
   const [success, setSuccess] = useState(false);
@@ -19,6 +20,7 @@ const Login = () => {
 
   return (
     <div className="section flex flex-col h-96 justify-center items-center">
+      <Toaster />
       {success && <Navigate to="/profile" />}
       <div className="w-28 h-28">
         <VkLogo />

@@ -3,10 +3,12 @@ import { mockUsers } from "@/constants/leaderboard-mock";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
 import VictoryIcon from "@/assets/victory.svg";
+import { Toaster } from "@/components/ui/toaster";
 
 const Leaderboard = observer(() => {
   return (
     <main className="section flex flex-col mt-10 pb-10">
+      <Toaster />
       <Text.H2>Лучшие доноры</Text.H2>
       <Text.H3 className="mt-5">
         Вы на <span className="text-primary">первом</span> месте!
