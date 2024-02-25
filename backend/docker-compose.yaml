@@ -47,11 +47,10 @@ services:
      env_file:
        - ".env"
      environment:
-       - POSTGRES_HOST=postgres
+      #  - POSTGRES_HOST=postgres
        - RABBITMQ_HOST=rabbitmq
      depends_on:
        - rabbitmq
-       - postgres
 
 volumes:
   postgres-data:
