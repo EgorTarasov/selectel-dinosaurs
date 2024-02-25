@@ -76,7 +76,6 @@ async def get_all_blood_donations(
         stmt = stmt.where(
             Pet.blood_type == filters.pet_type,
         )
-    logging.info(obj)
     res = (await db.execute(stmt)).all()
     return [
         BloodDonationSearchResult.model_validate(
