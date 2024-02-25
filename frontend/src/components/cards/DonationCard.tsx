@@ -5,7 +5,12 @@ import VkIcon from "@/assets/vk.svg";
 import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
 import { useToast } from "../ui/use-toast";
 
-const DonationCard = ({ id, pet: { avatar, name, age, weight, bloodType }, owner }: Donation) => {
+const DonationCard = ({
+  id,
+  pet: { avatar, name, age, weight, bloodType },
+  owner,
+  msg
+}: Donation) => {
   const { toast } = useToast();
 
   return (
@@ -109,8 +114,8 @@ const DonationCard = ({ id, pet: { avatar, name, age, weight, bloodType }, owner
       )}
 
       <div className="donation-description">
-        <span className="text-sm font-semibold">Пожелания владельца:</span>
-        <span className="text-sm"> {owner.wishes}</span>
+        <span className="text-sm font-semibold">Пожелания владельца: {msg}</span>
+        <span className="text-sm">{msg}</span>
       </div>
 
       <div className="flex justify-end w-full flex-col h-full mt-3">

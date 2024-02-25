@@ -2,6 +2,7 @@ export interface Donation {
   id: number;
   amount: number;
   date: string;
+  msg: string;
   pet: {
     id: number;
     name: string;
