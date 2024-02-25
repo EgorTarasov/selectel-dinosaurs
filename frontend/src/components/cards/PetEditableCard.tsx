@@ -383,7 +383,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                 confirmLabel="Добавить"
                 description="Чтобы ее могли видеть другие пользователи"
                 title="Добавить заявку на донорство"
-                msgLabel="Пожелание"
+                msgLabel="Заболевание"
                 initialValue={0}
                 callback={({ address, amount, date, msg }) => {
                   BloodDonationsEndpoint.postDonation({
@@ -413,7 +413,7 @@ export const PetEditableCard: FC<PetEditableCardProps> = observer(({ vm, pet, in
                 description="Чтобы ее могли видеть другие пользователи"
                 title="Добавить заявку на переливание"
                 initialValue={0}
-                msgLabel="Заболевание"
+                msgLabel="Пожелание"
                 callback={({ address, amount, date, msg }) => {
                   BloodDonationsEndpoint.postRequest({
                     amount,
