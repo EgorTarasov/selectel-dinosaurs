@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import orm
 import sqlalchemy as sa
 from typing import List, Optional
+import logging
 
 from ..middlewares.db_session import get_session
 from ..middlewares.current_user import get_current_user, UserTokenData
@@ -75,7 +76,7 @@ async def get_all_blood_donations(
         stmt = stmt.where(
             Pet.blood_type == filters.pet_type,
         )
-
+    logging.info(obj)
     res = (await db.execute(stmt)).all()
     return [
         BloodDonationSearchResult.model_validate(
@@ -102,8 +103,8 @@ async def get_all_blood_donations(
                     },
                     "wishes": obj[14],
                 },
-                "msg": "Болезнь",
-                "address": "Москва",
+                "msg": obj[15],
+                "address": obj[16],
             }
         )
         for obj in res
