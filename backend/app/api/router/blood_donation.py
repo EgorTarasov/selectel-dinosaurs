@@ -77,6 +77,7 @@ async def get_all_blood_donations(
             Pet.blood_type == filters.pet_type,
         )
     res = (await db.execute(stmt)).all()
+    print(*res[0], sep="\n")
     return [
         BloodDonationSearchResult.model_validate(
             {
@@ -102,8 +103,8 @@ async def get_all_blood_donations(
                     },
                     "wishes": obj[14],
                 },
-                "msg": obj[15],
-                "address": obj[16],
+                "msg": obj[16],
+                "address": obj[17],
             }
         )
         for obj in res
