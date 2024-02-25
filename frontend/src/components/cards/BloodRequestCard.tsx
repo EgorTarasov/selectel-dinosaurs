@@ -3,12 +3,21 @@ import { getDonationDeclension, getYearDeclension } from "@/api/utils/declesions
 import { Button } from "../ui/button";
 import { BloodDonationsEndpoint } from "@/api/endpoints/donations.endpoint";
 import { useToast } from "../ui/use-toast";
+import { ProfileStore } from "@/stores/profile.store";
+
+type BloodRequestCardProps = {
+  vm: ProfileStore;
+  bloodRequest: BloodRequest;
+};
 
 const BloodRequestCard = ({
-  id,
-  pet: { avatar, name, age, bloodType, weight },
-  msg
-}: BloodRequest) => {
+  vm,
+  bloodRequest: {
+    id,
+    pet: { avatar, name, age, bloodType, weight },
+    msg
+  }
+}: BloodRequestCardProps) => {
   const { toast } = useToast();
 
   return (
@@ -98,6 +107,8 @@ const BloodRequestCard = ({
                     title: "Запрос отклонен",
                     description: "Помощь не требуется"
                   });
+
+                  vm.fetchRequests();
                 })
                 .catch(() => {
                   toast({

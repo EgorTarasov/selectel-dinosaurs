@@ -21,11 +21,15 @@ export const RequestsSection: FCVM<ProfileStore> = observer(({ vm }) => {
       ) : (
         vm.donationRequests
           .map((donationRequest) => (
-            <DonationRequestCard key={donationRequest.id} {...donationRequest} />
+            <DonationRequestCard
+              key={donationRequest.id}
+              vm={vm}
+              donationRequest={donationRequest}
+            />
           ))
           .concat(
             vm.bloodRequests.map((bloodRequest) => (
-              <BloodRequestCard key={bloodRequest.id} {...bloodRequest} />
+              <BloodRequestCard key={bloodRequest.id} vm={vm} bloodRequest={bloodRequest} />
             ))
           )
       )}
