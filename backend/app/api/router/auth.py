@@ -98,7 +98,9 @@ async def auth_vk(
     """Вход через ВКонтакте"""
     stmt = sa.select(User).where(User.email == payload.user.email)
     db_user: User | None = (await db.execute(stmt)).unique().scalar_one_or_none()
+
     if db_user:
+        logging.info(f"found user: {db_user.vkid} {db_user.email}")
         token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
         return Token(access_token=token, token_type="Bearer")
     else:
@@ -110,7 +112,7 @@ async def auth_vk(
             email=(
                 payload.user.email
                 if payload.user.email
-                else f"{payload.user.id}@larek.tech"
+                else f"{payload.user.id}+{dt.datetime.now().isoformat()}@larek.tech"
             ),
             role="user",
             password="",
