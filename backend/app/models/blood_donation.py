@@ -8,7 +8,7 @@ from .base import Base, TimestampMixin
 
 class BloodDonation(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id"))
+    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id", ondelete='CASCADE'))
     amount: Mapped[int] = mapped_column(sa.Integer)
     date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
     selected_blood_donation_response_id: Mapped[sa.Integer] = mapped_column(sa.Integer, nullable=True)

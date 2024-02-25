@@ -10,7 +10,7 @@ from .pet import (
 
 class Vaccine(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
-    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id"))
+    pet_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("pets.id", ondelete='CASCADE'))
     name: Mapped[str] = mapped_column(sa.Text)
     date: Mapped[dt.datetime] = mapped_column(sa.DateTime)
     expire_date: Mapped[dt.datetime] = mapped_column(sa.DateTime)

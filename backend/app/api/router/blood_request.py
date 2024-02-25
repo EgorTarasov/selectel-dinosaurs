@@ -21,6 +21,7 @@ from ..serializers import (
     db_blood_request_responses_to_blood_request_response_dtos,
     db_blood_requests_to_blood_request_dtos,
 )
+from ...worker import send_emai_on_blood_request
 
 router = APIRouter(prefix="/blood-requests")
 
@@ -77,6 +78,12 @@ async def create_blood_request_request(
         blood_request.pet,
         ["id", "owner"],
     )
+
+    send_emai_on_blood_request(blood_request.pet.owner.contact_email,
+                               first_name=blood_request.pet.owner.first_name,
+                               last_name=blood_request.pet.owner.last_name,
+                               pet_name=blood_request.pet.name,
+                               link_to_details="https://selectel.larek.tech")
 
     return db_blood_request_to_blood_request_dto(blood_request)
 

@@ -16,7 +16,7 @@ class Pet(Base, TimestampMixin):
     blood_type: Mapped[str] = mapped_column(sa.Text, nullable=False)
     weight: Mapped[float] = mapped_column(sa.Float)
     able_to_donate: Mapped[bool] = mapped_column(sa.Boolean)
-    owner_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("users.id"))
+    owner_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("users.id", ondelete='CASCADE'))
 
     owner = relationship("User", back_populates="pets")
     vaccines = relationship("Vaccine", back_populates="pet")
