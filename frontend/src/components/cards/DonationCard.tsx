@@ -114,8 +114,8 @@ const DonationCard = ({
       )}
 
       <div className="donation-description">
-        <span className="text-sm font-semibold">Пожелания владельца: {msg}</span>
-        <span className="text-sm">{msg}</span>
+        <span className="text-sm font-semibold">Пожелания владельца:</span>
+        <span className="text-sm"> {msg}</span>
       </div>
 
       <div className="flex justify-end w-full flex-col h-full mt-3">
