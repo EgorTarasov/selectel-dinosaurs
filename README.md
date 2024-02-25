@@ -1,9 +1,10 @@
-
-![selectel](  https://chatwoot.selectel.ru/rails/active_storage/disk/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDVG9JYTJWNVNTSWhaREZtT0dkb2IyeDNjRGw2YURkeWNHRmhOV0pyTURabU1HdHJiZ1k2QmtWVU9oQmthWE53YjNOcGRHbHZia2tpTzJsdWJHbHVaVHNnWm1sc1pXNWhiV1U5SWpjMkxUSXVjRzVuSWpzZ1ptbHNaVzVoYldVcVBWVlVSaTA0SnljM05pMHlMbkJ1WndZN0JsUTZFV052Ym5SbGJuUmZkSGx3WlVraURtbHRZV2RsTDNCdVp3WTdCbFE2RVhObGNuWnBZMlZmYm1GdFpUb0tiRzlqWVd3PSIsImV4cCI6IjIwMjQtMDItMjRUMDk6NTk6MTguNTI0WiIsInB1ciI6ImJsb2Jfa2V5In19--c5bc1ce3d92d7d06f6fd1903aa8e8329c2246e07/76-2.png)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![DonorSearch](https://donorsearch.org/static/images/newLogoIcon.svg)
 
+![selectel](https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Selectel_red-gray.svg/320px-Selectel_red-gray.svg.png)
+
 # DonorPet
+
 ## Описание 
 
 Проект DonorPet - это сервис, разработанный для решения проблемы нехватки крови у животных путем сбора информации о донорах и больных питомцах в одном месте. Мы объединяем владельцев домашних животных, которые нуждаются в переливании крови, и тех, кто готов помочь, упрощая процесс донорства для питомцев. 
