@@ -96,9 +96,15 @@ async def auth_vk(
     db: AsyncSession = Depends(get_session),
 ) -> Token:
     """Вход через ВКонтакте"""
-    stmt = sa.select(User).where(User.email == payload.user.email)
+    stmt = sa.select(User).where(User.vkid == payload.user.id)
     db_user: User | None = (await db.execute(stmt)).unique().scalar_one_or_none()
+
     if db_user:
+        if payload.user and payload.user.avatar:
+            db_user.avatar = payload.user.avatar if payload.user else None
+            db.add(db_user)
+            await db.commit()
+        logging.info(f"found user: {db_user.vkid} {db_user.email}")
         token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
         return Token(access_token=token, token_type="Bearer")
     else:
@@ -110,9 +116,10 @@ async def auth_vk(
             email=(
                 payload.user.email
                 if payload.user.email
-                else f"{payload.user.id}@larek.tech"
+                else f"{payload.user.id}+{dt.datetime.now().isoformat()}@larek.tech"
             ),
             role="user",
+            avatar=payload.user.avatar if payload.user.avatar else None,
             password="",
         )
         db.add(db_user)
@@ -181,4 +188,5 @@ async def reset_password(
     db_user.password = password.PasswordManager.hash_password(newPassword)
     db.add(db_user)
     await db.commit()
-    return Response(status_code=status.HTTP_200_OK)
+    token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
+    return Token(access_token=token, token_type="Bearer")

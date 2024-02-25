@@ -25,7 +25,7 @@ def send_recovery_code(email: str, first_name: str, last_name: str, code: str) -
     """Sends email with password recovery link"""
     subject = "Смена пароля"
     template = "password_recover.jinja"
-    link_on_password_recover = f"{settings.domain}/reset-password?token={code}"
+    link_on_password_recover = f"{settings.frontend_domain}/reset-password?token={code}"
 
     data = {
         "fullname": f"{first_name} {last_name}",
