@@ -100,6 +100,10 @@ async def auth_vk(
     db_user: User | None = (await db.execute(stmt)).unique().scalar_one_or_none()
 
     if db_user:
+        if payload.user and payload.user.avatar:
+            db_user.avatar = payload.user.avatar if payload.user else None
+            db.add(db_user)
+            await db.commit()
         logging.info(f"found user: {db_user.vkid} {db_user.email}")
         token = jwt.JWTEncoder.create_access_token(db_user.id, db_user.role)
         return Token(access_token=token, token_type="Bearer")
@@ -115,6 +119,7 @@ async def auth_vk(
                 else f"{payload.user.id}+{dt.datetime.now().isoformat()}@larek.tech"
             ),
             role="user",
+            avatar=payload.user.avatar if payload.user.avatar else None,
             password="",
         )
         db.add(db_user)
